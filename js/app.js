@@ -97,6 +97,7 @@ function renderProgress(){
 function startSession(items,label,after=null){if(!items.length){alert('No exercises available for this selection yet.');return}session={items,index:0,correct:0,label,log:[],after};renderExercise()}
 function renderExercise(){
   const ex=session.items[session.index];
+  session.itemStartedAt=Date.now();
   setTitle(session.label);
   if(!ex)return finishSession();
   if(ex.type==='selfcheck'){
@@ -146,11 +147,12 @@ function feedbackHTML(ex,answer,ok){
 }
 function finishAnswer(ex,answer,ok){
   if(ok)session.correct++;
-  recordAttempt(state,ex,ok,answer);
-  session.log.push({id:ex.id,concept:ex.concept,type:ex.type,answer,correct:ok});
+  const responseMs=Math.max(0,Date.now()-(session.itemStartedAt||Date.now()));
+  recordAttempt(state,ex,ok,answer,{responseMs});
+  session.log.push({id:ex.id,concept:ex.concept,type:ex.type,answer,correct:ok,responseMs});
   const f=document.getElementById('feedbackBox');
   f.innerHTML=feedbackHTML(ex,answer,ok);
-  f.querySelectorAll('[data-c]').forEach(x=>x.onclick=()=>{f.querySelectorAll('[data-c]').forEach(z=>z.classList.remove('selected'));x.classList.add('selected');updateConfidence(state,ex.id,x.dataset.c)});
+  f.querySelectorAll('[data-c]').forEach(x=>x.onclick=()=>{f.querySelectorAll('[data-c]').forEach(z=>z.classList.remove('selected'));x.classList.add('selected');updateConfidence(state,ex.id,x.dataset.c,ex.concept)});
   document.getElementById('nextEx').onclick=()=>{session.index++;renderExercise()};
 }
 function answerExercise(ex,answer,btn){
