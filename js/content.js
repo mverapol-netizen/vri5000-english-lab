@@ -8,7 +8,8 @@ const concepts=[
 {id:'future',name:'Future forms',priority:9,summary:'Schedules, arrangements, intentions, predictions and future perfect/progressive.',rule:'Present simple for schedules, present progressive for arrangements, future perfect for completion before a future point.',examples:['The class starts at 9.','I am meeting my supervisor tomorrow.','By Friday, I will have finished the draft.']},
 {id:'verbpatterns',name:'Verb patterns',priority:8,summary:'-ing, to-infinitive and modal + base.',rule:'Modals + base; avoid/suggest + -ing; decide/plan + to-infinitive; need + object + to-infinitive.',examples:['They could reduce the risk.','They suggested changing the rule.','We decided to revise the draft.']},
 {id:'prepositions',name:'Prepositions & collocations',priority:8,summary:'High-frequency dependent prepositions and academic chunks.',rule:'Learn the whole chunk: depend on, interested in, responsible for, impact on, highly likely.',examples:['The outcome depends on institutional capacity.','She is responsible for the analysis.','The reform had an impact on trust.']},
-{id:'passivecausative',name:'Passive & causative',priority:6,summary:'Passive voice and have/get something done.',rule:'Passive = be + past participle. Causative = have/get + object + past participle.',examples:['The data were collected in 2025.','We had the document translated.']}
+{id:'passivecausative',name:'Passive & causative',priority:6,summary:'Passive voice and have/get something done.',rule:'Passive = be + past participle. Causative = have/get + object + past participle.',examples:['The data were collected in 2025.','We had the document translated.']},
+{id:'academicdiscourse',name:'Academic discourse',priority:8,summary:'Signposting, hedging, concession, reformulation and Q&A for academic presentations and writing.',rule:'Use explicit discourse frames to organize claims, soften certainty, concede objections and repair your wording without abandoning the turn.',examples:['My main argument is that…','The evidence suggests that…','While it is true that…, I would argue that…','What I mean is…','Let me rephrase that…']}
 ];
 const C=Object.fromEntries(concepts.map(x=>[x.id,x]));
 const domains=['politics','philosophy','sociology','horror','academic','everyday'];
@@ -271,10 +272,20 @@ speaking.push(
 {id:'presentation_extra_04',concept:'agreement',domain:'politics',seconds:75,prompt:'Give a concise evidence-based argument while deliberately switching between singular and plural academic subjects.',targets:['agreement','sentence control']}
 );
 
+
+speaking.push(
+{id:'academic_discourse_speak_01',concept:'academicdiscourse',domain:'academic',seconds:90,prompt:'Open a presentation: state your main argument, give a three-part roadmap, and make one hedged claim.',targets:['thesis frame','roadmap','hedging']},
+{id:'academic_discourse_speak_02',concept:'academicdiscourse',domain:'philosophy',seconds:75,prompt:'Respond to an objection. Acknowledge it, draw a distinction, and reformulate your claim without abandoning the turn.',targets:['acknowledgment','distinction','self-repair']},
+{id:'academic_discourse_speak_03',concept:'academicdiscourse',domain:'politics',seconds:75,prompt:'Explain one empirical result using a cautious claim, a possible explanation, and a limitation.',targets:['hedging','possible explanation','limitation']},
+{id:'academic_discourse_speak_04',concept:'academicdiscourse',domain:'academic',seconds:60,prompt:'Give a concise conclusion that synthesizes two findings and states one implication without overclaiming.',targets:['synthesis','cautious conclusion','implication']},
+{id:'academic_discourse_speak_05',concept:'academicdiscourse',domain:'academic',seconds:60,prompt:'A listener says your definition is unclear. Define the term again, give one example, and explicitly reformulate once.',targets:['definition','example','self-repair']},
+{id:'academic_discourse_speak_06',concept:'academicdiscourse',domain:'philosophy',seconds:90,prompt:'Present a claim, concede one opposing point, and explain why your argument still holds.',targets:['claim','concession','response']}
+);
+
 const schedules={
  conservative:[
   {date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
-  {date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+  {date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
   {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
   {date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
   {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
@@ -285,9 +296,9 @@ const schedules={
  ],
  mon_wed:[
 {date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
-{date:'2026-09-30',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement']},
-{date:'2026-10-07',title:'Presentation preparation · Opening',concepts:['questions','prepositions']},
-{date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+{date:'2026-09-30',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement','academicdiscourse']},
+{date:'2026-10-07',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
+{date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
 {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
 {date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
 {date:'2026-10-28',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
@@ -299,9 +310,9 @@ const schedules={
 ],
  tue_thu:[
 {date:'2026-10-06',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
-{date:'2026-10-08',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement']},
-{date:'2026-10-15',title:'Presentation preparation · Opening',concepts:['questions','prepositions']},
-{date:'2026-10-20',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+{date:'2026-10-08',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement','academicdiscourse']},
+{date:'2026-10-15',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
+{date:'2026-10-20',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
 {date:'2026-10-22',title:'Unit 4.1 · Future forms',concepts:['future']},
 {date:'2026-10-27',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
 {date:'2026-10-29',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
@@ -313,9 +324,9 @@ const schedules={
 ],
  wed_fri_am:[
 {date:'2026-10-02',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
-{date:'2026-10-07',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement']},
-{date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions']},
-{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+{date:'2026-10-07',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement','academicdiscourse']},
+{date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
+{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
 {date:'2026-10-23',title:'Unit 4.1 · Future forms',concepts:['future']},
 {date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
 {date:'2026-10-30',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
@@ -327,9 +338,9 @@ const schedules={
 ],
  wed_fri_pm:[
 {date:'2026-09-30',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
-{date:'2026-10-07',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement']},
-{date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions']},
-{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+{date:'2026-10-07',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement','academicdiscourse']},
+{date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
+{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
 {date:'2026-10-23',title:'Unit 4.1 · Future forms',concepts:['future']},
 {date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
 {date:'2026-10-30',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
@@ -341,6 +352,71 @@ const schedules={
 ]
 };
 
+
+
+function addAcademicDiscourse(){
+  const mcq=[
+    ['You are opening a presentation. Choose the clearest thesis frame.',['My main argument is that platform personalization can narrow individual agency.','I think like maybe platforms are kind of bad.'],'My main argument is that platform personalization can narrow individual agency.','Use an explicit thesis frame to establish the central claim.'],
+    ['Choose the best signpost for moving to your first analytical point.',['The first point concerns the relationship between personalization and choice.','And another thing is choice somehow.'],'The first point concerns the relationship between personalization and choice.','A signpost tells the audience what function the next section performs.'],
+    ['Choose the more cautious academic claim.',['The evidence suggests that the reform may have affected participation.','The reform definitely destroyed participation.'],'The evidence suggests that the reform may have affected participation.','Hedging distinguishes supported inference from absolute certainty.'],
+    ['Choose the better transition to a broader implication.',['This leads to a broader question about institutional trust.','So anyway, trust.'],'This leads to a broader question about institutional trust.','The transition explicitly marks how the argument develops.'],
+    ['Choose the best way to introduce an example.',['One illustration of this is the change in turnout after the reform.','For example thing, turnout changed.'],'One illustration of this is the change in turnout after the reform.','Academic exemplification should connect the example to the claim.'],
+    ['Choose the stronger concession structure.',['While it is true that platforms expand access, they may also intensify dependence.','Platforms expand access but no, dependence too.'],'While it is true that platforms expand access, they may also intensify dependence.','Concession acknowledges a point before qualifying or opposing it.'],
+    ['Choose the best phrase for a limited claim.',['To some extent, the pattern can be explained by institutional capacity.','Totally, everything is explained by institutional capacity.'],'To some extent, the pattern can be explained by institutional capacity.','To some extent limits the scope of the claim.'],
+    ['Choose the best evidence frame.',['The available evidence indicates a persistent difference across cases.','The evidence says the truth is obvious.'],'The available evidence indicates a persistent difference across cases.','Academic language separates evidence from overstatement.'],
+    ['A listener asks what you mean by “individuality.” Choose the best response opener.',['What I mean by individuality is the capacity to form and revise one’s own commitments.','It means what I already said.'],'What I mean by individuality is the capacity to form and revise one’s own commitments.','Define the contested term directly before expanding.'],
+    ['You notice that your sentence became unclear. Choose the best self-repair.',['Let me rephrase that: the issue is not choice itself, but how choices are structured.','No, wait, forget it.'],'Let me rephrase that: the issue is not choice itself, but how choices are structured.','Self-repair should preserve the turn while improving precision.'],
+    ['Choose the best way to answer a difficult question without pretending certainty.',['That is an important question. I would distinguish between the empirical and normative parts of the claim.','I do not know, so next question.'],'That is an important question. I would distinguish between the empirical and normative parts of the claim.','A structured answer can acknowledge difficulty and still advance the response.'],
+    ['Choose the sentence that clearly contrasts two cases.',['By contrast, the second case shows much weaker institutional enforcement.','The second case is different and stuff.'],'By contrast, the second case shows much weaker institutional enforcement.','By contrast explicitly marks comparison.'],
+    ['Choose the best phrase for an inference rather than a fact.',['One possible explanation is that lower trust reduces compliance.','The only explanation is obviously low trust.'],'One possible explanation is that lower trust reduces compliance.','Possible explanation marks inferential status.'],
+    ['Choose the best way to qualify a generalization.',['Broadly speaking, the cases follow a similar pattern, although important differences remain.','All cases are basically the same.'],'Broadly speaking, the cases follow a similar pattern, although important differences remain.','A qualification prevents an overgeneralized claim.'],
+    ['Choose the clearest roadmap sentence.',['I will first define the concept, then examine the mechanism, and finally discuss its implications.','I will talk about some things and finish later.'],'I will first define the concept, then examine the mechanism, and finally discuss its implications.','A roadmap helps the audience anticipate the structure.'],
+    ['Choose the best conclusion frame.',['Taken together, these findings suggest that institutional design matters, but not in isolation.','So that proves everything I said.'],'Taken together, these findings suggest that institutional design matters, but not in isolation.','A conclusion should synthesize rather than overclaim.'],
+    ['Choose the best way to return from an example to the argument.',['This example matters because it shows how the mechanism operates in practice.','That was the example. Next.'],'This example matters because it shows how the mechanism operates in practice.','Explicitly state the analytical role of the example.'],
+    ['Choose the best way to disagree politely in Q&A.',['I see the concern, but I would draw a distinction between dependence and domination.','No, that objection is wrong.'],'I see the concern, but I would draw a distinction between dependence and domination.','Acknowledge the objection before stating the distinction.'],
+    ['Choose the most natural cautious verb.',['The results appear to support the hypothesis.','The results scream that the hypothesis is true.'],'The results appear to support the hypothesis.','Appear to supports a cautious empirical claim.'],
+    ['Choose the best transition from evidence to implication.',['If this interpretation is correct, it has implications for how we understand autonomy.','The evidence is done, now autonomy.'],'If this interpretation is correct, it has implications for how we understand autonomy.','The conditional transition keeps the implication proportionate to the evidence.']
+  ];
+  mcq.forEach((x,i)=>exercises.push(exercise({id:id('acad'),concept:'academicdiscourse',domain:i%2?'philosophy':'academic',type:'mcq',transfer:i<8?'controlled':'guided',difficulty:i<8?1:2,prompt:x[0],options:x[1],answer:x[2],explanation:x[3],misconception:'academic_register'})));
+
+  const builders=[
+    ['My','main','argument','is','that','platforms','reshape','the','conditions','of','choice.'],
+    ['The','first','point','concerns','the','relationship','between','freedom','and','dependence.'],
+    ['The','evidence','suggests','that','the','effect','may','vary','across','cases.'],
+    ['This','leads','to','a','broader','question','about','institutional','capacity.'],
+    ['One','possible','explanation','is','that','trust','shapes','compliance.'],
+    ['While','it','is','true','that','access','has','expanded,','important','inequalities','remain.'],
+    ['What','I','mean','is','that','the','mechanism','operates','indirectly.'],
+    ['Let','me','rephrase','that:','the','claim','is','more','limited.'],
+    ['Taken','together,','these','findings','suggest','a','persistent','pattern.'],
+    ['By','contrast,','the','second','case','shows','weaker','enforcement.']
+  ];
+  builders.forEach((tokens,i)=>exercises.push(exercise({id:id('acadbuild'),concept:'academicdiscourse',domain:i%2?'politics':'academic',type:'builder',transfer:i<4?'controlled':'guided',difficulty:2,prompt:'Build the academic sentence.',tokens:[...tokens].sort(()=>Math.random()-.5),answer:tokens.join(' '),explanation:'The exercise trains complete discourse frames so they can be retrieved as chunks during presentation.',misconception:'academic_word_order'})));
+
+  const transforms=[
+    ['Make the claim more cautious: “The reform causes lower trust.”','The reform may cause lower trust.'],
+    ['Introduce this as your thesis: “Platform personalization can narrow agency.”','My main argument is that platform personalization can narrow agency.'],
+    ['Turn this into a concession: “Platforms expand access, but they may intensify dependence.”','While it is true that platforms expand access, they may intensify dependence.'],
+    ['Reformulate politely: “That was unclear. I mean the mechanism is indirect.”','Let me rephrase that: the mechanism is indirect.'],
+    ['Introduce a possible explanation: “Lower trust may reduce compliance.”','One possible explanation is that lower trust reduces compliance.'],
+    ['Connect an example back to the argument: “Turnout fell after the reform.”','This example matters because it shows how the reform may have affected participation.'],
+    ['Add a contrast signpost: “The second case shows weaker enforcement.”','By contrast, the second case shows weaker enforcement.'],
+    ['Conclude cautiously: “The findings show institutional design matters.”','Taken together, the findings suggest that institutional design matters.'],
+    ['Define a term in Q&A: “Individuality means the capacity to revise commitments.”','What I mean by individuality is the capacity to revise commitments.'],
+    ['Give a roadmap: define the concept, examine the mechanism, discuss implications.','I will first define the concept, then examine the mechanism, and finally discuss its implications.']
+  ];
+  transforms.forEach((x,i)=>exercises.push(exercise({id:id('acadtrans'),concept:'academicdiscourse',domain:i%2?'philosophy':'academic',type:'text',transfer:'guided',difficulty:3,prompt:x[0],acceptedAnswers:[x[1]],answer:x[1],explanation:'The goal is to retrieve an academic discourse frame that matches the communicative function.',misconception:'academic_discourse_function'})));
+
+  const free=[
+    ['academic','Present a thesis in 4–5 sentences. Include a thesis frame, a roadmap, one hedged claim and one transition.','Model: My main argument is that platform personalization changes the conditions of individual choice. I will first define individuality, then examine the mechanism, and finally discuss its implications. The evidence suggests that the effect may vary across contexts. This leads to a broader question about autonomy.'],
+    ['philosophy','Answer an objection to a philosophical claim. Acknowledge the objection, draw a distinction, and reformulate your position.','Model: I see the concern, but I would draw a distinction between dependence and domination. What I mean is that social dependence does not necessarily eliminate individuality. Let me rephrase that: the argument concerns the quality of the relation, not the absence of relations.'],
+    ['politics','Explain a finding cautiously: state the result, give one possible explanation, and identify a limitation.','Model: The results indicate a decline in trust. One possible explanation is weaker institutional performance. However, the evidence does not establish a single causal mechanism.'],
+    ['academic','Give a 60-second conclusion to a presentation using taken together, suggests that, and one implication.','Model: Taken together, these findings suggest that institutional capacity shapes how reforms are experienced. If this interpretation is correct, it has implications for how we understand public trust.'],
+    ['academic','Respond to a difficult Q&A question without losing the turn. Use an acknowledgment, a distinction, a cautious claim and self-repair.','Model: That is an important question. I would distinguish between the empirical and normative claims. The evidence appears to support the first more strongly. What I mean is that the second remains an interpretive argument.']
+  ];
+  free.forEach((x)=>exercises.push(exercise({id:id('acadfree'),concept:'academicdiscourse',domain:x[0],type:'selfcheck',transfer:'free',difficulty:3,prompt:x[1],options:[],answer:x[2],explanation:'Compare the communicative functions in your answer with the model. Do not copy the wording; check signposting, hedging, concession and repair.',misconception:'academic_transfer'})));
+}
+addAcademicDiscourse();
 
 function addV04RichPractice(){
   const builderMap={
