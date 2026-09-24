@@ -1,11 +1,23 @@
 name: Validate content
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: '3.12'
-      - run: python scripts/validate_content.py
+          node-version: '22'
+      - name: Syntax check
+        run: |
+          node --check js/app.js
+          node --check js/engine.js
+          node --check js/store.js
+          node --check js/content.js
+      - name: Validate pedagogical content
+        run: node scripts/validate_content.mjs
