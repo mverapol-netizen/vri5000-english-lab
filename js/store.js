@@ -65,12 +65,25 @@ export function recordAttempt(state,exercise,correct,userAnswer,{confidence='unk
   c.transfer[bucket].attempts++;if(correct)c.transfer[bucket].correct++;
   c.reviewAt=new Date(now.getTime()+conceptIntervalHours(c,correct)*3600e3).toISOString();
 
+  const key=exercise.misconception||exercise.id;
   if(!correct){
-    const key=exercise.misconception||exercise.id;
     let err=state.errors.find(e=>!e.resolved&&e.concept===exercise.concept&&(e.misconception||e.exerciseId)===key);
-    if(err){err.occurrences=(err.occurrences||1)+1;err.lastSeen=iso;err.userAnswer=userAnswer;err.correctAnswer=exercise.answer;err.explanation=exercise.explanation;err.exerciseId=exercise.id}
-    else state.errors.unshift({id:crypto.randomUUID(),exerciseId:exercise.id,concept:exercise.concept,prompt:exercise.prompt,userAnswer,correctAnswer:exercise.answer,explanation:exercise.explanation,misconception:exercise.misconception,createdAt:iso,lastSeen:iso,occurrences:1,resolved:false});
+    if(err){
+      err.occurrences=(err.occurrences||1)+1;err.lastSeen=iso;err.userAnswer=userAnswer;err.correctAnswer=exercise.answer;err.explanation=exercise.explanation;err.exerciseId=exercise.id;err.repairStreak=0;
+    } else {
+      state.errors.unshift({id:crypto.randomUUID(),exerciseId:exercise.id,concept:exercise.concept,prompt:exercise.prompt,userAnswer,correctAnswer:exercise.answer,explanation:exercise.explanation,misconception:exercise.misconception,createdAt:iso,lastSeen:iso,occurrences:1,repairStreak:0,resolved:false});
+    }
     state.errors=state.errors.slice(0,100);
+  } else {
+    const related=state.errors.filter(e=>!e.resolved&&e.concept===exercise.concept&&(e.misconception||e.exerciseId)===key);
+    for(const err of related){
+      err.repairStreak=(err.repairStreak||0)+1;
+      err.lastRepair=iso;
+      if(err.repairStreak>=3){
+        err.resolved=true;
+        err.resolvedAt=iso;
+      }
+    }
   }
   saveState(state);return state;
 }
