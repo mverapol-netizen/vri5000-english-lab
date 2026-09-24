@@ -1,12 +1,23 @@
 # Roadmap — VRI5000 Personal English Lab
 
-## v0.6 — current
+## v0.6 — completed
 - Pronunciation and connected-speech corpus added.
 - Device text-to-speech model playback added.
 - Local microphone recording and pronunciation self-audit added.
 - Next: deeper shadowing workflow, chunk-focused retrieval and pronunciation progress analytics.
 
-## v0.7
+## v0.7 — current
+- Unit 4/Written Exam Lab deepened with intensifiers and for/against writing.
+- Unit 5 Change Lab built.
+- Conditional counterarguments added as a tracked concept.
+- Problem/solution writing lab built.
+- Final Oral five-part transfer simulator built.
+- Progress diagnostics and weak-area recommendations built.
+- Course events are individually practiceable.
+- Quick 5-minute mode added.
+- Next: richer listening/shadowing, vocabulary/chunk expansion, and user-data calibration.
+
+## v0.8
 - Written Exam lab:
   - future forms
   - intensifiers
