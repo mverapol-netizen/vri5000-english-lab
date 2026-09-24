@@ -329,10 +329,13 @@ const schedules={
   {date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
   {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
   {date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
+  {date:'2026-11-02',title:'Unit 4 Review · For & against writing',concepts:['future','intensifiers','academicdiscourse']},
   {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
   {date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
   {date:'2026-11-16',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
   {date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+  {date:'2026-11-23',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','conditionals','academicdiscourse']},
+  {date:'2026-11-30',title:'Final Oral preparation',concepts:concepts.map(x=>x.id)},
   {date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
  ],
  mon_wed:[
@@ -345,10 +348,13 @@ const schedules={
 {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
 {date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
 {date:'2026-10-28',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
+{date:'2026-11-02',title:'Unit 4 Review · For & against writing',concepts:['future','intensifiers','academicdiscourse']},
 {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-16',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
 {date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+{date:'2026-11-23',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','conditionals','academicdiscourse']},
+{date:'2026-11-30',title:'Final Oral preparation',concepts:concepts.map(x=>x.id)},
 {date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
  tue_thu:[
@@ -361,10 +367,13 @@ const schedules={
 {date:'2026-10-22',title:'Unit 4.1 · Future forms',concepts:['future']},
 {date:'2026-10-27',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
 {date:'2026-10-29',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
+{date:'2026-11-03',title:'Unit 4 Review · For & against writing',concepts:['future','intensifiers','academicdiscourse']},
 {date:'2026-11-05',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-10',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-17',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
 {date:'2026-11-19',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+{date:'2026-11-24',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','conditionals','academicdiscourse']},
+{date:'2026-12-01',title:'Final Oral preparation',concepts:concepts.map(x=>x.id)},
 {date:'2026-12-03',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
  wed_fri_am:[
@@ -377,10 +386,13 @@ const schedules={
 {date:'2026-10-23',title:'Unit 4.1 · Future forms',concepts:['future']},
 {date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
 {date:'2026-10-30',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
+{date:'2026-11-04',title:'Unit 4 Review · For & against writing',concepts:['future','intensifiers','academicdiscourse']},
 {date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-11',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-18',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
 {date:'2026-11-20',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+{date:'2026-11-25',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','conditionals','academicdiscourse']},
+{date:'2026-12-02',title:'Final Oral preparation',concepts:concepts.map(x=>x.id)},
 {date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
  wed_fri_pm:[
