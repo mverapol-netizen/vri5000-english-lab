@@ -1,6 +1,6 @@
 import {loadState,saveState,recordAttempt,updateConfidence,resetState,recordSpeaking,recordExamRun} from './store.js';
 import {pickExercises,todayMix,reviewMix,challengeMix,eventPack,conceptStats,daysUntil,isCorrect} from './engine.js';
-import {concepts,C,domains,exercises,speaking,listening,pronunciation,schedules} from './content.js';
+import {concepts,C,domains,exercises,chunks,shadowing,conversations,speaking,listening,pronunciation,schedules} from './content.js';
 
 const app=document.getElementById('app');
 const title=document.getElementById('pageTitle');
@@ -11,6 +11,9 @@ let mediaRecorder=null,mediaChunks=[],recordingUrl=null,timerHandle=null,timerSt
 let oralSim=null;
 let presentationSim=null;
 let finalOralSim=null;
+let chunkSession=null;
+let shadowSession=null;
+let conversationSession=null;
 
 function esc(s){return String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
 function setTitle(t){title.textContent=t}
@@ -30,12 +33,12 @@ document.getElementById('importProgress').onclick=()=>document.getElementById('i
 document.getElementById('importProgressFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const incoming=JSON.parse(await f.text());localStorage.setItem('vri5000_lab_state_v03',JSON.stringify(incoming));state=loadState();document.getElementById('settingsDialog').close();render()}catch{alert('Backup inválido')}};
 
 function render(){if(route==='today')return renderToday();if(route==='learn')return renderLearn();if(route==='practice')return renderPractice();if(route==='course')return renderCourse();if(route==='progress')return renderProgress()}
-function renderToday(){setTitle('Today');const ev=nextEvent();const due=reviewMix(exercises,state,10).length;const now=new Date();const assessment=currentEvents().find(e=>e.assessment&&new Date(e.date+'T23:59:59')>=now);const assessmentDays=assessment?daysUntil(assessment.date):999;const oral=assessmentDays<=14&&assessment?.title.includes('Oral Midterm');const finalOral=assessmentDays<=21&&assessment?.title.includes('Final Oral');const academic=assessmentDays<=14&&assessment?.title.includes('Academic Project');const written=(assessmentDays<=14&&assessment?.title.includes('Written Exam'))||ev?.title.includes('Unit 4');const unit5=ev?.title.includes('Unit 5');app.innerHTML=card('<div class="kicker">Adaptive session</div><h2>'+esc(ev.title)+'</h2><p class="muted">'+daysUntil(ev.date)+' días · '+esc(ev.date)+'</p><div class="grid"><button class="primary" id="todayStart">Start '+state.settings.duration+' min</button><button class="secondary" id="quickStart">Quick 5 min</button><button class="secondary" id="reviewStart">Review due ('+due+')</button><button class="secondary" id="challengeStart">Challenge me</button><button class="secondary" id="speakStart">Speaking Studio</button><button class="secondary" id="listenStart">Listening</button><button class="secondary" id="pronStart">Pronunciation</button></div>','hero')+(oral?card('<div class="kicker">Immediate priority · '+assessmentDays+' days</div><h3>Oral Midterm Lab</h3><p>Questions, narrative tenses, conditionals, agreement, chunks and productive transfer.</p><button class="primary" id="oralLab">Open Oral Lab</button>','urgent-card'):'')+(academic?card('<div class="kicker">Next assessment · '+assessmentDays+' days</div><h3>Academic Project Lab</h3><p>Thesis, signposting, hedging, sentence control and Q&A.</p><button class="primary" id="academicLab">Open Presentation Lab</button>','urgent-card'):'')+(written?card('<div class="kicker">'+(assessment?.title.includes('Written Exam')?'Written Exam · '+assessmentDays+' days':'Course preparation')+'</div><h3>Unit 4 / Written Exam Lab</h3><p>Future forms, intensifiers and short for-and-against writing.</p><button class="primary" id="writtenLab">Open Written Lab</button>','urgent-card'):'')+(unit5?card('<div class="kicker">Course preparation</div><h3>Unit 5 Change Lab</h3><p>Passive & causative, -ing/infinitive forms, conditional counterarguments and problem/solution writing.</p><button class="primary" id="unit5Lab">Open Unit 5 Lab</button>','urgent-card'):'')+(finalOral?card('<div class="kicker">Final assessment · '+assessmentDays+' days</div><h3>Final Oral Lab</h3><p>Integrated productive transfer across the semester with timed speaking and repair.</p><button class="primary" id="finalOralLab">Open Final Oral Lab</button>','urgent-card'):'')+card('<h3>How the engine works</h3><p>It prefers unseen exercises, active errors and due concepts. Correct items are normally replaced by new items testing the same structure.</p>');
+function renderToday(){setTitle('Today');const ev=nextEvent();const due=reviewMix(exercises,state,10).length;const now=new Date();const assessment=currentEvents().find(e=>e.assessment&&new Date(e.date+'T23:59:59')>=now);const assessmentDays=assessment?daysUntil(assessment.date):999;const oral=assessmentDays<=14&&assessment?.title.includes('Oral Midterm');const finalOral=assessmentDays<=21&&assessment?.title.includes('Final Oral');const academic=assessmentDays<=14&&assessment?.title.includes('Academic Project');const written=(assessmentDays<=14&&assessment?.title.includes('Written Exam'))||ev?.title.includes('Unit 4');const unit5=ev?.title.includes('Unit 5');app.innerHTML=card('<div class="kicker">Adaptive session</div><h2>'+esc(ev.title)+'</h2><p class="muted">'+daysUntil(ev.date)+' días · '+esc(ev.date)+'</p><div class="grid"><button class="primary" id="todayStart">Start '+state.settings.duration+' min</button><button class="secondary" id="quickStart">Quick 5 min</button><button class="secondary" id="reviewStart">Review due ('+due+')</button><button class="secondary" id="challengeStart">Challenge me</button><button class="secondary" id="speakStart">Speaking Studio</button><button class="secondary" id="conversationStart">Conversation</button><button class="secondary" id="chunkStart">Chunks</button><button class="secondary" id="shadowStart">Shadowing</button><button class="secondary" id="listenStart">Listening</button><button class="secondary" id="pronStart">Pronunciation</button></div>','hero')+(oral?card('<div class="kicker">Immediate priority · '+assessmentDays+' days</div><h3>Oral Midterm Lab</h3><p>Questions, narrative tenses, conditionals, agreement, chunks and productive transfer.</p><button class="primary" id="oralLab">Open Oral Lab</button>','urgent-card'):'')+(academic?card('<div class="kicker">Next assessment · '+assessmentDays+' days</div><h3>Academic Project Lab</h3><p>Thesis, signposting, hedging, sentence control and Q&A.</p><button class="primary" id="academicLab">Open Presentation Lab</button>','urgent-card'):'')+(written?card('<div class="kicker">'+(assessment?.title.includes('Written Exam')?'Written Exam · '+assessmentDays+' days':'Course preparation')+'</div><h3>Unit 4 / Written Exam Lab</h3><p>Future forms, intensifiers and short for-and-against writing.</p><button class="primary" id="writtenLab">Open Written Lab</button>','urgent-card'):'')+(unit5?card('<div class="kicker">Course preparation</div><h3>Unit 5 Change Lab</h3><p>Passive & causative, -ing/infinitive forms, conditional counterarguments and problem/solution writing.</p><button class="primary" id="unit5Lab">Open Unit 5 Lab</button>','urgent-card'):'')+(finalOral?card('<div class="kicker">Final assessment · '+assessmentDays+' days</div><h3>Final Oral Lab</h3><p>Integrated productive transfer across the semester with timed speaking and repair.</p><button class="primary" id="finalOralLab">Open Final Oral Lab</button>','urgent-card'):'')+card('<h3>How the engine works</h3><p>It prefers unseen exercises, active errors and due concepts. Correct items are normally replaced by new items testing the same structure.</p>');
  document.getElementById('todayStart').onclick=()=>startSession(todayMix(exercises,state,countForMinutes(state.settings.duration),{courseConcepts:ev.concepts}),'Today');
  document.getElementById('quickStart').onclick=()=>startSession(todayMix(exercises,state,5,{courseConcepts:ev.concepts}),'Quick 5');
  document.getElementById('reviewStart').onclick=()=>startSession(reviewMix(exercises,state,10),'Review');
  document.getElementById('challengeStart').onclick=()=>startSession(challengeMix(exercises,state,10),'Challenge');
- document.getElementById('speakStart').onclick=()=>renderSpeaking();document.getElementById('listenStart').onclick=()=>renderListeningLab();document.getElementById('pronStart').onclick=()=>renderPronunciationLab();
+ document.getElementById('speakStart').onclick=()=>renderSpeaking();document.getElementById('conversationStart').onclick=()=>renderConversationLab();document.getElementById('chunkStart').onclick=()=>renderChunkLab();document.getElementById('shadowStart').onclick=()=>renderShadowingLab();document.getElementById('listenStart').onclick=()=>renderListeningLab();document.getElementById('pronStart').onclick=()=>renderPronunciationLab();
  if(oral)document.getElementById('oralLab').onclick=renderOralLab;if(academic)document.getElementById('academicLab').onclick=renderAcademicLab;if(written)document.getElementById('writtenLab').onclick=renderWrittenLab;if(unit5)document.getElementById('unit5Lab').onclick=renderUnit5Lab;if(finalOral)document.getElementById('finalOralLab').onclick=renderFinalOralLab;
 }
 function renderLearn(){setTitle('Learn');app.innerHTML='<div class="section-title">Concept library</div>'+concepts.sort((a,b)=>b.priority-a.priority).map(c=>card('<div class="row between"><div><div class="kicker">Priority '+c.priority+'</div><h3>'+esc(c.name)+'</h3></div>'+pill(c.id)+'</div><p>'+esc(c.summary)+'</p><button class="secondary learnBtn" data-id="'+c.id+'">Open</button>')).join('');document.querySelectorAll('.learnBtn').forEach(b=>b.onclick=()=>renderConcept(b.dataset.id))}
@@ -44,7 +47,7 @@ function renderPractice(){
   setTitle('Practice');
   app.innerHTML=card('<h2>Choose your practice</h2><label>Content<select id="pConcept"><option value="mixed">Mixed</option>'+concepts.map(c=>'<option value="'+c.id+'">'+esc(c.name)+'</option>').join('')+'</select></label><label>Exercise type<select id="pType"><option value="mixed">Mixed formats</option><option value="mcq">Choice / contrast</option><option value="text">Correction / transformation</option><option value="builder">Sentence builder</option><option value="timeline">Timeline</option><option value="selfcheck">Free production</option></select></label><label>Context<select id="pDomain"><option value="all">All contexts</option>'+domains.map(d=>'<option>'+d+'</option>').join('')+'</select></label><label>Length<select id="pCount"><option>8</option><option selected>12</option><option>20</option></select></label><button class="primary" id="pStart">Start practice</button>')+
   card('<h3>Production-first options</h3><div class="grid"><button class="secondary" id="guidedStart">Guided production</button><button class="secondary" id="freeStart">Free transfer</button><button class="secondary" id="correctionStart">Error correction</button><button class="secondary" id="builderStart">Sentence builders</button><button class="secondary" id="timelineStart">Timeline practice</button><button class="secondary" id="mixedStart">Mixed challenge</button></div>')+
-  card('<h3>Focused labs</h3><div class="grid"><button class="secondary" id="labOral">Oral Midterm</button><button class="secondary" id="labAcademic">Academic Project</button><button class="secondary" id="labWritten">Unit 4 / Written</button><button class="secondary" id="labUnit5">Unit 5 Change</button><button class="secondary" id="labFinal">Final Oral</button><button class="secondary" id="labListening">Listening</button><button class="secondary" id="labPron">Pronunciation</button></div>');
+  card('<h3>Focused labs</h3><div class="grid"><button class="secondary" id="labOral">Oral Midterm</button><button class="secondary" id="labAcademic">Academic Project</button><button class="secondary" id="labWritten">Unit 4 / Written</button><button class="secondary" id="labUnit5">Unit 5 Change</button><button class="secondary" id="labFinal">Final Oral</button><button class="secondary" id="labConversation">Conversation</button><button class="secondary" id="labChunks">Chunks</button><button class="secondary" id="labShadow">Shadowing</button><button class="secondary" id="labListening">Listening</button><button class="secondary" id="labPron">Pronunciation</button></div>');
   document.getElementById('pStart').onclick=()=>startSession(pickExercises(exercises,state,{concept:document.getElementById('pConcept').value,type:document.getElementById('pType').value,domain:document.getElementById('pDomain').value,count:+document.getElementById('pCount').value}),'Practice');
   document.getElementById('guidedStart').onclick=()=>startSession(pickExercises(exercises,state,{count:12,transfer:'guided'}),'Guided production');
   document.getElementById('freeStart').onclick=()=>startSession(pickExercises(exercises,state,{count:8,transfer:'free'}),'Free transfer');
@@ -57,6 +60,9 @@ function renderPractice(){
   document.getElementById('labWritten').onclick=renderWrittenLab;
   document.getElementById('labUnit5').onclick=renderUnit5Lab;
   document.getElementById('labFinal').onclick=renderFinalOralLab;
+  document.getElementById('labConversation').onclick=()=>renderConversationLab();
+  document.getElementById('labChunks').onclick=()=>renderChunkLab();
+  document.getElementById('labShadow').onclick=()=>renderShadowingLab();
   document.getElementById('labListening').onclick=renderListeningLab;
   document.getElementById('labPron').onclick=renderPronunciationLab;
 }
@@ -431,6 +437,125 @@ function listeningCoverage(reference,answer){
   for(const w of ref){if(counts[w]>0){hit++;counts[w]--}}
   return Math.round(hit/ref.length*100);
 }
+
+function chunkNorm(s){return String(s||'').toLowerCase().replace(/[’']/g,"'").replace(/[.,?!;:"]/g,'').replace(/\s+/g,' ').trim()}
+function ensureChunkHistory(){if(!state.chunkHistory)state.chunkHistory={};return state.chunkHistory}
+function chunkRank(ch){
+  const h=ensureChunkHistory()[ch.id];
+  if(!h)return 0;
+  if(h.lastCorrect===false)return 1;
+  if(h.reviewAt&&new Date(h.reviewAt).getTime()<=Date.now())return 2;
+  return 3;
+}
+function chooseChunks(area='all',count=5){
+  let pool=chunks.filter(x=>area==='all'||x.area===area);
+  return [...pool].sort((a,b)=>chunkRank(a)-chunkRank(b)||Math.random()-.5).slice(0,count);
+}
+function renderChunkLab(){
+  setTitle('Chunk Lab');
+  const areas=[...new Set(chunks.map(x=>x.area))];
+  app.innerHTML=card('<div class="kicker">Productive vocabulary</div><h2>Learn complete chunks, not isolated words</h2><p>Recall the English expression from meaning, then reuse it in a new sentence or speaking turn.</p><label>Area<select id="chunkArea"><option value="all">All areas</option>'+areas.map(a=>'<option>'+esc(a)+'</option>').join('')+'</select></label><div class="grid"><button class="primary" id="chunkRecall">Recall 5</button><button class="secondary" id="chunkBrowse">Browse bank</button></div>')+
+  card('<h3>Why chunks?</h3><p class="muted">The goal is fast retrieval of complete combinations such as <strong>depend on</strong>, <strong>raise an objection</strong>, <strong>the evidence suggests that</strong>, and natural conversational frames.</p>');
+  document.getElementById('chunkRecall').onclick=()=>startChunkSession(document.getElementById('chunkArea').value);
+  document.getElementById('chunkBrowse').onclick=()=>renderChunkBrowse(document.getElementById('chunkArea').value);
+}
+function renderChunkBrowse(area='all'){
+  setTitle('Chunk Bank');
+  const pool=chunks.filter(x=>area==='all'||x.area===area);
+  app.innerHTML=card('<button class="ghost small-btn" id="chunkBack">← Chunk Lab</button><h2>'+esc(area==='all'?'All chunks':area)+'</h2><p class="muted">'+pool.length+' chunks</p>')+
+  pool.map(ch=>card('<div class="kicker">'+esc(ch.area)+'</div><h3>'+esc(ch.text)+'</h3><p>'+esc(ch.meaning_es)+'</p><div class="example">'+esc(ch.example)+'</div><p class="muted small">'+esc(ch.trap)+'</p>')).join('');
+  document.getElementById('chunkBack').onclick=renderChunkLab;
+}
+function startChunkSession(area='all'){
+  chunkSession={items:chooseChunks(area,5),index:0,correct:0,area};
+  renderChunkItem();
+}
+function renderChunkItem(){
+  const ch=chunkSession.items[chunkSession.index];
+  if(!ch)return finishChunkSession();
+  setTitle('Chunk Recall · '+(chunkSession.index+1)+' / '+chunkSession.items.length);
+  app.innerHTML=card('<div class="row between">'+pill(ch.area)+pill((chunkSession.index+1)+' / '+chunkSession.items.length,'gold')+'</div><h2>'+esc(ch.meaning_es)+'</h2><p class="muted">Type the English chunk from memory.</p><input class="input" id="chunkAnswer" autocomplete="off" placeholder="English chunk…"><button class="primary" id="chunkCheck">Check</button><div id="chunkFeedback"></div>');
+  document.getElementById('chunkCheck').onclick=()=>checkChunkAnswer(ch);
+}
+function checkChunkAnswer(ch){
+  const answer=document.getElementById('chunkAnswer').value.trim();
+  const ok=chunkNorm(answer)===chunkNorm(ch.text);
+  if(ok)chunkSession.correct++;
+  const hist=ensureChunkHistory();
+  const h=hist[ch.id]||{attempts:0,correct:0,streak:0};
+  h.attempts++;if(ok)h.correct++;h.lastCorrect=ok;h.lastSeen=new Date().toISOString();h.streak=ok?(h.streak||0)+1:0;
+  const hours=ok?[24,72,168,336][Math.min(h.streak-1,3)]:12;
+  h.reviewAt=new Date(Date.now()+hours*3600e3).toISOString();hist[ch.id]=h;saveState(state);
+  document.getElementById('chunkFeedback').innerHTML='<div class="feedback '+(ok?'':'error')+'"><h3>'+(ok?'Correct':'Review it')+'</h3><p><strong>'+esc(ch.text)+'</strong> — '+esc(ch.meaning_es)+'</p><div class="example">'+esc(ch.example)+'</div><p class="muted small">'+esc(ch.trap)+'</p><label>Reuse it now<input class="input" id="chunkReuse" placeholder="Write one new sentence with the chunk…"></label><button class="primary" id="chunkNext">'+(chunkSession.index===chunkSession.items.length-1?'Finish':'Next')+'</button></div>';
+  document.getElementById('chunkNext').onclick=()=>{chunkSession.index++;renderChunkItem()};
+}
+function finishChunkSession(){
+  const pct=Math.round(chunkSession.correct/chunkSession.items.length*100);
+  state.sessions.unshift({date:new Date().toISOString(),label:'Chunk Recall',type:'chunks',area:chunkSession.area,total:chunkSession.items.length,correct:chunkSession.correct,coverage:pct});
+  state.sessions=state.sessions.slice(0,50);saveState(state);
+  app.innerHTML=card('<div class="kicker">Chunk session complete</div><h2>'+pct+'%</h2><p>'+chunkSession.correct+' / '+chunkSession.items.length+' recalled exactly.</p><div class="grid"><button class="primary" id="chunkAgain">Another 5</button><button class="secondary" id="chunkHome">Back to Chunk Lab</button></div>','hero');
+  document.getElementById('chunkAgain').onclick=()=>startChunkSession(chunkSession.area);
+  document.getElementById('chunkHome').onclick=renderChunkLab;
+}
+
+function renderShadowingLab(){
+  setTitle('Shadowing Lab');
+  const s=shadowing[Math.floor(Math.random()*shadowing.length)];
+  shadowSession={item:s};
+  app.innerHTML=card('<div class="row between">'+pill(s.domain)+pill(s.focus,'gold')+'</div><h2>Listen → compare → shadow → reuse</h2><p class="muted">First listen without the transcript. On the second pass, focus on rhythm and stressed words.</p><div class="grid"><button class="primary" id="shadowListen1">First listen</button><button class="secondary" id="shadowListen2">Second listen</button><button class="secondary" id="shadowReveal">Reveal transcript</button><button class="secondary" id="shadowNew">New passage</button></div><div id="shadowTranscript"></div>')+
+  card('<h3>Shadowing</h3><p>After revealing the transcript, play the model again and speak almost simultaneously with it. Imitate rhythm, stress and chunking rather than individual words.</p><div class="big-timer" id="sTimer">40</div><div class="grid"><button class="primary" id="recordBtn">Record shadowing</button><button class="secondary" id="shadowModel">Play model</button></div><div id="audioBox"></div><div class="divider"></div><h3>Self-audit</h3><label class="check-line"><input type="checkbox" class="shadowCheck">I kept natural thought groups.</label><label class="check-line"><input type="checkbox" class="shadowCheck">I stressed the key content words.</label><label class="check-line"><input type="checkbox" class="shadowCheck">I stayed close to the model rhythm.</label><button class="secondary" id="shadowSave">Save shadowing audit</button>')+
+  card('<h3>Reuse</h3><p>'+esc(s.reusePrompt)+'</p><div>'+s.chunks.map(x=>pill(x)).join('')+'</div><textarea class="input textarea" id="shadowReuse" placeholder="Write notes, then say it aloud…"></textarea>');
+  const play=(rate=.9)=>{if(!('speechSynthesis' in window)){alert('Text-to-speech is unavailable on this device.');return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(s.transcript);u.lang='en-US';u.rate=rate;speechSynthesis.speak(u)};
+  document.getElementById('shadowListen1').onclick=()=>play(.92);
+  document.getElementById('shadowListen2').onclick=()=>play(.82);
+  document.getElementById('shadowModel').onclick=()=>play(.88);
+  document.getElementById('shadowReveal').onclick=()=>{document.getElementById('shadowTranscript').innerHTML='<div class="feedback"><h3>Transcript</h3><p>'+esc(s.transcript)+'</p><div>'+s.chunks.map(x=>pill(x,'gold')).join('')+'</div></div>'};
+  document.getElementById('shadowNew').onclick=renderShadowingLab;
+  document.getElementById('recordBtn').onclick=()=>toggleRecording({seconds:40});
+  document.getElementById('shadowSave').onclick=()=>{
+    const checks=[...document.querySelectorAll('.shadowCheck:checked')].length;
+    const coverage=Math.round(checks/3*100);
+    state.sessions.unshift({date:new Date().toISOString(),label:'Shadowing Lab',type:'shadowing',domain:s.domain,focus:s.focus,coverage,reuse:document.getElementById('shadowReuse').value.trim()});
+    state.sessions=state.sessions.slice(0,50);saveState(state);alert('Shadowing audit saved locally.');
+  };
+}
+
+function renderConversationLab(){
+  setTitle('Conversation Lab');
+  app.innerHTML=card('<div class="kicker">Interactive speaking</div><h2>Choose a conversation</h2><p>Respond naturally, keep the turn moving, and practice returning questions instead of producing isolated monologues.</p>')+
+  conversations.map((s,i)=>card('<div class="kicker">'+esc(s.domain)+'</div><h3>'+esc(s.title)+'</h3><p>'+esc(s.opening)+'</p><button class="secondary convStart" data-i="'+i+'">Start conversation</button>')).join('');
+  document.querySelectorAll('.convStart').forEach(b=>b.onclick=()=>startConversation(+b.dataset.i));
+}
+function startConversation(index){
+  conversationSession={scenario:conversations[index],turn:0,scores:[]};
+  renderConversationTurn();
+}
+function renderConversationTurn(){
+  const s=conversationSession.scenario;
+  const t=s.turns[conversationSession.turn];
+  if(!t)return finishConversation();
+  setTitle(s.title+' · '+(conversationSession.turn+1)+' / '+s.turns.length);
+  const other=conversationSession.turn===0?s.opening+' '+t.other:t.other;
+  app.innerHTML=card('<div class="kicker">Other person</div><div class="exercise-prompt">'+esc(other)+'</div><div class="divider"></div><h3>Your task</h3><p>'+esc(t.task)+'</p><div class="big-timer" id="sTimer">60</div><div class="grid"><button class="primary" id="recordBtn">Record response</button><button class="secondary" id="convFrames">Show useful frames</button></div><div id="audioBox"></div><div id="convFrameBox"></div><div class="divider"></div><h3>Self-audit</h3><label class="check-line"><input type="checkbox" class="convCheck">I answered the content naturally.</label><label class="check-line"><input type="checkbox" class="convCheck">I used the target structure/function.</label><label class="check-line"><input type="checkbox" class="convCheck">I kept the interaction moving with a follow-up or clear response.</label><button class="primary" id="convNext">'+(conversationSession.turn===s.turns.length-1?'Finish conversation':'Save & next turn')+'</button>');
+  document.getElementById('recordBtn').onclick=()=>toggleRecording({seconds:60});
+  document.getElementById('convFrames').onclick=()=>{document.getElementById('convFrameBox').innerHTML='<div class="feedback"><h3>Useful frames</h3>'+t.frames.map(x=>'<div class="example">'+esc(x)+'</div>').join('')+'</div>'};
+  document.getElementById('convNext').onclick=()=>{
+    const score=[...document.querySelectorAll('.convCheck:checked')].length;
+    conversationSession.scores.push(score);
+    conversationSession.turn++;renderConversationTurn();
+  };
+}
+function finishConversation(){
+  const total=conversationSession.scores.length*3;
+  const hit=conversationSession.scores.reduce((a,b)=>a+b,0);
+  const coverage=total?Math.round(hit/total*100):0;
+  state.sessions.unshift({date:new Date().toISOString(),label:'Conversation Lab · '+conversationSession.scenario.title,type:'conversation',domain:conversationSession.scenario.domain,coverage});
+  state.sessions=state.sessions.slice(0,50);saveState(state);
+  app.innerHTML=card('<div class="kicker">Conversation complete</div><h2>'+coverage+'% interaction checklist</h2><p>This is a self-audit of interaction, target language and follow-up behavior.</p><div class="grid"><button class="primary" id="convAgain">Try another</button><button class="secondary" id="convSame">Repeat scenario</button></div>','hero');
+  document.getElementById('convAgain').onclick=renderConversationLab;
+  document.getElementById('convSame').onclick=()=>startConversation(conversations.indexOf(conversationSession.scenario));
+}
+
 function renderListeningLab(){
   setTitle('Listening Lab');
   const item=listening[Math.floor(Math.random()*listening.length)];
