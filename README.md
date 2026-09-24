@@ -1,4 +1,4 @@
-# VRI5000 Personal English Lab — v0.4
+# VRI5000 Personal English Lab — v0.5
 
 Personal, Android-first PWA for VRI5000 Upper Intermediate English 1.
 
