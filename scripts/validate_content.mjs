@@ -1,4 +1,4 @@
-import {concepts,domains,exercises,speaking,pronunciation,schedules} from '../js/content.js';
+import {concepts,domains,exercises,speaking,listening,pronunciation,schedules} from '../js/content.js';
 
 const errors=[];
 const conceptIds=new Set(concepts.map(c=>c.id));
@@ -47,6 +47,12 @@ for(const p of speaking){
   if(!p.prompt||!p.targets?.length||!p.seconds) errors.push('invalid speaking prompt');
 }
 
+for(const l of listening){
+  if(!l.id||!l.concept||!l.focus||!l.transcript||!l.tip) errors.push('invalid listening item');
+  if(l.concept && !conceptIds.has(l.concept)) errors.push('listening '+l.id+': unknown concept '+l.concept);
+  if(l.domain && !domains.includes(l.domain)) errors.push('listening '+l.id+': undeclared domain '+l.domain);
+}
+
 for(const p of pronunciation){
   if(!p.id||!p.focus||!p.sentence||!p.tip||!p.seconds) errors.push('invalid pronunciation item');
 }
@@ -69,6 +75,7 @@ console.log(JSON.stringify({
   guided:exercises.filter(e=>e.transfer==='guided').length,
   free:exercises.filter(e=>e.transfer==='free').length,
   speaking:speaking.length,
+  listening:listening.length,
   pronunciation:pronunciation.length,
   exactDuplicates:0,
   byType:Object.fromEntries([...new Set(exercises.map(e=>e.type))].map(t=>[t,exercises.filter(e=>e.type===t).length]))
