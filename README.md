@@ -9,7 +9,7 @@ The repository is now the live development source for the app. The design is del
 The app currently includes:
 
 - 10 concept families
-- 349 unique exercise instances generated from finite, auditable templates
+- 401 unique exercise instances generated from finite, auditable templates
 - 0 exact prompt + answer duplicates
 - 20 free-transfer/self-check tasks
 - 24 speaking challenges with microphone recording
