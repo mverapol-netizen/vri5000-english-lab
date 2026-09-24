@@ -53,7 +53,7 @@ function renderPractice(){
 function renderCourse(){setTitle('Course Path');const evs=currentEvents();const next=nextEvent();app.innerHTML=card('<div class="kicker">Current section</div><h2>'+esc(state.settings.section)+'</h2><p>Next: <strong>'+esc(next.title)+'</strong> · '+daysUntil(next.date)+' days</p><div class="study-pack"><button class="secondary" data-phase="prepare">Prepare</button><button class="secondary" data-phase="consolidate">Consolidate</button><button class="secondary" data-phase="transfer">Transfer test</button></div>')+'<div class="section-title">Timeline</div>'+evs.map(e=>card('<div class="row between"><div><strong>'+esc(e.date)+'</strong><h3>'+esc(e.title)+'</h3><div>'+e.concepts.slice(0,4).map(x=>pill(C[x]?.name||x)).join('')+'</div></div>'+(e.assessment?pill('ASSESSMENT','gold'):'')+'</div>')).join('');document.querySelectorAll('[data-phase]').forEach(b=>b.onclick=()=>startSession(eventPack(exercises,state,next,b.dataset.phase,12),next.title+' · '+b.dataset.phase))}
 function renderProgress(){setTitle('Progress');const total=Object.values(state.seen).reduce((a,x)=>a+(x.attempts||0),0);const active=state.errors.filter(e=>!e.resolved);app.innerHTML=card('<div class="grid"><div class="metric"><strong>'+total+'</strong><span>attempts</span></div><div class="metric"><strong>'+Object.keys(state.seen).length+'</strong><span>unique items</span></div><div class="metric"><strong>'+active.length+'</strong><span>active errors</span></div><div class="metric"><strong>'+exercises.length+'</strong><span>available items</span></div></div>')+'<div class="section-title">Mastery by concept</div>'+concepts.map(c=>{const s=conceptStats(state,c.id);return card('<div class="row between"><strong>'+esc(c.name)+'</strong>'+pill(s.status)+'</div><div class="progressbar"><span style="width:'+s.mastery+'%"></span></div><div class="transfer-row"><span>Controlled</span><div class="progressbar"><span style="width:'+s.rates.controlled+'%"></span></div><strong>'+s.rates.controlled+'%</strong></div><div class="transfer-row"><span>Guided</span><div class="progressbar"><span style="width:'+s.rates.guided+'%"></span></div><strong>'+s.rates.guided+'%</strong></div><div class="transfer-row"><span>Transfer</span><div class="progressbar"><span style="width:'+s.rates.free+'%"></span></div><strong>'+s.rates.free+'%</strong></div>')}).join('')+(active.length?'<div class="section-title">Error Bank</div>'+active.slice(0,10).map(e=>card('<strong>'+esc(C[e.concept]?.name||e.concept)+'</strong><p>'+esc(e.prompt)+'</p><p class="small">Your answer: '+esc(e.userAnswer)+'<br>Correct: '+esc(e.correctAnswer)+'</p><button class="secondary repairBtn" data-c="'+e.concept+'">Repair this area</button>')).join(''):'');document.querySelectorAll('.repairBtn').forEach(b=>b.onclick=()=>startSession(pickExercises(exercises,state,{concept:b.dataset.c,count:8}),'Error repair'))}
 
-function startSession(items,label){if(!items.length){alert('No exercises available for this selection yet.');return}session={items,index:0,correct:0,label,log:[]};renderExercise()}
+function startSession(items,label,after=null){if(!items.length){alert('No exercises available for this selection yet.');return}session={items,index:0,correct:0,label,log:[],after};renderExercise()}
 function renderExercise(){
   const ex=session.items[session.index];
   setTitle(session.label);
@@ -129,7 +129,7 @@ function answerTextExercise(ex,answer){
 function answerSelfcheck(ex){const answer=document.getElementById('freeAnswer').value.trim();const f=document.getElementById('feedbackBox');f.innerHTML='<div class="feedback"><h3>Model, not a script</h3><p>'+esc(ex.answer)+'</p><p>'+esc(ex.explanation)+'</p><p><strong>Did you use the target structure accurately?</strong></p><div class="selfcheck-row"><button class="primary" id="selfYes">Yes</button><button class="ghost" id="selfNo">Not yet</button></div></div>';document.getElementById('revealModel').disabled=true;document.getElementById('selfYes').onclick=()=>completeSelfcheck(ex,answer,true);document.getElementById('selfNo').onclick=()=>completeSelfcheck(ex,answer,false)}
 function completeSelfcheck(ex,answer,ok){recordAttempt(state,ex,ok,answer);if(ok)session.correct++;session.log.push({id:ex.id,concept:ex.concept,answer,correct:ok});document.getElementById('feedbackBox').insertAdjacentHTML('beforeend','<button class="primary" id="nextSelf" style="margin-top:10px">'+(session.index===session.items.length-1?'Finish':'Next')+'</button>');document.getElementById('nextSelf').onclick=()=>{session.index++;renderExercise()}}
 
-function finishSession(){const pct=Math.round(session.correct/session.items.length*100);state.sessions.unshift({date:new Date().toISOString(),label:session.label,total:session.items.length,correct:session.correct,log:session.log});state.sessions=state.sessions.slice(0,50);saveState(state);app.innerHTML=card('<div class="kicker">Session complete</div><h2>'+pct+'%</h2><p>'+session.correct+' / '+session.items.length+' correct.</p><p class="muted">The engine will reuse the structure before it reuses the exact successful item.</p><button class="primary" id="homeAfter">Back to Today</button>','hero');document.getElementById('homeAfter').onclick=()=>nav('today')}
+function finishSession(){const pct=Math.round(session.correct/session.items.length*100);const after=session.after;state.sessions.unshift({date:new Date().toISOString(),label:session.label,total:session.items.length,correct:session.correct,log:session.log});state.sessions=state.sessions.slice(0,50);saveState(state);app.innerHTML=card('<div class="kicker">Session complete</div><h2>'+pct+'%</h2><p>'+session.correct+' / '+session.items.length+' correct.</p><p class="muted">The engine will reuse the structure before it reuses the exact successful item.</p><div class="grid">'+(after?'<button class="primary" id="continueAfter">Continue rehearsal</button>':'')+'<button class="secondary" id="homeAfter">Back to Today</button></div>','hero');if(after)document.getElementById('continueAfter').onclick=after;document.getElementById('homeAfter').onclick=()=>nav('today')}
 
 function renderOralLab(){setTitle('Oral Midterm Lab');const routeDays=[['D−5','Questions + agreement'],['D−4','Narrative tenses'],['D−3','Conditionals + chunks'],['D−2','Integrated speaking'],['D−1','Full rehearsal']];app.innerHTML=card('<div class="kicker">Oral Midterm</div><h2>Productive control under pressure</h2><p>This is a personal practice lab based on course content and your diagnostic priorities; it is not a reconstruction of the official exam.</p><div class="grid"><button class="primary" id="oralMix">10 min warm-up</button><button class="secondary" id="oralSpeak">Speaking bank</button><button class="secondary" id="storyLab">Unit 3 Story Lab</button><button class="secondary" id="oralTransfer">Free transfer</button><button class="secondary" id="oralSim">Full rehearsal</button></div>')+card('<h3>Five-day route</h3>'+routeDays.map(x=>'<div class="route-day"><strong>'+x[0]+'</strong><div>'+x[1]+'</div></div>').join(''))+card('<h3>Skill drills</h3><div class="grid">'+['questions','narrative','conditionals','usedto','agreement','prepositions'].map(c=>'<button class="secondary oralDrill" data-c="'+c+'">'+esc(C[c].name)+'</button>').join('')+'</div>');document.getElementById('oralMix').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['questions','narrative','conditionals','usedto','agreement','prepositions'],count:12}),'Oral warm-up');document.getElementById('oralSpeak').onclick=()=>renderSpeaking(['questions','narrative','conditionals','usedto','agreement','prepositions']);document.getElementById('storyLab').onclick=renderStoryLab;document.getElementById('oralSim').onclick=renderOralSimulator;document.getElementById('oralTransfer').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['questions','narrative','conditionals','usedto','prepositions'],transfer:'free',count:8}),'Oral · free transfer');document.querySelectorAll('.oralDrill').forEach(b=>b.onclick=()=>startSession(pickExercises(exercises,state,{concept:b.dataset.c,count:10}),'Oral drill · '+C[b.dataset.c].name))}
 
@@ -196,27 +196,54 @@ function renderStoryLab(){
 
 function renderWrittenLab(){
   setTitle('Unit 4 / Written Exam Lab');
-  app.innerHTML=card('<div class="kicker">Unit 4</div><h2>Future system + short academic writing</h2><p>Practice functional choice between schedules, arrangements, predictions, ongoing future actions and completion before a future point.</p><div class="grid"><button class="primary" id="futureDrill">Future forms drill</button><button class="secondary" id="futureTransfer">Future transfer</button><button class="secondary" id="writingSprint">Writing sprint</button><button class="secondary" id="futureSpeak">Future speaking</button></div>')+card('<h3>Future map</h3><div class="example"><strong>Schedule:</strong> The seminar starts at 9.</div><div class="example"><strong>Arrangement:</strong> I am meeting my supervisor tomorrow.</div><div class="example"><strong>In progress:</strong> At 10, I will be presenting.</div><div class="example"><strong>Completed:</strong> By Friday, I will have finished.</div><div class="example"><strong>Duration:</strong> By December, I will have been studying English for four months.</div>');
+  app.innerHTML=card('<div class="kicker">Unit 4 · Written Exam preparation</div><h2>Future system + intensifiers + for/against writing</h2><p>The course combines future forms, advanced future perfect/progressive forms, intensifiers and a Unit Review focused on structuring a for-and-against blog post.</p><div class="grid"><button class="primary" id="writtenSim">Full rehearsal</button><button class="secondary" id="futureDrill">Future forms</button><button class="secondary" id="intensifierDrill">Intensifiers</button><button class="secondary" id="writingSprint">For/against writing</button><button class="secondary" id="futureSpeak">Future speaking</button></div>')+
+  card('<h3>Future map</h3><div class="example"><strong>Schedule:</strong> The seminar starts at 9.</div><div class="example"><strong>Arrangement:</strong> I am meeting my supervisor tomorrow.</div><div class="example"><strong>In progress:</strong> At 10, I will be presenting.</div><div class="example"><strong>Completed:</strong> By Friday, I will have finished.</div><div class="example"><strong>Duration:</strong> By December, I will have been studying English for four months.</div>')+
+  card('<h3>Intensifier map</h3><div class="example"><strong>Comparative:</strong> considerably more effective</div><div class="example"><strong>Strong adjective:</strong> utterly unrealistic / totally unexpected</div><div class="example"><strong>Academic collocation:</strong> highly likely / deeply concerned</div>');
+  document.getElementById('writtenSim').onclick=renderWrittenExamSimulator;
   document.getElementById('futureDrill').onclick=()=>startSession(pickExercises(exercises,state,{concept:'future',count:14}),'Unit 4 · future forms');
-  document.getElementById('futureTransfer').onclick=()=>startSession(pickExercises(exercises,state,{concept:'future',transfer:'free',count:6}),'Unit 4 · future transfer');
-  document.getElementById('writingSprint').onclick=renderWritingSprint;
-  document.getElementById('futureSpeak').onclick=()=>renderSpeaking(['future']);
+  document.getElementById('intensifierDrill').onclick=()=>startSession(pickExercises(exercises,state,{concept:'intensifiers',count:12}),'Unit 4 · intensifiers');
+  document.getElementById('writingSprint').onclick=renderForAgainstLab;
+  document.getElementById('futureSpeak').onclick=()=>renderSpeaking(['future','intensifiers']);
 }
 
-function renderWritingSprint(){
-  setTitle('Writing Sprint');
+function renderWrittenExamSimulator(){
+  const grammar=pickExercises(exercises,state,{concepts:['future','intensifiers','prepositions','agreement','academicdiscourse'],count:18});
+  startSession(grammar,'Written Exam rehearsal · language',renderForAgainstLab);
+}
+
+function renderForAgainstLab(){
+  setTitle('For & Against Writing Lab');
   const prompts=[
-    'AI will improve higher education more than it will harm it.',
-    'Automation will make academic work more creative.',
-    'Digital platforms strengthen democratic participation.',
-    'Future cities should restrict private car use.'
+    'Universities should allow students to use generative AI in most assessed work.',
+    'Cities should restrict private cars in their centers.',
+    'Automation will improve working life more than it will damage it.',
+    'Political campaigns should be allowed to use highly personalized digital advertising.',
+    'Remote work is better for organizations than fully in-person work.'
   ];
   const p=prompts[Math.floor(Math.random()*prompts.length)];
-  app.innerHTML=card('<div class="kicker">60–90 words</div><h2>'+esc(p)+'</h2><p>Write one compact argument block: claim → reason → example → cautious conclusion.</p><textarea class="input textarea" id="writingText" placeholder="Write here…"></textarea><button class="primary" id="writingCheck">Open self-check</button><div id="writingFeedback"></div>');
+  app.innerHTML=card('<div class="kicker">Personal practice · 130–180 words</div><h2>'+esc(p)+'</h2><p>Write a balanced post with five functions: introduce the issue → argument for → argument against → your position → conclusion.</p><textarea class="input textarea" id="writingText" style="min-height:220px" placeholder="Write here…"></textarea><div class="row between"><span class="muted small" id="wordCount">0 words</span><button class="primary small-btn" id="writingCheck">Self-check</button></div><div id="writingFeedback"></div>')+
+  card('<h3>Structure prompts</h3><div class="example"><strong>Introduce:</strong> There is considerable debate about whether…</div><div class="example"><strong>For:</strong> One argument in favor is that…</div><div class="example"><strong>Against:</strong> On the other hand, critics argue that…</div><div class="example"><strong>Position:</strong> On balance, I would argue that…</div><div class="example"><strong>Conclusion:</strong> Overall, the strongest case depends on…</div>');
+  const ta=document.getElementById('writingText');
+  ta.oninput=()=>{const n=ta.value.trim()?ta.value.trim().split(/\s+/).length:0;document.getElementById('wordCount').textContent=n+' words'};
   document.getElementById('writingCheck').onclick=()=>{
-    const txt=document.getElementById('writingText').value.trim();
-    document.getElementById('writingFeedback').innerHTML='<div class="feedback"><h3>Self-check</h3><label class="check-line"><input type="checkbox">Clear claim</label><label class="check-line"><input type="checkbox">Reason or evidence</label><label class="check-line"><input type="checkbox">Example</label><label class="check-line"><input type="checkbox">Hedging or cautious conclusion</label><div class="example"><strong>Useful frame:</strong> While it is true that…, the evidence suggests that… One possible explanation is… Therefore, it is likely that…</div><button class="secondary" id="saveWriting">Save locally</button></div>';
-    document.getElementById('saveWriting').onclick=()=>{state.sessions.unshift({date:new Date().toISOString(),label:'Writing Sprint',type:'writing',prompt:p,text:txt});state.sessions=state.sessions.slice(0,50);saveState(state);alert('Writing sprint saved locally.')};
+    const txt=ta.value.trim();
+    document.getElementById('writingFeedback').innerHTML='<div class="feedback"><h3>Writing audit</h3>'+
+      '<label class="check-line"><input type="checkbox" class="writeCheck">The introduction identifies the issue.</label>'+
+      '<label class="check-line"><input type="checkbox" class="writeCheck">There is at least one developed argument for.</label>'+
+      '<label class="check-line"><input type="checkbox" class="writeCheck">There is at least one developed argument against.</label>'+
+      '<label class="check-line"><input type="checkbox" class="writeCheck">Examples or reasons support the claims.</label>'+
+      '<label class="check-line"><input type="checkbox" class="writeCheck">My own position is explicit but not overstated.</label>'+
+      '<label class="check-line"><input type="checkbox" class="writeCheck">The conclusion synthesizes rather than introduces a new argument.</label>'+
+      '<label class="check-line"><input type="checkbox" class="writeCheck">Future forms / intensifiers are accurate where used.</label>'+
+      '<label class="check-line"><input type="checkbox" class="writeCheck">Agreement, punctuation and linking are controlled.</label>'+
+      '<button class="secondary" id="saveWriting">Save audit</button></div>';
+    document.getElementById('saveWriting').onclick=()=>{
+      const checks=[...document.querySelectorAll('.writeCheck:checked')].length;
+      const coverage=Math.round(checks/8*100);
+      state.sessions.unshift({date:new Date().toISOString(),label:'For & Against Writing',type:'writing',prompt:p,text:txt,coverage});
+      state.sessions=state.sessions.slice(0,50);saveState(state);
+      app.insertAdjacentHTML('afterbegin',card('<div class="kicker">Saved</div><h2>'+coverage+'% checklist coverage</h2><p class="muted">This is a personal diagnostic, not an official exam score.</p>','hero'));
+    };
   };
 }
 
