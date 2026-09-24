@@ -312,6 +312,287 @@ const schedules={
 ]
 };
 
+
+function addV04RichPractice(){
+  const builderMap={
+    questions:[
+      ['Who','wrote','the','report?'],
+      ['What','did','the','committee','change?'],
+      ['Could','you','tell','me','where','the','seminar','is?'],
+      ['Who','challenged','the','argument?'],
+      ['Which','proposal','did','the','analyst','support?'],
+      ['What','are','you','worried','about?']
+    ],
+    agreement:[
+      ['The','evidence','suggests','a','pattern.'],
+      ['The','results','suggest','a','pattern.'],
+      ['A','series','of','studies','has','confirmed','the','finding.'],
+      ['These','arguments','raise','two','questions.'],
+      ['Each','of','the','cases','illustrates','the','problem.'],
+      ['Public','trust','remains','fragile.']
+    ],
+    narrative:[
+      ['She','was','reading','when','the','lights','went','out.'],
+      ['Someone','had','removed','the','file','before','she','arrived.'],
+      ['They','had','been','waiting','for','hours','when','the','door','opened.'],
+      ['Officials','were','counting','ballots','when','the','system','failed.'],
+      ['The','meeting','had','already','started','when','I','arrived.'],
+      ['He','was','walking','home','when','he','noticed','the','stranger.']
+    ],
+    usedto:[
+      ['I','used','to','study','at','night.'],
+      ['I','would','read','for','hours','after','class.'],
+      ['I','am','used','to','reading','long','papers.'],
+      ['I','am','getting','used','to','speaking','in','English.'],
+      ['She','used','to','be','very','shy.'],
+      ['Researchers','are','used','to','working','with','incomplete','data.']
+    ],
+    presentperfect:[
+      ['I','have','written','three','pages','today.'],
+      ['I','have','been','writing','all','morning.'],
+      ['She','has','visited','the','archive','twice','this','month.'],
+      ['They','have','been','collecting','data','for','six','months.'],
+      ['I','have','known','her','for','years.'],
+      ['We','have','already','finished','the','analysis.']
+    ],
+    conditionals:[
+      ['Unless','institutions','adapt,','trust','will','decline.'],
+      ['You','can','use','the','archive','as','long','as','you','follow','the','rules.'],
+      ['Bring','a','copy','in','case','the','internet','fails.'],
+      ['Provided','that','oversight','continues,','the','measure','may','be','acceptable.'],
+      ['As','soon','as','the','results','arrive,','I','will','update','the','table.'],
+      ['We','will','continue','unless','the','committee','objects.']
+    ],
+    future:[
+      ['The','seminar','starts','at','nine.'],
+      ['I','am','meeting','my','supervisor','tomorrow.'],
+      ['At','ten,','I','will','be','presenting','my','paper.'],
+      ['By','Friday,','I','will','have','finished','the','draft.'],
+      ['By','December,','I','will','have','been','studying','English','for','four','months.'],
+      ['The','evidence','suggests','that','AI','will','change','assessment.']
+    ],
+    verbpatterns:[
+      ['They','could','reduce','the','risk.'],
+      ['They','suggested','changing','the','rule.'],
+      ['We','decided','to','revise','the','draft.'],
+      ['Researchers','should','avoid','overstating','the','evidence.'],
+      ['My','supervisor','needs','me','to','send','the','file.'],
+      ['They','considered','postponing','the','project.']
+    ],
+    prepositions:[
+      ['The','outcome','depends','on','institutional','capacity.'],
+      ['She','is','responsible','for','the','analysis.'],
+      ['Researchers','are','concerned','about','declining','trust.'],
+      ['The','reform','had','an','impact','on','participation.'],
+      ['This','outcome','is','highly','likely.'],
+      ['The','author','draws','a','distinction','between','autonomy','and','independence.']
+    ],
+    passivecausative:[
+      ['The','data','were','collected','in','2025.'],
+      ['The','interviews','were','recorded','and','transcribed.'],
+      ['We','had','the','document','translated.'],
+      ['She','got','the','laptop','repaired','before','class.'],
+      ['The','proposal','was','reviewed','by','the','committee.'],
+      ['They','had','the','results','checked','again.']
+    ]
+  };
+  for(const [concept,rows] of Object.entries(builderMap)){
+    rows.forEach((tokens,i)=>exercises.push(exercise({
+      id:id('build'),concept,domain:domains[i%domains.length],type:'builder',transfer:i<3?'controlled':'guided',
+      difficulty:i<3?1:2,prompt:'Build the sentence in the correct order.',tokens:[...tokens].sort(()=>Math.random()-.5),
+      answer:tokens.join(' '),explanation:'Build the complete target structure before checking. Word order is part of the grammar.',misconception:'word_order'
+    })));
+  }
+
+  const correctionMap={
+    questions:[
+      ['Who did write the report?','Who wrote the report?','Who is the subject, so did is unnecessary.'],
+      ['What the committee changed?','What did the committee change?','Object questions need did + subject + base verb in the past.'],
+      ['Could you tell me where is the seminar?','Could you tell me where the seminar is?','Indirect questions use statement word order.'],
+      ['Who did proposed the reform?','Who proposed the reform?','A subject question does not use did.'],
+      ['What are you worried?','What are you worried about?','The preposition remains with the verb phrase.']
+    ],
+    agreement:[
+      ['The evidence suggest a pattern.','The evidence suggests a pattern.','Evidence is singular here.'],
+      ['The results suggests a pattern.','The results suggest a pattern.','Results is plural.'],
+      ['A series of studies have confirmed the result.','A series of studies has confirmed the result.','The head noun series is singular.'],
+      ['Each of the cases illustrate the problem.','Each of the cases illustrates the problem.','Each is singular.'],
+      ['These finding indicates a problem.','These findings indicate a problem.','Plural subject requires the base verb form.']
+    ],
+    narrative:[
+      ['When she arrived, someone removed the file before.','When she arrived, someone had removed the file.','Past perfect marks the earlier event.'],
+      ['She read when the lights went out.','She was reading when the lights went out.','Past progressive gives the background action.'],
+      ['They had waited for hours when the door opened.','They had been waiting for hours when the door opened.','Past perfect progressive highlights prior duration.'],
+      ['Officials were counted ballots when the system failed.','Officials were counting ballots when the system failed.','Past progressive is was/were + -ing.'],
+      ['By the time I arrived, the meeting started.','By the time I arrived, the meeting had started.','Use past perfect for the earlier completed event.']
+    ],
+    usedto:[
+      ['I am used to read long papers.','I am used to reading long papers.','Be used to is followed by a noun or -ing form.'],
+      ['I am getting used to speak in English.','I am getting used to speaking in English.','Get used to is followed by a noun or -ing form.'],
+      ['I would be shy when I was younger.','I used to be shy when I was younger.','Would is not normally used for past states such as be shy.'],
+      ['I used to reading at night.','I used to read at night.','Used to for a past habit takes the base verb.'],
+      ['She is used to work under pressure.','She is used to working under pressure.','Be used to + -ing expresses familiarity.']
+    ],
+    presentperfect:[
+      ['I have been written three pages today.','I have written three pages today.','Use present perfect for a completed result/number.'],
+      ['I have written all morning.','I have been writing all morning.','The progressive emphasizes duration/activity.'],
+      ['I have been knowing her for years.','I have known her for years.','Know is normally stative and not used progressively here.'],
+      ['She has went to the archive twice.','She has gone to the archive twice.','Present perfect uses the past participle.'],
+      ['We have finish the analysis.','We have finished the analysis.','Present perfect is have/has + past participle.']
+    ],
+    conditionals:[
+      ['Unless institutions do not adapt, trust will decline.','Unless institutions adapt, trust will decline.','Unless already means if not.'],
+      ['As soon as the results will arrive, I will update the table.','As soon as the results arrive, I will update the table.','Use present simple after as soon as for future reference.'],
+      ['Bring a copy unless the internet fails.','Bring a copy in case the internet fails.','In case expresses precaution.'],
+      ['You can enter provided you will follow the rules.','You can enter provided you follow the rules.','Use present simple in the condition clause.'],
+      ['As long as institutions will cooperate, the plan can work.','As long as institutions cooperate, the plan can work.','Use present simple after as long as.']
+    ],
+    future:[
+      ['According to the timetable, the class will start at 9.','According to the timetable, the class starts at 9.','Present simple is standard for fixed schedules.'],
+      ['By Friday, I will finish already the draft.','By Friday, I will have finished the draft.','Future perfect marks completion before a future point.'],
+      ['At 10 tomorrow, I will have presented my paper.','At 10 tomorrow, I will be presenting my paper.','Future progressive marks an action in progress at that time.'],
+      ['By December, I will study English for four months.','By December, I will have been studying English for four months.','Future perfect progressive marks duration up to a future point.'],
+      ['I meet my supervisor tomorrow; it is arranged.','I am meeting my supervisor tomorrow; it is arranged.','Present progressive expresses a personal arrangement.']
+    ],
+    verbpatterns:[
+      ['They could reducing the risk.','They could reduce the risk.','A modal is followed by the base verb.'],
+      ['They suggested to change the rule.','They suggested changing the rule.','Suggest is followed by -ing here.'],
+      ['We decided revising the draft.','We decided to revise the draft.','Decide is followed by to-infinitive.'],
+      ['Researchers should avoid to overstate the evidence.','Researchers should avoid overstating the evidence.','Avoid is followed by -ing.'],
+      ['My supervisor needs that I send the file.','My supervisor needs me to send the file.','Need + object + to-infinitive is natural here.']
+    ],
+    prepositions:[
+      ['The result depends about institutional capacity.','The result depends on institutional capacity.','The dependent preposition is depend on.'],
+      ['She is responsible of the analysis.','She is responsible for the analysis.','The pattern is responsible for.'],
+      ['Researchers are concerned of declining trust.','Researchers are concerned about declining trust.','The pattern is concerned about.'],
+      ['The reform had an impact in participation.','The reform had an impact on participation.','The collocation is impact on.'],
+      ['The outcome is deeply likely.','The outcome is highly likely.','Highly likely is the natural adverb–adjective collocation.']
+    ],
+    passivecausative:[
+      ['The data was collected in 2025.','The data were collected in 2025.','In formal academic usage, data is commonly treated as plural.'],
+      ['The interviews were record yesterday.','The interviews were recorded yesterday.','Passive voice requires be + past participle.'],
+      ['We had translated the document by a professional.','We had the document translated by a professional.','Causative have is have + object + past participle.'],
+      ['She got repaired her laptop.','She got her laptop repaired.','Causative get places the object before the past participle.'],
+      ['The proposal reviewed by the committee.','The proposal was reviewed by the committee.','Passive voice needs an appropriate form of be.']
+    ]
+  };
+  for(const [concept,rows] of Object.entries(correctionMap)){
+    rows.forEach((x,i)=>exercises.push(exercise({
+      id:id('corr'),concept,domain:domains[(i+1)%domains.length],type:'text',transfer:i<2?'controlled':'guided',
+      difficulty:2,prompt:'Correct the sentence: “'+x[0]+'”',acceptedAnswers:[x[1]],answer:x[1],
+      explanation:x[2],misconception:'error_correction'
+    })));
+  }
+
+  const transformMap={
+    questions:[
+      ['The researcher changed the interpretation. Ask about the researcher.','Who changed the interpretation?'],
+      ['The researcher changed the interpretation. Ask about the interpretation.','What did the researcher change?'],
+      ['Where is the seminar? Make the question indirect with “Could you tell me…?”','Could you tell me where the seminar is?'],
+      ['The analyst is worried about the deadline. Ask what the analyst is worried about.','What is the analyst worried about?']
+    ],
+    agreement:[
+      ['Rewrite with a plural subject: “The result suggests a pattern.”','The results suggest a pattern.'],
+      ['Rewrite with a singular head noun: “The studies have changed the debate.” Use “A series of studies”.','A series of studies has changed the debate.'],
+      ['Correct the agreement: “Each of the arguments raise a problem.”','Each of the arguments raises a problem.'],
+      ['Correct the agreement: “Public trust remain low.”','Public trust remains low.']
+    ],
+    narrative:[
+      ['Show the earlier event clearly: “She arrived. Someone removed the file before that.”','Someone had removed the file before she arrived.'],
+      ['Make reading the background action: “She read. Then the lights went out.”','She was reading when the lights went out.'],
+      ['Emphasize prior duration: “They waited for hours. Then the door opened.”','They had been waiting for hours when the door opened.'],
+      ['Use past perfect for the first event: “The meeting started. I arrived later.”','The meeting had started when I arrived.']
+    ],
+    usedto:[
+      ['Express a past habit that is no longer true: “I studied at night in the past.”','I used to study at night.'],
+      ['Express present familiarity: “Reading long papers feels normal to me now.”','I am used to reading long papers.'],
+      ['Express adaptation in progress: “Speaking spontaneously is becoming more normal for me.”','I am getting used to speaking spontaneously.'],
+      ['Express a repeated past action with would: “Every evening, I read for an hour.”','Every evening, I would read for an hour.']
+    ],
+    presentperfect:[
+      ['Emphasize completed result: “Three pages are finished this morning.”','I have written three pages this morning.'],
+      ['Emphasize ongoing duration: “I started writing this morning and I am still doing it.”','I have been writing all morning.'],
+      ['Express experience up to now: “I never presented this paper in English before now.”','I have never presented this paper in English before.'],
+      ['Express a state continuing from the past: “I met her years ago and still know her.”','I have known her for years.']
+    ],
+    conditionals:[
+      ['Rewrite with unless: “If institutions do not adapt, trust will decline.”','Unless institutions adapt, trust will decline.'],
+      ['Rewrite as a precaution with in case: “Bring a copy because the internet might fail.”','Bring a copy in case the internet fails.'],
+      ['Rewrite with as long as: “You can use the archive if you follow the rules.”','You can use the archive as long as you follow the rules.'],
+      ['Rewrite with as soon as: “The results arrive, and immediately after that I will update the table.”','As soon as the results arrive, I will update the table.']
+    ],
+    future:[
+      ['Express completion before Friday: “I finish the draft before Friday.”','By Friday, I will have finished the draft.'],
+      ['Express an action in progress at 10 tomorrow: “I present my paper at that time.”','At 10 tomorrow, I will be presenting my paper.'],
+      ['Express a fixed timetable: “The seminar is scheduled for 9.”','The seminar starts at 9.'],
+      ['Express an arranged meeting tomorrow: “My meeting with my supervisor is already arranged.”','I am meeting my supervisor tomorrow.']
+    ],
+    verbpatterns:[
+      ['Use suggest correctly: “They suggested that the rule should change.”','They suggested changing the rule.'],
+      ['Use decide correctly: “They made the decision to revise the draft.”','They decided to revise the draft.'],
+      ['Use avoid correctly: “Researchers should not overstate the evidence.”','Researchers should avoid overstating the evidence.'],
+      ['Use need + object + to-infinitive: “My supervisor requires me to send the file.”','My supervisor needs me to send the file.']
+    ],
+    prepositions:[
+      ['Use depend correctly: “Institutional capacity determines the outcome.”','The outcome depends on institutional capacity.'],
+      ['Use responsible correctly: “She has responsibility for the analysis.”','She is responsible for the analysis.'],
+      ['Use impact correctly: “The reform affected participation.”','The reform had an impact on participation.'],
+      ['Use the natural collocation for strong probability: “The outcome is very probable.”','The outcome is highly likely.']
+    ],
+    passivecausative:[
+      ['Make it passive: “Researchers collected the data in 2025.”','The data were collected in 2025.'],
+      ['Use causative have: “A professional translated the document for us.”','We had the document translated by a professional.'],
+      ['Use causative get: “A technician repaired her laptop for her.”','She got her laptop repaired.'],
+      ['Make it passive: “The committee reviewed the proposal.”','The proposal was reviewed by the committee.']
+    ]
+  };
+  for(const [concept,rows] of Object.entries(transformMap)){
+    rows.forEach((x,i)=>exercises.push(exercise({
+      id:id('trans'),concept,domain:domains[(i+3)%domains.length],type:'text',transfer:'guided',
+      difficulty:3,prompt:x[0],acceptedAnswers:[x[1]],answer:x[1],
+      explanation:'This transformation tests whether you can select and produce the target structure without relying on recognition alone.',misconception:'transformation'
+    })));
+  }
+
+  const timelineRows=[
+    ['narrative',['17:45 — someone removed the file','18:00 — the researcher arrived'],'Choose the sentence that correctly marks the earlier event.',['When the researcher arrived, someone had removed the file.','When the researcher had arrived, someone removed the file.'],'When the researcher arrived, someone had removed the file.','Past perfect marks the event that happened before the later past reference point.'],
+    ['narrative',['20:00 — officials were counting ballots','20:15 — the system failed'],'Choose the sentence that gives background + event.',['Officials were counting ballots when the system failed.','Officials had counted ballots when the system was failing.'],'Officials were counting ballots when the system failed.','Past progressive gives the ongoing background; past simple marks the event.'],
+    ['narrative',['14:00 — they started waiting','17:00 — the door opened'],'Choose the sentence that emphasizes the duration before the later event.',['They had been waiting for three hours when the door opened.','They waited for three hours when the door had opened.'],'They had been waiting for three hours when the door opened.','Past perfect progressive expresses duration continuing up to a past reference point.'],
+    ['narrative',['08:30 — the meeting started','08:45 — I arrived'],'Choose the clearest sequence.',['The meeting had started when I arrived.','The meeting was starting after I had arrived.'],'The meeting had started when I arrived.','Past perfect marks the earlier completed event.'],
+    ['narrative',['22:00 — she was walking home','22:10 — she noticed the stranger'],'Choose the natural narrative sentence.',['She was walking home when she noticed the stranger.','She had walked home when she was noticing the stranger.'],'She was walking home when she noticed the stranger.','Use past progressive for background and past simple for the event.'],
+    ['narrative',['09:00 — technicians started monitoring','13:00 — the attack began'],'Choose the form that emphasizes the prior ongoing activity.',['Technicians had been monitoring the network for four hours when the attack began.','Technicians were monitoring the network for four hours after the attack had begun.'],'Technicians had been monitoring the network for four hours when the attack began.','Past perfect progressive marks prior duration.'],
+    ['narrative',['11:00 — the committee approved the text','12:00 — journalists received it'],'Choose the sentence with explicit anteriority.',['The committee had approved the text before journalists received it.','The committee was approving the text after journalists had received it.'],'The committee had approved the text before journalists received it.','Past perfect locates approval before the later past event.'],
+    ['narrative',['18:30 — she was reading','18:42 — the alarm rang'],'Choose the natural sentence.',['She was reading when the alarm rang.','She had read when the alarm was ringing.'],'She was reading when the alarm rang.','The ongoing action is background; the alarm is the event.'],
+    ['narrative',['16:00 — the witness left','17:00 — police arrived'],'Choose the sequence.',['The witness had left before the police arrived.','The witness was leaving after the police had arrived.'],'The witness had left before the police arrived.','Use past perfect for the earlier action.'],
+    ['narrative',['10:00 — researchers started coding','15:00 — the server crashed'],'Choose the form that highlights five hours of prior activity.',['Researchers had been coding for five hours when the server crashed.','Researchers coded for five hours when the server had crashed.'],'Researchers had been coding for five hours when the server crashed.','Past perfect progressive emphasizes duration before the later event.'],
+    ['future',['09:00 tomorrow — seminar begins'],'Choose the standard timetable form.',['The seminar starts at 9 tomorrow.','The seminar will have started at 9 yesterday.'],'The seminar starts at 9 tomorrow.','Present simple is commonly used for fixed timetables.'],
+    ['future',['10:00 tomorrow — presentation in progress'],'Choose the form for an action in progress at that future time.',['At 10 tomorrow, I will be presenting my paper.','At 10 tomorrow, I will have presented my paper yesterday.'],'At 10 tomorrow, I will be presenting my paper.','Future progressive locates an activity in progress at a future point.'],
+    ['future',['Friday — deadline','Before Friday — draft complete'],'Choose the form for completion before the deadline.',['By Friday, I will have finished the draft.','By Friday, I will be finishing the draft last week.'],'By Friday, I will have finished the draft.','Future perfect marks completion before a future reference point.'],
+    ['future',['September — study begins','December — four months of study'],'Choose the form that emphasizes duration up to December.',['By December, I will have been studying English for four months.','By December, I will study English for four months yesterday.'],'By December, I will have been studying English for four months.','Future perfect progressive emphasizes duration up to a future point.'],
+    ['future',['Tomorrow 10:00 — arranged supervisor meeting'],'Choose the form for a personal arrangement.',['I am meeting my supervisor tomorrow at 10.','I meet my supervisor yesterday at 10.'],'I am meeting my supervisor tomorrow at 10.','Present progressive is common for arranged future plans.'],
+    ['future',['2030 — adoption complete before this point'],'Choose the future-perfect prediction.',['By 2030, many universities will have adopted new AI policies.','By 2030, many universities adopted new AI policies tomorrow.'],'By 2030, many universities will have adopted new AI policies.','Future perfect expresses expected completion before a future point.'],
+    ['future',['This time next year — thesis writing in progress'],'Choose the natural form.',['This time next year, I will be writing my thesis.','This time next year, I will have wrote my thesis.'],'This time next year, I will be writing my thesis.','Future progressive expresses an action in progress at a future time.'],
+    ['future',['Conference schedule — opening at 08:30'],'Choose the timetable form.',['The conference opens at 8:30.','The conference is going to have opened yesterday at 8:30.'],'The conference opens at 8:30.','Schedules commonly take the present simple.'],
+    ['future',['Before the oral exam — practice accumulated over weeks'],'Choose the duration form.',['By the oral exam, I will have been practicing for several weeks.','By the oral exam, I practice for several weeks yesterday.'],'By the oral exam, I will have been practicing for several weeks.','Future perfect progressive expresses accumulated duration up to the future point.'],
+    ['future',['Next week — already arranged presentation'],'Choose the arrangement form.',['I am presenting my project next week.','I present my project last week.'],'I am presenting my project next week.','Present progressive is natural for an arranged event.'],
+    ['presentperfect',['08:00 — writing begins','12:00 — still writing'],'Choose the form that emphasizes ongoing duration.',['I have been writing all morning.','I have written all morning three times.'],'I have been writing all morning.','Present perfect progressive highlights ongoing activity and duration.'],
+    ['presentperfect',['This month — three completed archive visits'],'Choose the form that emphasizes frequency/number.',['I have visited the archive three times this month.','I have been visiting the archive three times this month.'],'I have visited the archive three times this month.','Present perfect is natural for counted completed occurrences.'],
+    ['presentperfect',['2019 — meet colleague','now — still know colleague'],'Choose the form for a continuing state.',['I have known her since 2019.','I have been knowing her since 2019.'],'I have known her since 2019.','Know is stative, so present perfect simple is preferred.'],
+    ['presentperfect',['Morning — three pages completed'],'Choose the result-focused sentence.',['I have written three pages this morning.','I have been writing three pages this morning.'],'I have written three pages this morning.','Present perfect simple foregrounds the completed result.'],
+    ['presentperfect',['Six months ago — data collection starts','now — collection continues'],'Choose the duration-focused form.',['They have been collecting data for six months.','They have collected data for six months and are still doing it.'],'They have been collecting data for six months.','Present perfect progressive naturally emphasizes an ongoing activity.'],
+    ['presentperfect',['Past years — no previous English presentation','now — experience still absent'],'Choose the natural experience form.',['I have never presented this paper in English.','I have never been presenting this paper in English.'],'I have never presented this paper in English.','Present perfect simple is used for experience up to now.'],
+    ['presentperfect',['Earlier today — analysis completed','now — result available'],'Choose the result-focused form.',['We have already finished the analysis.','We have already been finishing the analysis.'],'We have already finished the analysis.','Present perfect simple foregrounds the completed present result.'],
+    ['presentperfect',['Recent weeks — repeated activity with temporary feel'],'Choose the activity-focused form.',['I have been practicing spoken English a lot recently.','I have practiced spoken English a lot recently and am doing it right now only once.'],'I have been practicing spoken English a lot recently.','Present perfect progressive highlights repeated/ongoing recent activity.'],
+    ['presentperfect',['This week — five completed gym visits'],'Choose the frequency form.',['I have been to the gym five times this week.','I have been being to the gym five times this week.'],'I have been to the gym five times this week.','Present perfect simple is used for counted frequency.'],
+    ['presentperfect',['Recent days — temporary bike commute continues'],'Choose the temporary ongoing form.',['I have been riding my bike to work recently.','I have ridden my bike to work right now for the last two weeks only as an ongoing activity.'],'I have been riding my bike to work recently.','Present perfect progressive highlights a temporary ongoing pattern.']
+  ];
+  timelineRows.forEach((x,i)=>exercises.push(exercise({
+    id:id('time'),concept:x[0],domain:domains[i%domains.length],type:'timeline',transfer:i%3===0?'guided':'controlled',
+    difficulty:2,prompt:x[2],timeline:x[1],options:x[3],answer:x[4],explanation:x[5],misconception:'time_relation'
+  })));
+}
+addV04RichPractice();
+
 const freeTasks=[
 ['questions','politics','You are interviewing a political scientist about an unexpected election result. Write or say three questions: one subject question, one object question, and one indirect question.','Example: Who changed the campaign strategy? What did the opposition propose? Could you tell me why turnout fell?'],
 ['questions','academic','Ask three natural follow-up questions after a researcher says: “The archival evidence changed my interpretation.”','Possible questions: What changed your interpretation? Which document changed it? Could you explain why the evidence mattered?'],
@@ -335,5 +616,30 @@ const freeTasks=[
 ['passivecausative','everyday','Describe two services you arranged for someone else to perform using have/get something done.','Model: I had my laptop repaired and got the document printed before the meeting.']
 ];
 freeTasks.forEach((x)=>exercises.push(exercise({id:id('free'),concept:x[0],domain:x[1],type:'selfcheck',transfer:'free',difficulty:3,prompt:x[2],options:[],answer:x[3],explanation:'Compare your response with the model. The goal is accurate spontaneous use of the target structure, not reproducing the wording exactly.',misconception:'free_transfer'})));
+
+
+const v04FreeTasks=[
+['questions','philosophy','You are interviewing a philosopher after a lecture. Produce four natural follow-up questions, including one subject question and one indirect question.','Model: Who first formulated that objection? What did you mean by autonomy? Could you explain how the distinction affects your argument? What are you responding to?'],
+['questions','everyday','A classmate says: “My morning was awful and I almost missed class.” Ask four natural follow-up questions.','Model: What happened? Who woke you up? What were you worried about? Could you tell me why you almost missed class?'],
+['agreement','politics','Explain a survey result in four sentences while keeping agreement accurate with evidence, results, a series of polls, and each country.','Model: The evidence suggests a shift. The results indicate important differences. A series of polls has shown the same tendency. Each country presents a different pattern.'],
+['agreement','philosophy','Define a concept in four sentences using one long singular subject and one plural subject without losing agreement.','Model: The relationship between autonomy and social dependence remains central. Recent arguments challenge the older account.'],
+['narrative','literature','Retell a short disturbing scene using background, a main event, an earlier event, and prior duration.','Model: The narrator was walking through the house when the lights failed. Someone had opened the locked room earlier, and the family had been hearing noises for days.'],
+['narrative','academic','Tell the story of a research problem that appeared after an earlier mistake and had been developing for several days.','Model: We were preparing the presentation when the dataset failed. A file had been corrupted earlier, and the team had been trying to recover it for days.'],
+['usedto','sociology','Compare academic life before and after smartphones using all four members of the used-to family.','Model: Students used to rely more on printed material. They would spend longer in libraries. We are used to searching instantly now, and researchers had to get used to constant connectivity.'],
+['usedto','everyday','Describe a morning habit you had in the past, a repeated routine, something normal now, and something you are still adapting to.','Model: I used to wake up late. I would skip breakfast. I am used to getting up earlier now, and I am still getting used to speaking English first thing in the morning.'],
+['presentperfect','academic','Give a 45-second progress update on your English using present perfect for results and present perfect progressive for ongoing work.','Model: I have completed several grammar sets, and I have been practicing speaking every day.'],
+['presentperfect','politics','Describe how a political debate has changed over the last decade, combining a continuing trend and completed developments.','Model: The debate has become more polarized, and researchers have been studying the role of social media for years.'],
+['conditionals','politics','Give institutional advice using unless, provided that, as long as, in case, and as soon as.','Model: Institutions can act quickly provided that oversight remains. Keep backup procedures in case systems fail.'],
+['conditionals','horror','Give survival instructions in a fictional archive using at least four alternatives to if.','Model: Do not open the door unless you hear the guard. Keep the flashlight ready in case the power fails.'],
+['future','academic','Describe the next three months of your doctoral work using a schedule, an arrangement, future progressive, future perfect, and future perfect progressive.','Model: The seminar starts next week. I am meeting my supervisor on Friday. By December I will have completed the chapter.'],
+['future','technology','Make a structured forecast about AI and universities using three distinct future forms and explain why each form fits.','Model: Universities will change assessment; many will be redesigning courses; by 2030 they will have adopted new rules.'],
+['verbpatterns','academic','Give five pieces of advice to someone preparing a paper, deliberately using modal + base, avoid + -ing, suggest + -ing, decide + to, and need + object + to.','Model: You could narrow the question. Avoid overstating the evidence. I suggest revising the introduction.'],
+['verbpatterns','everyday','Explain a study plan using plan to, avoid -ing, consider -ing, need someone to, and can + base.','Model: I plan to study tonight, avoid checking my phone, consider taking notes, and ask someone to test me.'],
+['prepositions','politics','Explain democratic resilience using five complete chunks from the preposition/collocation bank.','Model: Resilience depends on institutional capacity and has an impact on public trust. Officials should be concerned about weak enforcement.'],
+['prepositions','academic','Describe a research problem using interested in, responsible for, reason for, risk of, and impact on.','Model: I am interested in the reason for the discrepancy. The team is responsible for checking the risk of bias and its impact on the results.'],
+['passivecausative','academic','Explain how an academic manuscript moved from draft to submission using at least three passives and two causatives.','Model: The draft was reviewed, the references were checked, and the paper was submitted. I had the figures redesigned and got the bibliography corrected.'],
+['passivecausative','everyday','Describe a day when you arranged several services using have/get something done, then add one ordinary passive.','Model: I had my phone repaired and got a document printed. The package was delivered in the afternoon.']
+];
+v04FreeTasks.forEach((x)=>exercises.push(exercise({id:id('free4'),concept:x[0],domain:x[1],type:'selfcheck',transfer:'free',difficulty:3,prompt:x[2],options:[],answer:x[3],explanation:'Use the model as a diagnostic reference, not as a script. Check whether the target grammar appeared accurately and naturally.',misconception:'free_transfer'})));
 
 export {concepts,C,domains,exercises,speaking,schedules};
