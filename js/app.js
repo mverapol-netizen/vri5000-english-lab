@@ -1,6 +1,6 @@
 import {loadState,saveState,recordAttempt,updateConfidence,resetState,recordSpeaking,recordExamRun} from './store.js';
 import {pickExercises,todayMix,reviewMix,challengeMix,eventPack,conceptStats,daysUntil,isCorrect} from './engine.js';
-import {concepts,C,domains,exercises,speaking,schedules} from './content.js';
+import {concepts,C,domains,exercises,speaking,pronunciation,schedules} from './content.js';
 
 const app=document.getElementById('app');
 const title=document.getElementById('pageTitle');
@@ -29,11 +29,11 @@ document.getElementById('importProgress').onclick=()=>document.getElementById('i
 document.getElementById('importProgressFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const incoming=JSON.parse(await f.text());localStorage.setItem('vri5000_lab_state_v03',JSON.stringify(incoming));state=loadState();document.getElementById('settingsDialog').close();render()}catch{alert('Backup inválido')}};
 
 function render(){if(route==='today')return renderToday();if(route==='learn')return renderLearn();if(route==='practice')return renderPractice();if(route==='course')return renderCourse();if(route==='progress')return renderProgress()}
-function renderToday(){setTitle('Today');const ev=nextEvent();const due=reviewMix(exercises,state,10).length;const oral=ev?.title.includes('Oral');const academic=ev?.title.includes('Academic Project');const written=ev?.title.includes('Written Exam')||ev?.title.includes('Unit 4');app.innerHTML=card('<div class="kicker">Adaptive session</div><h2>'+esc(ev.title)+'</h2><p class="muted">'+daysUntil(ev.date)+' días · '+esc(ev.date)+'</p><div class="grid"><button class="primary" id="todayStart">Start '+state.settings.duration+' min</button><button class="secondary" id="reviewStart">Review due ('+due+')</button><button class="secondary" id="challengeStart">Challenge me</button><button class="secondary" id="speakStart">Speaking Studio</button></div>','hero')+(oral?card('<div class="kicker">Immediate priority</div><h3>Oral Midterm Lab</h3><p>Questions, narrative tenses, conditionals, agreement, chunks and productive transfer.</p><button class="primary" id="oralLab">Open Oral Lab</button>','urgent-card'):'')+(academic?card('<div class="kicker">Next assessment</div><h3>Academic Project Lab</h3><p>Thesis, signposting, hedging, sentence control and Q&A.</p><button class="primary" id="academicLab">Open Presentation Lab</button>','urgent-card'):'')+(written?card('<div class="kicker">Course preparation</div><h3>Unit 4 / Written Exam Lab</h3><p>Future forms, intensifiers and short for-and-against writing.</p><button class="primary" id="writtenLab">Open Written Lab</button>','urgent-card'):'')+card('<h3>How the engine works</h3><p>It prefers unseen exercises, active errors and due concepts. Correct items are normally replaced by new items testing the same structure.</p>');
+function renderToday(){setTitle('Today');const ev=nextEvent();const due=reviewMix(exercises,state,10).length;const oral=ev?.title.includes('Oral');const academic=ev?.title.includes('Academic Project');const written=ev?.title.includes('Written Exam')||ev?.title.includes('Unit 4');app.innerHTML=card('<div class="kicker">Adaptive session</div><h2>'+esc(ev.title)+'</h2><p class="muted">'+daysUntil(ev.date)+' días · '+esc(ev.date)+'</p><div class="grid"><button class="primary" id="todayStart">Start '+state.settings.duration+' min</button><button class="secondary" id="reviewStart">Review due ('+due+')</button><button class="secondary" id="challengeStart">Challenge me</button><button class="secondary" id="speakStart">Speaking Studio</button><button class="secondary" id="pronStart">Pronunciation</button></div>','hero')+(oral?card('<div class="kicker">Immediate priority</div><h3>Oral Midterm Lab</h3><p>Questions, narrative tenses, conditionals, agreement, chunks and productive transfer.</p><button class="primary" id="oralLab">Open Oral Lab</button>','urgent-card'):'')+(academic?card('<div class="kicker">Next assessment</div><h3>Academic Project Lab</h3><p>Thesis, signposting, hedging, sentence control and Q&A.</p><button class="primary" id="academicLab">Open Presentation Lab</button>','urgent-card'):'')+(written?card('<div class="kicker">Course preparation</div><h3>Unit 4 / Written Exam Lab</h3><p>Future forms, intensifiers and short for-and-against writing.</p><button class="primary" id="writtenLab">Open Written Lab</button>','urgent-card'):'')+card('<h3>How the engine works</h3><p>It prefers unseen exercises, active errors and due concepts. Correct items are normally replaced by new items testing the same structure.</p>');
  document.getElementById('todayStart').onclick=()=>startSession(todayMix(exercises,state,countForMinutes(state.settings.duration),{courseConcepts:ev.concepts}),'Today');
  document.getElementById('reviewStart').onclick=()=>startSession(reviewMix(exercises,state,10),'Review');
  document.getElementById('challengeStart').onclick=()=>startSession(challengeMix(exercises,state,10),'Challenge');
- document.getElementById('speakStart').onclick=()=>renderSpeaking();
+ document.getElementById('speakStart').onclick=()=>renderSpeaking();document.getElementById('pronStart').onclick=()=>renderPronunciationLab();
  if(oral)document.getElementById('oralLab').onclick=renderOralLab;if(academic)document.getElementById('academicLab').onclick=renderAcademicLab;if(written)document.getElementById('writtenLab').onclick=renderWrittenLab;
 }
 function renderLearn(){setTitle('Learn');app.innerHTML='<div class="section-title">Concept library</div>'+concepts.sort((a,b)=>b.priority-a.priority).map(c=>card('<div class="row between"><div><div class="kicker">Priority '+c.priority+'</div><h3>'+esc(c.name)+'</h3></div>'+pill(c.id)+'</div><p>'+esc(c.summary)+'</p><button class="secondary learnBtn" data-id="'+c.id+'">Open</button>')).join('');document.querySelectorAll('.learnBtn').forEach(b=>b.onclick=()=>renderConcept(b.dataset.id))}
@@ -260,6 +260,26 @@ function completePresentationSimulatorPart(p){
   document.getElementById('presentationRepair').onclick=()=>startSession(pickExercises(exercises,state,{concept:'academicdiscourse',count:12}),'Presentation repair');
   document.getElementById('presentationAgain').onclick=renderPresentationSimulator;
   document.getElementById('presentationHome').onclick=()=>nav('today');
+}
+
+
+function renderPronunciationLab(){
+  setTitle('Pronunciation Lab');
+  const p=pronunciation[Math.floor(Math.random()*pronunciation.length)];
+  app.innerHTML=card('<div class="row between">'+pill(p.focus)+pill(p.seconds+' sec','gold')+'</div><div class="exercise-prompt">'+esc(p.sentence)+'</div><div class="example"><strong>Focus</strong><br>'+esc(p.tip)+'</div><div class="big-timer" id="sTimer">'+p.seconds+'</div><div class="grid"><button class="primary" id="pronPlay">Play model</button><button class="secondary" id="recordBtn">Record myself</button><button class="secondary" id="pronNew">New item</button></div><div id="audioBox"></div>')+
+  card('<h3>Self-audit</h3><label class="check-line"><input type="checkbox" class="pronCheck">I kept the sentence in natural thought groups.</label><label class="check-line"><input type="checkbox" class="pronCheck">I stressed the key content words rather than every word.</label><label class="check-line"><input type="checkbox" class="pronCheck">I followed the specific focus above.</label><button class="secondary" id="pronSave">Save audit</button><p class="muted small">The model uses the English voice available on your device. Treat it as pronunciation practice, not as a single mandatory accent.</p>');
+  document.getElementById('pronPlay').onclick=()=>{
+    if(!('speechSynthesis' in window)){alert('Text-to-speech is unavailable on this device.');return}
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(p.sentence);u.lang='en-US';u.rate=.88;speechSynthesis.speak(u);
+  };
+  document.getElementById('recordBtn').onclick=()=>toggleRecording(p);
+  document.getElementById('pronNew').onclick=renderPronunciationLab;
+  document.getElementById('pronSave').onclick=()=>{
+    const checks=[...document.querySelectorAll('.pronCheck:checked')].length;
+    state.sessions.unshift({date:new Date().toISOString(),label:'Pronunciation Lab',type:'pronunciation',focus:p.focus,sentence:p.sentence,coverage:Math.round(checks/3*100)});
+    state.sessions=state.sessions.slice(0,50);saveState(state);alert('Pronunciation audit saved locally.');
+  };
 }
 
 function renderSpeaking(filter=null){setTitle('Speaking Studio');let pool=speaking.filter(p=>!filter||filter.includes(p.concept));const p=pool[Math.floor(Math.random()*pool.length)];app.innerHTML=card('<div class="row between">'+pill(C[p.concept].name)+pill(p.seconds+' sec','gold')+'</div><div class="exercise-prompt">'+esc(p.prompt)+'</div><div>'+p.targets.map(x=>pill(x)).join('')+'</div><div class="big-timer" id="sTimer">'+p.seconds+'</div><div class="grid"><button class="primary" id="recordBtn">Start recording</button><button class="secondary" id="newPrompt">New prompt</button></div><div id="audioBox"></div><div class="divider"></div><h3>Self-audit</h3>'+p.targets.map((x,i)=>'<label class="check-line"><input type="checkbox" class="targetCheck" value="'+i+'">'+esc(x)+'</label>').join('')+'<button class="secondary" id="saveSpeak">Save self-audit</button>');document.getElementById('newPrompt').onclick=()=>renderSpeaking(filter);document.getElementById('recordBtn').onclick=()=>toggleRecording(p);document.getElementById('saveSpeak').onclick=()=>{const checks=[...document.querySelectorAll('.targetCheck:checked')].map(x=>x.value);const row=recordSpeaking(state,p,checks);alert('Self-audit saved: '+row.coverage+'% target coverage. This now counts as free-transfer evidence.')}}
