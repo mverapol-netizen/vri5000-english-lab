@@ -284,6 +284,7 @@ speaking.push(
 
 const schedules={
  conservative:[
+  {date:'2026-09-25',title:'Unit 3 · Final consolidation',concepts:['narrative','conditionals','prepositions','questions']},
   {date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
   {date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
   {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
@@ -295,6 +296,8 @@ const schedules={
   {date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
  ],
  mon_wed:[
+{date:'2026-09-21',title:'Lesson 3.3 · Don’t look down',concepts:['narrative','prepositions']},
+{date:'2026-09-23',title:'Unit 3 Review · Short story',concepts:['narrative','conditionals','prepositions']},
 {date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
 {date:'2026-09-30',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement','academicdiscourse']},
 {date:'2026-10-07',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
@@ -309,6 +312,8 @@ const schedules={
 {date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
  tue_thu:[
+{date:'2026-09-29',title:'Lesson 3.3 · Don’t look down',concepts:['narrative','prepositions']},
+{date:'2026-10-01',title:'Unit 3 Review · Short story',concepts:['narrative','conditionals','prepositions']},
 {date:'2026-10-06',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
 {date:'2026-10-08',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement','academicdiscourse']},
 {date:'2026-10-15',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
@@ -323,6 +328,8 @@ const schedules={
 {date:'2026-12-03',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
  wed_fri_am:[
+{date:'2026-09-25',title:'Lesson 3.3 · Don’t look down',concepts:['narrative','prepositions']},
+{date:'2026-09-30',title:'Unit 3 Review · Short story',concepts:['narrative','conditionals','prepositions']},
 {date:'2026-10-02',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
 {date:'2026-10-07',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement','academicdiscourse']},
 {date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
@@ -337,6 +344,8 @@ const schedules={
 {date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
  wed_fri_pm:[
+{date:'2026-09-23',title:'Lesson 3.3 · Don’t look down',concepts:['narrative','prepositions']},
+{date:'2026-09-25',title:'Unit 3 Review · Short story',concepts:['narrative','conditionals','prepositions']},
 {date:'2026-09-30',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
 {date:'2026-10-07',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement','academicdiscourse']},
 {date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
