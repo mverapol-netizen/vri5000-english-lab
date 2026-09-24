@@ -14,7 +14,7 @@ const concepts=[
 {id:'counterarguments',name:'Conditional counterarguments',priority:7,summary:'Use conditional structures to respond directly to another speaker’s argument and emphasize a contrasting possibility.',rule:'Reuse part of the original claim, then answer with a conditional counterargument. The modal often carries contrastive stress in speech: “That may be true, but people might change if…”',examples:['That may be true, but people might change if the incentives were stronger.','It could work if local institutions supported it.','Even if the cost increased, the long-term benefit might still justify it.']}
 ];
 const C=Object.fromEntries(concepts.map(x=>[x.id,x]));
-const domains=['politics','philosophy','sociology','horror','academic','everyday'];
+const domains=['politics','philosophy','sociology','horror','literature','academic','everyday','technology','environment','cities'];
 const frames=['In a seminar: ','In a policy memo: ','During an interview: ','In an archive note: ','In a conversation: '];
 const people=['the researcher','the committee','the journalist','the philosopher','the student','the analyst'];
 const objects=['the report','the proposal','the argument','the evidence','the manuscript','the dataset'];
