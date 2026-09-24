@@ -10,6 +10,7 @@ let session=null;
 let mediaRecorder=null,mediaChunks=[],recordingUrl=null,timerHandle=null,timerStarted=0;
 let oralSim=null;
 let presentationSim=null;
+let finalOralSim=null;
 
 function esc(s){return String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
 function setTitle(t){title.textContent=t}
@@ -29,12 +30,12 @@ document.getElementById('importProgress').onclick=()=>document.getElementById('i
 document.getElementById('importProgressFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const incoming=JSON.parse(await f.text());localStorage.setItem('vri5000_lab_state_v03',JSON.stringify(incoming));state=loadState();document.getElementById('settingsDialog').close();render()}catch{alert('Backup inválido')}};
 
 function render(){if(route==='today')return renderToday();if(route==='learn')return renderLearn();if(route==='practice')return renderPractice();if(route==='course')return renderCourse();if(route==='progress')return renderProgress()}
-function renderToday(){setTitle('Today');const ev=nextEvent();const due=reviewMix(exercises,state,10).length;const oral=ev?.title.includes('Oral');const academic=ev?.title.includes('Academic Project');const written=ev?.title.includes('Written Exam')||ev?.title.includes('Unit 4');app.innerHTML=card('<div class="kicker">Adaptive session</div><h2>'+esc(ev.title)+'</h2><p class="muted">'+daysUntil(ev.date)+' días · '+esc(ev.date)+'</p><div class="grid"><button class="primary" id="todayStart">Start '+state.settings.duration+' min</button><button class="secondary" id="reviewStart">Review due ('+due+')</button><button class="secondary" id="challengeStart">Challenge me</button><button class="secondary" id="speakStart">Speaking Studio</button><button class="secondary" id="pronStart">Pronunciation</button></div>','hero')+(oral?card('<div class="kicker">Immediate priority</div><h3>Oral Midterm Lab</h3><p>Questions, narrative tenses, conditionals, agreement, chunks and productive transfer.</p><button class="primary" id="oralLab">Open Oral Lab</button>','urgent-card'):'')+(academic?card('<div class="kicker">Next assessment</div><h3>Academic Project Lab</h3><p>Thesis, signposting, hedging, sentence control and Q&A.</p><button class="primary" id="academicLab">Open Presentation Lab</button>','urgent-card'):'')+(written?card('<div class="kicker">Course preparation</div><h3>Unit 4 / Written Exam Lab</h3><p>Future forms, intensifiers and short for-and-against writing.</p><button class="primary" id="writtenLab">Open Written Lab</button>','urgent-card'):'')+card('<h3>How the engine works</h3><p>It prefers unseen exercises, active errors and due concepts. Correct items are normally replaced by new items testing the same structure.</p>');
+function renderToday(){setTitle('Today');const ev=nextEvent();const due=reviewMix(exercises,state,10).length;const oral=ev?.title.includes('Oral Midterm');const finalOral=ev?.title.includes('Final Oral');const academic=ev?.title.includes('Academic Project');const written=ev?.title.includes('Written Exam')||ev?.title.includes('Unit 4');const unit5=ev?.title.includes('Unit 5');app.innerHTML=card('<div class="kicker">Adaptive session</div><h2>'+esc(ev.title)+'</h2><p class="muted">'+daysUntil(ev.date)+' días · '+esc(ev.date)+'</p><div class="grid"><button class="primary" id="todayStart">Start '+state.settings.duration+' min</button><button class="secondary" id="reviewStart">Review due ('+due+')</button><button class="secondary" id="challengeStart">Challenge me</button><button class="secondary" id="speakStart">Speaking Studio</button><button class="secondary" id="pronStart">Pronunciation</button></div>','hero')+(oral?card('<div class="kicker">Immediate priority</div><h3>Oral Midterm Lab</h3><p>Questions, narrative tenses, conditionals, agreement, chunks and productive transfer.</p><button class="primary" id="oralLab">Open Oral Lab</button>','urgent-card'):'')+(academic?card('<div class="kicker">Next assessment</div><h3>Academic Project Lab</h3><p>Thesis, signposting, hedging, sentence control and Q&A.</p><button class="primary" id="academicLab">Open Presentation Lab</button>','urgent-card'):'')+(written?card('<div class="kicker">Course preparation</div><h3>Unit 4 / Written Exam Lab</h3><p>Future forms, intensifiers and short for-and-against writing.</p><button class="primary" id="writtenLab">Open Written Lab</button>','urgent-card'):'')+(unit5?card('<div class="kicker">Course preparation</div><h3>Unit 5 Change Lab</h3><p>Passive & causative, -ing/infinitive forms, conditional counterarguments and problem/solution writing.</p><button class="primary" id="unit5Lab">Open Unit 5 Lab</button>','urgent-card'):'')+(finalOral?card('<div class="kicker">Final assessment</div><h3>Final Oral Lab</h3><p>Integrated productive transfer across the semester with timed speaking and repair.</p><button class="primary" id="finalOralLab">Open Final Oral Lab</button>','urgent-card'):'')+card('<h3>How the engine works</h3><p>It prefers unseen exercises, active errors and due concepts. Correct items are normally replaced by new items testing the same structure.</p>');
  document.getElementById('todayStart').onclick=()=>startSession(todayMix(exercises,state,countForMinutes(state.settings.duration),{courseConcepts:ev.concepts}),'Today');
  document.getElementById('reviewStart').onclick=()=>startSession(reviewMix(exercises,state,10),'Review');
  document.getElementById('challengeStart').onclick=()=>startSession(challengeMix(exercises,state,10),'Challenge');
  document.getElementById('speakStart').onclick=()=>renderSpeaking();document.getElementById('pronStart').onclick=()=>renderPronunciationLab();
- if(oral)document.getElementById('oralLab').onclick=renderOralLab;if(academic)document.getElementById('academicLab').onclick=renderAcademicLab;if(written)document.getElementById('writtenLab').onclick=renderWrittenLab;
+ if(oral)document.getElementById('oralLab').onclick=renderOralLab;if(academic)document.getElementById('academicLab').onclick=renderAcademicLab;if(written)document.getElementById('writtenLab').onclick=renderWrittenLab;if(unit5)document.getElementById('unit5Lab').onclick=renderUnit5Lab;if(finalOral)document.getElementById('finalOralLab').onclick=renderFinalOralLab;
 }
 function renderLearn(){setTitle('Learn');app.innerHTML='<div class="section-title">Concept library</div>'+concepts.sort((a,b)=>b.priority-a.priority).map(c=>card('<div class="row between"><div><div class="kicker">Priority '+c.priority+'</div><h3>'+esc(c.name)+'</h3></div>'+pill(c.id)+'</div><p>'+esc(c.summary)+'</p><button class="secondary learnBtn" data-id="'+c.id+'">Open</button>')).join('');document.querySelectorAll('.learnBtn').forEach(b=>b.onclick=()=>renderConcept(b.dataset.id))}
 function renderConcept(cid){const c=C[cid];setTitle(c.name);app.innerHTML=card('<button class="ghost small-btn" id="backLearn">← Learn</button><h2>'+esc(c.name)+'</h2><p>'+esc(c.summary)+'</p><div class="example"><strong>Rule</strong><br>'+esc(c.rule)+'</div><h3>Examples</h3>'+c.examples.map(x=>'<div class="example">'+esc(x)+'</div>').join('')+'<button class="primary" id="practiceConcept">Practice this</button>');document.getElementById('backLearn').onclick=()=>nav('learn');document.getElementById('practiceConcept').onclick=()=>startSession(pickExercises(exercises,state,{concept:cid,count:12}),'Practice · '+c.name)}
@@ -50,7 +51,7 @@ function renderPractice(){
   document.getElementById('timelineStart').onclick=()=>startSession(pickExercises(exercises,state,{count:10,type:'timeline'}),'Timeline practice');
   document.getElementById('mixedStart').onclick=()=>startSession(challengeMix(exercises,state,12),'Mixed challenge');
 }
-function renderCourse(){setTitle('Course Path');const evs=currentEvents();const next=nextEvent();app.innerHTML=card('<div class="kicker">Current section</div><h2>'+esc(state.settings.section)+'</h2><p>Next: <strong>'+esc(next.title)+'</strong> · '+daysUntil(next.date)+' days</p><div class="study-pack"><button class="secondary" data-phase="prepare">Prepare</button><button class="secondary" data-phase="consolidate">Consolidate</button><button class="secondary" data-phase="transfer">Transfer test</button></div>')+'<div class="section-title">Timeline</div>'+evs.map(e=>card('<div class="row between"><div><strong>'+esc(e.date)+'</strong><h3>'+esc(e.title)+'</h3><div>'+e.concepts.slice(0,4).map(x=>pill(C[x]?.name||x)).join('')+'</div></div>'+(e.assessment?pill('ASSESSMENT','gold'):'')+'</div>')).join('');document.querySelectorAll('[data-phase]').forEach(b=>b.onclick=()=>startSession(eventPack(exercises,state,next,b.dataset.phase,12),next.title+' · '+b.dataset.phase))}
+function renderCourse(){setTitle('Course Path');const evs=currentEvents();const next=nextEvent();app.innerHTML=card('<div class="kicker">Current section</div><h2>'+esc(state.settings.section)+'</h2><p>Next: <strong>'+esc(next.title)+'</strong> · '+daysUntil(next.date)+' days</p><div class="study-pack"><button class="secondary" data-phase="prepare">Prepare</button><button class="secondary" data-phase="consolidate">Consolidate</button><button class="secondary" data-phase="transfer">Transfer test</button></div>')+'<div class="section-title">Timeline</div>'+evs.map((e,i)=>card('<div class="row between"><div><strong>'+esc(e.date)+'</strong><h3>'+esc(e.title)+'</h3><div>'+e.concepts.slice(0,4).map(x=>pill(C[x]?.name||x)).join('')+'</div></div>'+(e.assessment?pill('ASSESSMENT','gold'):'')+'</div><button class="ghost event-prep" data-event="'+i+'">Practice this event</button>')).join('');document.querySelectorAll('[data-phase]').forEach(b=>b.onclick=()=>startSession(eventPack(exercises,state,next,b.dataset.phase,12),next.title+' · '+b.dataset.phase));document.querySelectorAll('[data-event]').forEach(b=>b.onclick=()=>{const e=evs[+b.dataset.event];startSession(eventPack(exercises,state,e,'prepare',12),e.title+' · prepare')})}
 function renderProgress(){setTitle('Progress');const total=Object.values(state.seen).reduce((a,x)=>a+(x.attempts||0),0);const active=state.errors.filter(e=>!e.resolved);app.innerHTML=card('<div class="grid"><div class="metric"><strong>'+total+'</strong><span>attempts</span></div><div class="metric"><strong>'+Object.keys(state.seen).length+'</strong><span>unique items</span></div><div class="metric"><strong>'+active.length+'</strong><span>active errors</span></div><div class="metric"><strong>'+exercises.length+'</strong><span>available items</span></div></div>')+'<div class="section-title">Mastery by concept</div>'+concepts.map(c=>{const s=conceptStats(state,c.id);return card('<div class="row between"><strong>'+esc(c.name)+'</strong>'+pill(s.status)+'</div><div class="progressbar"><span style="width:'+s.mastery+'%"></span></div><div class="transfer-row"><span>Controlled</span><div class="progressbar"><span style="width:'+s.rates.controlled+'%"></span></div><strong>'+s.rates.controlled+'%</strong></div><div class="transfer-row"><span>Guided</span><div class="progressbar"><span style="width:'+s.rates.guided+'%"></span></div><strong>'+s.rates.guided+'%</strong></div><div class="transfer-row"><span>Transfer</span><div class="progressbar"><span style="width:'+s.rates.free+'%"></span></div><strong>'+s.rates.free+'%</strong></div>')}).join('')+(active.length?'<div class="section-title">Error Bank</div>'+active.slice(0,10).map(e=>card('<strong>'+esc(C[e.concept]?.name||e.concept)+'</strong><p>'+esc(e.prompt)+'</p><p class="small">Your answer: '+esc(e.userAnswer)+'<br>Correct: '+esc(e.correctAnswer)+'</p><button class="secondary repairBtn" data-c="'+e.concept+'">Repair this area</button>')).join(''):'');document.querySelectorAll('.repairBtn').forEach(b=>b.onclick=()=>startSession(pickExercises(exercises,state,{concept:b.dataset.c,count:8}),'Error repair'))}
 
 function startSession(items,label,after=null){if(!items.length){alert('No exercises available for this selection yet.');return}session={items,index:0,correct:0,label,log:[],after};renderExercise()}
@@ -245,6 +246,99 @@ function renderForAgainstLab(){
       app.insertAdjacentHTML('afterbegin',card('<div class="kicker">Saved</div><h2>'+coverage+'% checklist coverage</h2><p class="muted">This is a personal diagnostic, not an official exam score.</p>','hero'));
     };
   };
+}
+
+
+function renderUnit5Lab(){
+  setTitle('Unit 5 · Change Lab');
+  app.innerHTML=card('<div class="kicker">Unit 5</div><h2>Change · grammar + argumentation</h2><p>Train the official Unit 5 core: passive voice and causative have/get, -ing and infinitive forms, conditional counterarguments, and problem/solution writing.</p><div class="grid"><button class="primary" id="u5Mix">Unit 5 mixed</button><button class="secondary" id="u5Passive">Passive & causative</button><button class="secondary" id="u5Verbs">-ing / infinitive</button><button class="secondary" id="u5Counter">Counterarguments</button><button class="secondary" id="u5Writing">Problem / solution</button><button class="secondary" id="u5Speak">Unit 5 speaking</button></div>')+
+  card('<h3>Functional map</h3><div class="example"><strong>Passive:</strong> The proposal was reviewed by the committee.</div><div class="example"><strong>Causative:</strong> We had the document translated.</div><div class="example"><strong>-ing:</strong> They suggested revising the draft.</div><div class="example"><strong>Infinitive:</strong> We decided to revise the draft.</div><div class="example"><strong>Counterargument:</strong> That may be true, but people might change if the incentives changed.</div>');
+  document.getElementById('u5Mix').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['passivecausative','verbpatterns','counterarguments','academicdiscourse'],count:16}),'Unit 5 · mixed');
+  document.getElementById('u5Passive').onclick=()=>startSession(pickExercises(exercises,state,{concept:'passivecausative',count:12}),'Unit 5 · passive & causative');
+  document.getElementById('u5Verbs').onclick=()=>startSession(pickExercises(exercises,state,{concept:'verbpatterns',count:12}),'Unit 5 · -ing & infinitive');
+  document.getElementById('u5Counter').onclick=()=>startSession(pickExercises(exercises,state,{concept:'counterarguments',count:12}),'Unit 5 · conditional counterarguments');
+  document.getElementById('u5Writing').onclick=renderProblemSolutionLab;
+  document.getElementById('u5Speak').onclick=()=>renderSpeaking(['passivecausative','verbpatterns','counterarguments','academicdiscourse']);
+}
+
+function renderProblemSolutionLab(){
+  setTitle('Problem / Solution Writing Lab');
+  const prompts=[
+    'University students are becoming increasingly distracted by constant notifications.',
+    'Many city residents feel unsafe using public transportation at night.',
+    'Academic researchers often struggle to communicate complex findings to the public.',
+    'Disposable packaging remains common even when reusable alternatives exist.',
+    'Some neighborhoods have very limited access to green public spaces.'
+  ];
+  const p=prompts[Math.floor(Math.random()*prompts.length)];
+  app.innerHTML=card('<div class="kicker">Personal practice · 140–190 words</div><h2>'+esc(p)+'</h2><p>Build the article around six functions: state the problem → explain a result → give an example → propose a solution → explain how it works → state the expected result.</p><textarea class="input textarea" id="psText" style="min-height:230px" placeholder="Write here…"></textarea><div class="row between"><span class="muted small" id="psCount">0 words</span><button class="primary small-btn" id="psCheck">Self-check</button></div><div id="psFeedback"></div>')+
+  card('<h3>Useful frames</h3><div class="example"><strong>Problem:</strong> One of the main problems is…</div><div class="example"><strong>Result:</strong> As a result,…</div><div class="example"><strong>Example:</strong> A clear example of this is…</div><div class="example"><strong>Solution:</strong> One way to tackle this issue is to…</div><div class="example"><strong>Mechanism:</strong> This would allow…</div><div class="example"><strong>Expected effect:</strong> If implemented effectively, this could…</div>');
+  const ta=document.getElementById('psText');
+  ta.oninput=()=>{const n=ta.value.trim()?ta.value.trim().split(/\s+/).length:0;document.getElementById('psCount').textContent=n+' words'};
+  document.getElementById('psCheck').onclick=()=>{
+    const txt=ta.value.trim();
+    document.getElementById('psFeedback').innerHTML='<div class="feedback"><h3>Problem / solution audit</h3>'+
+    '<label class="check-line"><input type="checkbox" class="psCheck">The problem is stated precisely.</label>'+
+    '<label class="check-line"><input type="checkbox" class="psCheck">A consequence or result is explained.</label>'+
+    '<label class="check-line"><input type="checkbox" class="psCheck">There is a concrete example.</label>'+
+    '<label class="check-line"><input type="checkbox" class="psCheck">At least one realistic solution is proposed.</label>'+
+    '<label class="check-line"><input type="checkbox" class="psCheck">I explain how the solution addresses the problem.</label>'+
+    '<label class="check-line"><input type="checkbox" class="psCheck">The expected result is stated cautiously.</label>'+
+    '<label class="check-line"><input type="checkbox" class="psCheck">Verb patterns, agreement and linking are controlled.</label>'+
+    '<button class="secondary" id="psSave">Save audit</button></div>';
+    document.getElementById('psSave').onclick=()=>{
+      const checks=[...document.querySelectorAll('.psCheck:checked')].length;
+      const coverage=Math.round(checks/7*100);
+      state.sessions.unshift({date:new Date().toISOString(),label:'Problem / Solution Writing',type:'writing',prompt:p,text:txt,coverage});
+      state.sessions=state.sessions.slice(0,50);saveState(state);
+      app.insertAdjacentHTML('afterbegin',card('<div class="kicker">Saved</div><h2>'+coverage+'% checklist coverage</h2><p class="muted">This is a personal diagnostic, not an official course score.</p>','hero'));
+    };
+  };
+}
+
+function renderFinalOralLab(){
+  setTitle('Final Oral Lab');
+  app.innerHTML=card('<div class="kicker">Semester integration</div><h2>Final Oral · productive transfer</h2><p>The final rehearsal mixes earlier weaknesses with the later course content. The goal is not to reproduce a confidential exam format, but to test whether you can select structures spontaneously under speaking pressure.</p><div class="grid"><button class="primary" id="finalFull">Full rehearsal</button><button class="secondary" id="finalTransfer">Mixed transfer</button><button class="secondary" id="finalSpeak">Speaking bank</button><button class="secondary" id="finalPron">Pronunciation</button><button class="secondary" id="finalU5">Unit 5 repair</button></div>')+
+  card('<h3>Five transfer zones</h3><div class="example">1. Questions & interaction</div><div class="example">2. Narrative / past sequence</div><div class="example">3. Change over time: present perfect + used-to family</div><div class="example">4. Future prediction and planning</div><div class="example">5. Passive / verb patterns / conditional counterargument</div>');
+  document.getElementById('finalFull').onclick=renderFinalOralSimulator;
+  document.getElementById('finalTransfer').onclick=()=>startSession(challengeMix(exercises,state,16),'Final Oral · mixed transfer');
+  document.getElementById('finalSpeak').onclick=()=>renderSpeaking();
+  document.getElementById('finalPron').onclick=renderPronunciationLab;
+  document.getElementById('finalU5').onclick=renderUnit5Lab;
+}
+
+function renderFinalOralSimulator(){
+  finalOralSim={index:0,results:[],parts:[
+    {id:'final_oral_1',concept:'questions',seconds:75,prompt:'A classmate says that an unexpected event changed their research project. Keep the conversation going with four natural follow-up questions, including one subject question and one indirect question.',targets:['subject question','object/follow-up question','indirect question']},
+    {id:'final_oral_2',concept:'narrative',seconds:90,prompt:'Tell a short story about a difficult academic or travel situation. Include background, a main event, an earlier event, and something that had been happening for some time.',targets:['past progressive','past simple','past perfect','past perfect progressive']},
+    {id:'final_oral_3',concept:'presentperfect',seconds:90,prompt:'Explain how your academic or professional life has changed over the last few years. Include a result up to now, an ongoing activity, a past habit, something normal now, and something you are still adapting to.',targets:['present perfect','present perfect progressive','used to / would','be/get used to']},
+    {id:'final_oral_4',concept:'future',seconds:90,prompt:'Describe your plans for the next year and make one prediction about universities or technology. Include a schedule/arrangement, an activity in progress at a future time, and something completed by a deadline.',targets:['schedule/arrangement','future progressive','future perfect','prediction']},
+    {id:'final_oral_5',concept:'counterarguments',seconds:90,prompt:'A speaker says: “Environmental or institutional reforms rarely work because people resist change.” Respond with a conditional counterargument, then describe one solution using either a passive or causative structure and one accurate verb pattern.',targets:['conditional counterargument','passive or causative','-ing/infinitive pattern']}
+  ]};
+  renderFinalOralSimulatorPart();
+}
+function renderFinalOralSimulatorPart(){
+  const p=finalOralSim.parts[finalOralSim.index];
+  setTitle('Final Oral rehearsal · '+(finalOralSim.index+1)+' / '+finalOralSim.parts.length);
+  app.innerHTML=card('<div class="row between">'+pill('Part '+(finalOralSim.index+1)+' / '+finalOralSim.parts.length)+pill(p.seconds+' sec','gold')+'</div><div class="exercise-prompt">'+esc(p.prompt)+'</div><div>'+p.targets.map(x=>pill(x)).join('')+'</div><div class="big-timer" id="sTimer">'+p.seconds+'</div><div class="grid"><button class="primary" id="recordBtn">Start recording</button><button class="secondary" id="finalTimer">Use timer only</button></div><div id="audioBox"></div><div class="divider"></div><h3>Target audit</h3>'+p.targets.map((x,i)=>'<label class="check-line"><input type="checkbox" class="targetCheck" value="'+i+'">'+esc(x)+'</label>').join('')+'<button class="primary" id="finalNext">'+(finalOralSim.index===finalOralSim.parts.length-1?'Finish rehearsal':'Save & next part')+'</button>')+
+  card('<p class="muted small">Only mark a target when it appeared accurately enough that you would want to keep it in a real answer.</p>');
+  document.getElementById('recordBtn').onclick=()=>toggleRecording(p);
+  document.getElementById('finalTimer').onclick=()=>startStandaloneTimer(p.seconds);
+  document.getElementById('finalNext').onclick=()=>completeFinalOralPart(p);
+}
+function completeFinalOralPart(p){
+  clearInterval(timerHandle);
+  const checks=[...document.querySelectorAll('.targetCheck:checked')].map(x=>x.value);
+  const row=recordSpeaking(state,p,checks);
+  finalOralSim.results.push({concept:p.concept,prompt:p.prompt,coverage:row.coverage,checks,total:p.targets.length});
+  if(finalOralSim.index<finalOralSim.parts.length-1){finalOralSim.index++;renderFinalOralSimulatorPart();return}
+  const overall=Math.round(finalOralSim.results.reduce((a,x)=>a+x.coverage,0)/finalOralSim.results.length);
+  const weak=finalOralSim.results.filter(x=>x.coverage<75).map(x=>x.concept);
+  recordExamRun(state,{type:'final_oral_rehearsal',coverage:overall,parts:finalOralSim.results});
+  app.innerHTML=card('<div class="kicker">Final rehearsal complete</div><h2>'+overall+'% target coverage</h2><p>This measures target coverage only; it is not an official grade prediction.</p>'+finalOralSim.results.map((x,i)=>'<div class="mini-row"><strong>Part '+(i+1)+' · '+esc(C[x.concept]?.name||x.concept)+'</strong><span style="float:right">'+x.coverage+'%</span></div>').join('')+'<div class="divider"></div><div class="grid">'+(weak.length?'<button class="primary" id="finalRepair">Repair weak areas</button>':'')+'<button class="secondary" id="finalAgain">Run again</button><button class="ghost" id="finalHome">Back to Today</button></div>','hero');
+  if(weak.length)document.getElementById('finalRepair').onclick=()=>startSession(pickExercises(exercises,state,{concepts:[...new Set(weak)],count:14}),'Final Oral · repair');
+  document.getElementById('finalAgain').onclick=renderFinalOralSimulator;
+  document.getElementById('finalHome').onclick=()=>nav('today');
 }
 
 function renderAcademicLab(){
