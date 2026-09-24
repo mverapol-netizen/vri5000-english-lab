@@ -10,7 +10,8 @@ const concepts=[
 {id:'prepositions',name:'Prepositions & collocations',priority:8,summary:'High-frequency dependent prepositions and academic chunks.',rule:'Learn the whole chunk: depend on, interested in, responsible for, impact on, highly likely.',examples:['The outcome depends on institutional capacity.','She is responsible for the analysis.','The reform had an impact on trust.']},
 {id:'passivecausative',name:'Passive & causative',priority:6,summary:'Passive voice and have/get something done.',rule:'Passive = be + past participle. Causative = have/get + object + past participle.',examples:['The data were collected in 2025.','We had the document translated.']},
 {id:'academicdiscourse',name:'Academic discourse',priority:8,summary:'Signposting, hedging, concession, reformulation and Q&A for academic presentations and writing.',rule:'Use explicit discourse frames to organize claims, soften certainty, concede objections and repair your wording without abandoning the turn.',examples:['My main argument is that…','The evidence suggests that…','While it is true that…, I would argue that…','What I mean is…','Let me rephrase that…']},
-{id:'intensifiers',name:'Intensifiers',priority:7,summary:'Natural adverb–adjective and adverb–comparative combinations for degree and emphasis.',rule:'Choose an intensifier that collocates naturally with the adjective or comparative: considerably + comparative, utterly/totally + strong adjective, intensely/deeply + evaluative state, extremely + gradable adjective.',examples:['considerably more effective','utterly unrealistic','totally unexpected','intensely frustrating','extremely difficult']}
+{id:'intensifiers',name:'Intensifiers',priority:7,summary:'Natural adverb–adjective and adverb–comparative combinations for degree and emphasis.',rule:'Choose an intensifier that collocates naturally with the adjective or comparative: considerably + comparative, utterly/totally + strong adjective, intensely/deeply + evaluative state, extremely + gradable adjective.',examples:['considerably more effective','utterly unrealistic','totally unexpected','intensely frustrating','extremely difficult']},
+{id:'counterarguments',name:'Conditional counterarguments',priority:7,summary:'Use conditional structures to respond directly to another speaker’s argument and emphasize a contrasting possibility.',rule:'Reuse part of the original claim, then answer with a conditional counterargument. The modal often carries contrastive stress in speech: “That may be true, but people might change if…”',examples:['That may be true, but people might change if the incentives were stronger.','It could work if local institutions supported it.','Even if the cost increased, the long-term benefit might still justify it.']}
 ];
 const C=Object.fromEntries(concepts.map(x=>[x.id,x]));
 const domains=['politics','philosophy','sociology','horror','academic','everyday'];
@@ -284,6 +285,14 @@ speaking.push(
 );
 
 
+
+speaking.push(
+{id:'counter_speak_01',concept:'counterarguments',domain:'environment',seconds:60,prompt:'Respond to this claim: “People will never give up convenient disposable products.” Give two conditional counterarguments.',targets:['direct reuse of claim','modal contrast','if-clause']},
+{id:'counter_speak_02',concept:'counterarguments',domain:'politics',seconds:60,prompt:'Respond to this claim: “Once institutions lose legitimacy, reform is pointless.” Use acknowledgment, could/might, and a condition.',targets:['acknowledgment','could/might','condition']},
+{id:'counter_speak_03',concept:'counterarguments',domain:'technology',seconds:75,prompt:'Debate the claim that AI will inevitably make university assessment meaningless. Give one concession and two conditional responses.',targets:['concession','conditional counterargument','contrastive modal']},
+{id:'counter_speak_04',concept:'counterarguments',domain:'academic',seconds:60,prompt:'A listener says your proposal would only work in wealthy countries. Respond without rejecting the criticism outright.',targets:['acknowledgment','conditional alternative','qualified conclusion']}
+);
+
 const pronunciation=[
 {id:'pron_q_01',focus:'Question intonation',sentence:'Have you been practicing long?',tip:'Yes/no questions often use rising intonation. Keep the final rise controlled rather than exaggerated.',seconds:12},
 {id:'pron_q_02',focus:'Question intonation',sentence:'Where were you living before?',tip:'Wh- questions commonly end with falling intonation.',seconds:12},
@@ -341,8 +350,8 @@ const schedules={
   {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
   {date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
   {date:'2026-11-16',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
-  {date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
-  {date:'2026-11-23',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','conditionals','academicdiscourse']},
+  {date:'2026-11-18',title:'Unit 5.3 · Conditional counterarguments',concepts:['counterarguments','conditionals']},
+  {date:'2026-11-23',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','counterarguments','academicdiscourse']},
   {date:'2026-11-30',title:'Final Oral preparation',concepts:concepts.map(x=>x.id)},
   {date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
  ],
@@ -360,8 +369,8 @@ const schedules={
 {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-16',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
-{date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
-{date:'2026-11-23',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','conditionals','academicdiscourse']},
+{date:'2026-11-18',title:'Unit 5.3 · Conditional counterarguments',concepts:['counterarguments','conditionals']},
+{date:'2026-11-23',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','counterarguments','academicdiscourse']},
 {date:'2026-11-30',title:'Final Oral preparation',concepts:concepts.map(x=>x.id)},
 {date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
@@ -379,8 +388,8 @@ const schedules={
 {date:'2026-11-05',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-10',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-17',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
-{date:'2026-11-19',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
-{date:'2026-11-24',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','conditionals','academicdiscourse']},
+{date:'2026-11-19',title:'Unit 5.3 · Conditional counterarguments',concepts:['counterarguments','conditionals']},
+{date:'2026-11-24',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','counterarguments','academicdiscourse']},
 {date:'2026-12-01',title:'Final Oral preparation',concepts:concepts.map(x=>x.id)},
 {date:'2026-12-03',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
@@ -398,8 +407,8 @@ const schedules={
 {date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-11',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-18',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
-{date:'2026-11-20',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
-{date:'2026-11-25',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','conditionals','academicdiscourse']},
+{date:'2026-11-20',title:'Unit 5.3 · Conditional counterarguments',concepts:['counterarguments','conditionals']},
+{date:'2026-11-25',title:'Unit 5 Review · Problem/solution writing',concepts:['passivecausative','verbpatterns','counterarguments','academicdiscourse']},
 {date:'2026-12-02',title:'Final Oral preparation',concepts:concepts.map(x=>x.id)},
 {date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ],
@@ -416,7 +425,7 @@ const schedules={
 {date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-11',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-18',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
-{date:'2026-11-20',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+{date:'2026-11-20',title:'Unit 5.3 · Conditional counterarguments',concepts:['counterarguments','conditionals']},
 {date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
 ]
 };
@@ -511,6 +520,71 @@ function addUnit5Depth(){
   })));
 }
 addUnit5Depth();
+
+
+function addConditionalCounterarguments(){
+  const mcq=[
+    ['A says: “People will never stop using disposable cups.” Choose the best conditional counterargument.',['They might if reusable cups were cheaper and easier to access.','People use cups every day.','That is completely false.'],'They might if reusable cups were cheaper and easier to access.','A conditional counterargument reuses the original idea and introduces a contrasting possibility.'],
+    ['A says: “Social media is harmless.” Choose the strongest response.',['It might be for some users, but it could be harmful if the platform repeatedly amplifies extreme content.','Social media exists online.','No, it is bad.'],'It might be for some users, but it could be harmful if the platform repeatedly amplifies extreme content.','The response acknowledges the claim, then changes the condition under which the conclusion holds.'],
+    ['A says: “Electric cars will never replace conventional cars.” Choose the best counterargument.',['They might if charging networks became cheaper and more widespread.','Cars have four wheels.','I disagree very much.'],'They might if charging networks became cheaper and more widespread.','The conditional identifies a circumstance that could alter the prediction.'],
+    ['A says: “Students will always choose the easiest option.” Choose the best response.',['They might not if assessment rewarded deeper reasoning.','Students sometimes choose options.','That is wrong because students study.'],'They might not if assessment rewarded deeper reasoning.','The negative modal directly counters always while the if-clause supplies the condition.'],
+    ['A says: “Public trust cannot recover after a major scandal.” Choose the best response.',['It could if institutions investigated the scandal transparently and imposed credible sanctions.','Trust is important.','Scandals are negative.'],'It could if institutions investigated the scandal transparently and imposed credible sanctions.','Could marks an alternative outcome under a different condition.'],
+    ['A says: “Remote work always weakens teamwork.” Choose the best counterargument.',['It might not if teams had clear routines for coordination and informal contact.','Remote work uses computers.','I prefer office work.'],'It might not if teams had clear routines for coordination and informal contact.','A useful counterargument targets the original generalization and states a condition that changes it.'],
+    ['A says: “No one will accept a congestion charge.” Choose the best response.',['They might if public transportation improved first.','Congestion is a problem.','Charges cost money.'],'They might if public transportation improved first.','The modal should carry the contrast: they might under a different condition.'],
+    ['A says: “AI feedback cannot improve student writing.” Choose the best response.',['It could if students used it to revise rather than simply accept suggestions.','AI produces text.','Writing is important.'],'It could if students used it to revise rather than simply accept suggestions.','The counterargument preserves the topic but modifies the circumstances.'],
+    ['A says: “This reform is too expensive to be realistic.” Choose the best response.',['It might still be realistic if the long-term savings outweighed the initial cost.','Expensive reforms cost money.','I do not like that view.'],'It might still be realistic if the long-term savings outweighed the initial cost.','Still helps signal contrast while the conditional provides the alternative scenario.'],
+    ['A says: “Citizens never read long policy documents.” Choose the best response.',['They might if the documents were clearer and directly relevant to a decision they had to make.','Documents can be long.','Some citizens read.'],'They might if the documents were clearer and directly relevant to a decision they had to make.','The response challenges never by specifying conditions that could alter behavior.'],
+    ['Choose the response that best takes the floor politely.',['That may be true, but people might respond differently if the incentives changed.','No, listen to me.','You are wrong.'],'That may be true, but people might respond differently if the incentives changed.','A brief acknowledgment plus a conditional counterargument allows disagreement without losing conversational control.'],
+    ['Choose the response with the clearest contrastive modal.',['They could if the city provided reliable alternatives.','If the city provided reliable alternatives, alternatives exist.','The city should be reliable maybe.'],'They could if the city provided reliable alternatives.','The modal could carries the contrast between the original impossibility claim and the alternative possibility.'],
+    ['A says: “Penalties are the only way to change behavior.” Choose the best response.',['Rewards might work if they were large enough and visible enough.','Penalties change behavior.','Only is a strong word.'],'Rewards might work if they were large enough and visible enough.','The counterargument proposes a competing mechanism under an explicit condition.'],
+    ['A says: “Young voters are not interested in local politics.” Choose the best response.',['They might be if local issues were connected more clearly to housing, transport and employment.','Young people vote sometimes.','Politics can be boring.'],'They might be if local issues were connected more clearly to housing, transport and employment.','The conditional tests whether the conclusion depends on how the issue is framed.'],
+    ['A says: “The policy failed once, so it will fail again.” Choose the best response.',['It might not if the implementation problems identified the first time were corrected.','It failed before.','Past failure is evidence.'],'It might not if the implementation problems identified the first time were corrected.','The response accepts the past failure but disputes that the same result is inevitable.'],
+    ['A says: “People will not change their environmental habits voluntarily.” Choose the best response.',['They might if the convenient option were also the sustainable one.','Habits are difficult.','Voluntary action exists.'],'They might if the convenient option were also the sustainable one.','The conditional explains the circumstance under which behavior might change.']
+  ];
+  mcq.forEach((x,i)=>exercises.push(exercise({
+    id:id('counter'),concept:'counterarguments',domain:i%4===0?'environment':i%4===1?'technology':i%4===2?'politics':'academic',
+    type:'mcq',transfer:i<8?'controlled':'guided',difficulty:i<8?1:2,prompt:x[0],options:x[1],answer:x[2],
+    explanation:x[3],misconception:'conditional_counterargument'
+  })));
+
+  const transforms=[
+    ['Respond conditionally to: “Nobody will use the new service.” Use might + if.','They might if the service were easier to access.'],
+    ['Respond conditionally to: “The reform cannot work in small municipalities.” Use could + if.','It could if small municipalities received additional technical support.'],
+    ['Respond conditionally to: “Students will always use AI irresponsibly.” Use might not + if.','They might not if assessment required transparent documentation of how AI was used.'],
+    ['Respond conditionally to: “The transition is too expensive.” Use still + might + if.','It might still be worthwhile if the long-term benefits outweighed the initial cost.'],
+    ['Add acknowledgment before this counterargument: “People might change if the incentives changed.”','That may be true, but people might change if the incentives changed.'],
+    ['Make the disagreement less categorical by using a conditional: “Remote work does not weaken teamwork.”','Remote work might not weaken teamwork if teams have strong coordination routines.'],
+    ['Counter this claim: “Public transport will never replace private cars.”','It might if public transport became faster, safer and more reliable.'],
+    ['Counter this claim: “Citizens cannot understand complex policy.”','They could if the information were presented more clearly.']
+  ];
+  transforms.forEach((x,i)=>exercises.push(exercise({
+    id:id('countertrans'),concept:'counterarguments',domain:i%2?'politics':'academic',type:'text',transfer:'guided',difficulty:2,
+    prompt:x[0],acceptedAnswers:[x[1]],answer:x[1],explanation:'Reuse the original proposition, then change the conclusion by introducing a condition and a contrasting modal.',misconception:'counterargument_form'
+  })));
+
+  const builders=[
+    ['That','may','be','true,','but','people','might','change','if','the','incentives','changed.'],
+    ['They','could','if','the','city','provided','reliable','alternatives.'],
+    ['It','might','not','fail','if','implementation','improved.'],
+    ['Even','if','costs','rose,','the','long-term','benefits','might','justify','the','policy.']
+  ];
+  builders.forEach((tokens,i)=>exercises.push(exercise({
+    id:id('counterbuild'),concept:'counterarguments',domain:i%2?'environment':'politics',type:'builder',transfer:'guided',difficulty:2,
+    prompt:'Build the conditional counterargument.',tokens:[...tokens].sort(()=>Math.random()-.5),answer:tokens.join(' '),
+    explanation:'Build the acknowledgment/contrast and conditional as one complete conversational move.',misconception:'counterargument_word_order'
+  })));
+
+  const free=[
+    ['politics','A colleague says: “Once public trust falls, governments cannot recover it.” Give a 45-second response with acknowledgment, a conditional counterargument and one example.','Model: That may be true in some cases, but trust could recover if institutions responded transparently and corrected the underlying problem. For example, an independent investigation might show citizens that accountability is possible.'],
+    ['environment','Someone says: “People will never change environmentally harmful habits unless they are punished.” Respond using at least two conditional counterarguments.','Model: Penalties may help, but people might also change if the sustainable option were cheaper and easier. They could also respond to rewards if those incentives were visible enough.'],
+    ['technology','Someone says: “AI will inevitably reduce students’ ability to think.” Respond with one concession and two conditional alternatives.','Model: That risk is real, but the outcome might be different if students had to justify their reasoning. AI could even support reflection if it were used for revision rather than answer generation.']
+  ];
+  free.forEach((x)=>exercises.push(exercise({
+    id:id('counterfree'),concept:'counterarguments',domain:x[0],type:'selfcheck',transfer:'free',difficulty:3,
+    prompt:x[1],options:[],answer:x[2],explanation:'Check whether you directly reused the original idea, introduced a genuine condition and made the contrasting modal clear.',misconception:'counterargument_transfer'
+  })));
+}
+addConditionalCounterarguments();
 
 function addIntensifiers(){
   const rows=[
