@@ -38,7 +38,7 @@ export function reviewMix(all,state,count=10){
 export function todayMix(all,state,count=12,{courseConcepts=[]}={}){
   const dueConcepts=Object.keys(state.concepts).filter(c=>conceptDue(state,c));
   const errorConcepts=[...new Set(state.errors.filter(e=>!e.resolved).map(e=>e.concept))];
-  const weak=Object.entries(state.concepts).sort((a,b)=>conceptMastery(a[1])-conceptMastery(b[1])).map(([k])=>k);
+  const weak=Object.entries(state.concepts).filter(([,v])=>(v.attempts||0)>=3).sort((a,b)=>conceptNeedScore(b[1])-conceptNeedScore(a[1])).map(([k])=>k);
   const fallback=['narrative','questions','conditionals','usedto','agreement','prepositions'];
   const targets=[...new Set([...courseConcepts,...errorConcepts,...dueConcepts,...weak,...fallback])].filter(Boolean);let out=[];
   for(let cursor=0;out.length<count&&cursor<targets.length*4;cursor++){
@@ -67,6 +67,17 @@ export function eventPack(all,state,event,phase='prepare',count=10){
   return [...new Map(out.map(x=>[x.id,x])).values()].slice(0,count);
 }
 function bucketRate(b){if(!b?.attempts)return 0;return b.correct/b.attempts}
+export function conceptNeedScore(c={}){
+  if(!(c.attempts||0))return 0;
+  const mastery=conceptMastery(c);
+  const t=c.transfer||{};
+  const controlled=bucketRate(t.controlled),free=bucketRate(t.free);
+  const transferGap=Math.max(0,controlled-free);
+  const responsePressure=Math.min(1,Math.max(0,((c.avgResponseMs||0)-5000)/10000));
+  const conf=c.confidence||{},confTotal=(conf.sure||0)+(conf.unsure||0)+(conf.guess||0);
+  const uncertainty=confTotal?((conf.unsure||0)+(conf.guess||0))/confTotal:0;
+  return (1-mastery)*.55+transferGap*.25+responsePressure*.10+uncertainty*.10;
+}
 export function conceptMastery(c={}){const t=c.transfer||{},controlled=bucketRate(t.controlled),guided=bucketRate(t.guided),free=bucketRate(t.free),base=c.attempts?c.correct/c.attempts:0;return .2*base+.25*controlled+.3*guided+.25*free}
 export function conceptStats(state,id){
   const c=state.concepts[id]||{attempts:0,correct:0,transfer:{controlled:{attempts:0,correct:0},guided:{attempts:0,correct:0},free:{attempts:0,correct:0}}};
@@ -78,7 +89,9 @@ export function conceptStats(state,id){
   if(c.attempts>=14&&rates.guided>=75&&rates.controlled>=85)status='GUIDED';
   if(c.attempts>=18&&counts.free>=2&&rates.free>=60&&rates.guided>=80)status='MAINTENANCE';
   if(c.attempts>=28&&counts.free>=3&&mastery>=86&&rates.guided>=85&&rates.free>=75)status='MASTERED';
-  return {...c,accuracy,mastery,rates,counts,status};
+  const conf=c.confidence||{},confTotal=(conf.sure||0)+(conf.unsure||0)+(conf.guess||0);
+  const uncertainty=confTotal?Math.round(((conf.unsure||0)+(conf.guess||0))/confTotal*100):0;
+  return {...c,accuracy,mastery,rates,counts,status,avgResponseMs:c.avgResponseMs||0,uncertainty,needScore:Math.round(conceptNeedScore(c)*100)};
 }
 export function courseNow(events){const now=new Date();let next=events.find(e=>new Date(e.date+'T23:59:59')>=now);if(!next)next=events.at(-1);return next}
 export function nextAssessment(events){const now=new Date();return events.find(e=>e.assessment&&new Date(e.date+'T23:59:59')>=now)||events.filter(e=>e.assessment).at(-1)}
