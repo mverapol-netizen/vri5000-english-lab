@@ -9,12 +9,14 @@ The repository is now the live development source for the app. The design is del
 The app currently includes:
 
 - 10 concept families
-- 286 unique exercise instances generated from finite, auditable templates
+- 349 unique exercise instances generated from finite, auditable templates
 - 0 exact prompt + answer duplicates
 - 20 free-transfer/self-check tasks
-- 8 speaking challenges with microphone recording
+- 24 speaking challenges with microphone recording
 - Oral Midterm Lab
 - Academic Project Presentation Lab
+- Unit 3 Story Lab
+- Unit 4 / Written Exam Lab
 - Prepare → Consolidate → Transfer packs for course milestones
 - adaptive Today, Review due, Challenge me, Error Bank and mastery tracking
 - local backup/import of progress
@@ -92,5 +94,5 @@ Progress remains in browser local storage. Audio recordings are held as temporar
 - add an integrated Unit 3 / Short Story Lab;
 - expand the Academic Project Presentation Lab with hedging, signposting, Q&A and reformulation;
 - build the Unit 4 / Written Exam Lab;
-- make speaking self-audits contribute explicitly to transfer mastery;
+- continue calibrating speaking self-audits as explicit transfer evidence;
 - add richer session-history analytics while keeping the interface small.
