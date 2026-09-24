@@ -17,14 +17,22 @@
 - Quick 5-minute mode added.
 - Next: richer listening/shadowing, vocabulary/chunk expansion, and user-data calibration.
 
-## v0.8 — current
+## v0.8 — completed
 - Listening/dictation corpus and lab added.
 - Error Bank repair lifecycle implemented.
 - Upcoming assessments now surface independently from the next class event.
 - Focused labs exposed directly from Practice.
 - Next: shadowing cycles, richer chunk/vocabulary retrieval, and calibration from real usage data.
 
-## v0.9
+## v0.9 — current
+- Chunk Lab with spaced retrieval added.
+- Shadowing cycle added.
+- Multi-turn Conversation Lab added.
+- Response speed and confidence now feed adaptive priority.
+- Progress analytics expanded to listening, interaction, chunks and automation.
+- Next: richer native/sourced audio options where licensing permits, deeper collocation banks, and calibration from actual user study history.
+
+## v1.0
 - Written Exam lab:
   - future forms
   - intensifiers
