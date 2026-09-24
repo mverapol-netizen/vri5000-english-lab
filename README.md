@@ -96,3 +96,7 @@ Progress remains in browser local storage. Audio recordings are held as temporar
 - build the Unit 4 / Written Exam Lab;
 - continue calibrating speaking self-audits as explicit transfer evidence;
 - add richer session-history analytics while keeping the interface small.
+
+
+## GitHub Pages deployment
+The repository already contains a GitHub Actions deployment workflow. GitHub Pages must be enabled once in the repository settings using **GitHub Actions** as the Pages source. After that, pushes to `main` deploy the PWA automatically.
