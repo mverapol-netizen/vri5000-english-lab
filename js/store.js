@@ -1,6 +1,6 @@
 const KEY='vri5000_lab_state_v03';
 const OLD_KEYS=['vri5000_lab_state_v02','vri5000_lab_state_v01'];
-const defaults={settings:{section:'conservative',duration:20},seen:{},concepts:{},errors:[],sessions:[],speaking:[],examRuns:[]};
+const defaults={settings:{section:'conservative',duration:20},seen:{},concepts:{},errors:[],sessions:[],speaking:[],examRuns:[],chunkHistory:{}};
 const clone=x=>structuredClone(x);
 
 function ensureTransfer(t={}){
@@ -10,7 +10,7 @@ function ensureTransfer(t={}){
 function migrate(old={}){
   const s={...clone(defaults),...old};
   s.settings={...defaults.settings,...(old.settings||{})};
-  s.seen=s.seen||{};s.concepts=s.concepts||{};s.errors=s.errors||[];s.sessions=s.sessions||[];s.speaking=s.speaking||[];s.examRuns=s.examRuns||[];
+  s.seen=s.seen||{};s.concepts=s.concepts||{};s.errors=s.errors||[];s.sessions=s.sessions||[];s.speaking=s.speaking||[];s.examRuns=s.examRuns||[];s.chunkHistory=s.chunkHistory||{};
   for(const [id,v0] of Object.entries(s.seen)){
     const v={...v0};
     if(v.attempts==null)v.attempts=1;
