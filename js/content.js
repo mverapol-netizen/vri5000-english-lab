@@ -293,6 +293,40 @@ speaking.push(
 {id:'counter_speak_04',concept:'counterarguments',domain:'academic',seconds:60,prompt:'A listener says your proposal would only work in wealthy countries. Respond without rejecting the criticism outright.',targets:['acknowledgment','conditional alternative','qualified conclusion']}
 );
 
+
+const listening=[
+{id:'listen_01',concept:'questions',domain:'academic',focus:'subject question',transcript:'Who developed the argument that changed the debate?',tip:'Listen for who + past verb without did.'},
+{id:'listen_02',concept:'questions',domain:'everyday',focus:'indirect question',transcript:'Could you tell me why the class was moved to another room?',tip:'Notice statement word order after the indirect question frame.'},
+{id:'listen_03',concept:'questions',domain:'politics',focus:'preposition question',transcript:'What are the researchers most concerned about?',tip:'Listen for the final preposition as part of the question.'},
+{id:'listen_04',concept:'agreement',domain:'academic',focus:'agreement',transcript:'A series of recent studies has challenged the earlier interpretation.',tip:'The head noun series controls the singular verb.'},
+{id:'listen_05',concept:'agreement',domain:'politics',focus:'agreement',transcript:'The results indicate that public trust remains fragile.',tip:'Results takes indicate; trust takes remains.'},
+{id:'listen_06',concept:'narrative',domain:'horror',focus:'past background',transcript:'She was reading in the archive when the lights suddenly went out.',tip:'Distinguish the ongoing background from the interrupting event.'},
+{id:'listen_07',concept:'narrative',domain:'academic',focus:'past perfect',transcript:'Someone had removed the file before the researcher arrived.',tip:'Listen for had + past participle marking the earlier event.'},
+{id:'listen_08',concept:'narrative',domain:'literature',focus:'past perfect progressive',transcript:'They had been waiting for nearly an hour when the door finally opened.',tip:'Listen for had been + -ing and the duration phrase.'},
+{id:'listen_09',concept:'usedto',domain:'academic',focus:'used to',transcript:'I used to avoid speaking English during seminars.',tip:'Used to + base verb expresses a past habit.'},
+{id:'listen_10',concept:'usedto',domain:'everyday',focus:'be used to',transcript:'I am used to reading long papers before breakfast now.',tip:'Be used to is followed by an -ing form here.'},
+{id:'listen_11',concept:'usedto',domain:'academic',focus:'get used to',transcript:'I am slowly getting used to answering questions without translating first.',tip:'Notice getting used to + -ing.'},
+{id:'listen_12',concept:'presentperfect',domain:'academic',focus:'result',transcript:'I have completed three practice sessions this week.',tip:'Present perfect simple foregrounds completed number/result.'},
+{id:'listen_13',concept:'presentperfect',domain:'academic',focus:'duration',transcript:'I have been practicing spontaneous speaking every morning.',tip:'Present perfect progressive foregrounds ongoing activity.'},
+{id:'listen_14',concept:'conditionals',domain:'academic',focus:'unless',transcript:'Unless you practice under time pressure, spontaneous speaking may remain difficult.',tip:'Unless already contains the negative meaning.'},
+{id:'listen_15',concept:'conditionals',domain:'everyday',focus:'in case',transcript:'Take a written outline in case your phone battery dies.',tip:'In case introduces a precaution.'},
+{id:'listen_16',concept:'future',domain:'academic',focus:'future progressive',transcript:'At this time next week, I will be presenting my research in English.',tip:'Future progressive marks an activity in progress at a future time.'},
+{id:'listen_17',concept:'future',domain:'academic',focus:'future perfect',transcript:'By Friday, I will have finished the revised version of the paper.',tip:'Future perfect marks completion before a future point.'},
+{id:'listen_18',concept:'future',domain:'academic',focus:'future perfect progressive',transcript:'By December, I will have been studying English intensively for several months.',tip:'Listen for will have been + -ing.'},
+{id:'listen_19',concept:'prepositions',domain:'politics',focus:'dependent preposition',transcript:'The outcome depends on whether institutions can maintain public trust.',tip:'Depend is followed by on.'},
+{id:'listen_20',concept:'prepositions',domain:'academic',focus:'collocation',transcript:'The researchers were deeply concerned about the quality of the data.',tip:'Deeply concerned about forms one natural chunk.'},
+{id:'listen_21',concept:'passivecausative',domain:'academic',focus:'passive',transcript:'The interviews were recorded, transcribed and checked before analysis.',tip:'Listen for the passive sequence be + past participles.'},
+{id:'listen_22',concept:'passivecausative',domain:'everyday',focus:'causative',transcript:'I had the document printed before I left for class.',tip:'Causative have uses have + object + past participle.'},
+{id:'listen_23',concept:'verbpatterns',domain:'academic',focus:'avoid + ing',transcript:'Researchers should avoid overstating what the evidence can actually show.',tip:'Avoid is followed by -ing.'},
+{id:'listen_24',concept:'verbpatterns',domain:'academic',focus:'decide + infinitive',transcript:'We decided to revise the argument after the seminar.',tip:'Decide is followed by the to-infinitive.'},
+{id:'listen_25',concept:'intensifiers',domain:'technology',focus:'intensifier',transcript:'The second system was considerably more reliable than the first.',tip:'Considerably naturally modifies a comparative.'},
+{id:'listen_26',concept:'intensifiers',domain:'academic',focus:'intensifier',transcript:'The explanation is highly convincing, although the evidence remains limited.',tip:'Highly convincing is a formal collocation.'},
+{id:'listen_27',concept:'academicdiscourse',domain:'academic',focus:'hedging',transcript:'The available evidence suggests that the effect may vary across cases.',tip:'Listen for two layers of caution: suggests that and may.'},
+{id:'listen_28',concept:'academicdiscourse',domain:'philosophy',focus:'self-repair',transcript:'Let me rephrase that: the argument concerns dependence, not the absence of social relations.',tip:'Treat let me rephrase that as one discourse chunk.'},
+{id:'listen_29',concept:'counterarguments',domain:'politics',focus:'conditional counterargument',transcript:'That may be true, but people might respond differently if the incentives changed.',tip:'Listen for the contrastive modal might and the if-clause.'},
+{id:'listen_30',concept:'counterarguments',domain:'environment',focus:'conditional counterargument',transcript:'The policy could work if the sustainable option were also the convenient one.',tip:'The modal could introduces an alternative possibility.'}
+];
+
 const pronunciation=[
 {id:'pron_q_01',focus:'Question intonation',sentence:'Have you been practicing long?',tip:'Yes/no questions often use rising intonation. Keep the final rise controlled rather than exaggerated.',seconds:12},
 {id:'pron_q_02',focus:'Question intonation',sentence:'Where were you living before?',tip:'Wh- questions commonly end with falling intonation.',seconds:12},
@@ -1031,4 +1065,4 @@ const v04FreeTasks=[
 ];
 v04FreeTasks.forEach((x)=>exercises.push(exercise({id:id('free4'),concept:x[0],domain:x[1],type:'selfcheck',transfer:'free',difficulty:3,prompt:x[2],options:[],answer:x[3],explanation:'Use the model as a diagnostic reference, not as a script. Check whether the target grammar appeared accurately and naturally.',misconception:'free_transfer'})));
 
-export {concepts,C,domains,exercises,speaking,pronunciation,schedules};
+export {concepts,C,domains,exercises,speaking,listening,pronunciation,schedules};
