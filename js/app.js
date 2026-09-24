@@ -9,6 +9,7 @@ let route='today';
 let session=null;
 let mediaRecorder=null,mediaChunks=[],recordingUrl=null,timerHandle=null,timerStarted=0;
 let oralSim=null;
+let presentationSim=null;
 
 function esc(s){return String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
 function setTitle(t){title.textContent=t}
@@ -219,7 +220,47 @@ function renderWritingSprint(){
   };
 }
 
-function renderAcademicLab(){setTitle('Academic Project Lab');app.innerHTML=card('<div class="kicker">Academic Project Presentation</div><h2>Argument + sentence control + Q&A</h2><p>Practice the language needed to introduce a thesis, organize an argument, hedge claims and respond without losing the turn.</p><div class="grid"><button class="primary" id="academicMix">Grammar + chunks</button><button class="secondary" id="academicSpeak">Presentation speaking</button></div>')+card('<h3>Useful frames</h3><div class="example">My main argument is that…</div><div class="example">The first point concerns…</div><div class="example">The evidence suggests that…</div><div class="example">While it is true that…, I would argue that…</div><div class="example">What I mean is… / Let me rephrase that…</div>')+card('<h3>Three-step rehearsal</h3><p><strong>1.</strong> 90 seconds: explain one claim.</p><p><strong>2.</strong> 45 seconds: answer an objection.</p><p><strong>3.</strong> 30 seconds: reformulate your answer more precisely.</p>');document.getElementById('academicMix').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['questions','agreement','prepositions','presentperfect','verbpatterns'],count:12}),'Academic Project · language');document.getElementById('academicSpeak').onclick=()=>renderSpeaking(['questions','agreement','prepositions','presentperfect','future'])}
+function renderAcademicLab(){
+  setTitle('Academic Project Lab');
+  app.innerHTML=card('<div class="kicker">Academic Project Presentation</div><h2>Argument + sentence control + Q&A</h2><p>Practice the language needed to introduce a thesis, organize an argument, hedge claims and respond without losing the turn.</p><div class="grid"><button class="primary" id="academicMix">Language drill</button><button class="secondary" id="academicSpeak">Speaking bank</button><button class="secondary" id="academicSim">Full rehearsal</button><button class="secondary" id="academicQA">Q&A challenge</button></div>')+
+  card('<h3>Useful frames</h3><div class="example">My main argument is that…</div><div class="example">The first point concerns…</div><div class="example">The evidence suggests that…</div><div class="example">While it is true that…, I would argue that…</div><div class="example">What I mean is… / Let me rephrase that…</div>')+
+  card('<h3>Three-step rehearsal</h3><p><strong>1.</strong> Opening: thesis + roadmap.</p><p><strong>2.</strong> Argument: claim + evidence + cautious implication.</p><p><strong>3.</strong> Q&A: objection + distinction + reformulation.</p>');
+  document.getElementById('academicMix').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['academicdiscourse','questions','agreement','prepositions','presentperfect','verbpatterns'],count:14}),'Academic Project · language');
+  document.getElementById('academicSpeak').onclick=()=>renderSpeaking(['academicdiscourse','questions','agreement','prepositions','presentperfect','future']);
+  document.getElementById('academicSim').onclick=renderPresentationSimulator;
+  document.getElementById('academicQA').onclick=()=>renderSpeaking(['academicdiscourse']);
+}
+
+function renderPresentationSimulator(){
+  presentationSim={index:0,results:[],parts:[
+    {id:'presentation_sim_1',concept:'academicdiscourse',seconds:90,prompt:'Open your academic presentation. State a clear main argument, give a three-part roadmap, and make one hedged claim about the evidence.',targets:['thesis frame','roadmap','hedging']},
+    {id:'presentation_sim_2',concept:'academicdiscourse',seconds:90,prompt:'Develop one central point. State the claim, introduce one piece of evidence or example, and explain its implication without overclaiming.',targets:['claim','evidence/example','cautious implication']},
+    {id:'presentation_sim_3',concept:'academicdiscourse',seconds:60,prompt:'A listener objects: “Your argument seems to confuse social dependence with loss of autonomy.” Respond by acknowledging the objection, drawing a distinction, and reformulating your position.',targets:['acknowledgment','distinction','self-repair']}
+  ]};
+  renderPresentationSimulatorPart();
+}
+function renderPresentationSimulatorPart(){
+  const p=presentationSim.parts[presentationSim.index];
+  setTitle('Presentation rehearsal · '+(presentationSim.index+1)+' / '+presentationSim.parts.length);
+  app.innerHTML=card('<div class="row between">'+pill('Part '+(presentationSim.index+1)+' / '+presentationSim.parts.length)+pill(p.seconds+' sec','gold')+'</div><div class="exercise-prompt">'+esc(p.prompt)+'</div><div>'+p.targets.map(x=>pill(x)).join('')+'</div><div class="big-timer" id="sTimer">'+p.seconds+'</div><div class="grid"><button class="primary" id="recordBtn">Start recording</button><button class="secondary" id="presentationTimer">Use timer only</button></div><div id="audioBox"></div><div class="divider"></div><h3>Target audit</h3>'+p.targets.map((x,i)=>'<label class="check-line"><input type="checkbox" class="targetCheck" value="'+i+'">'+esc(x)+'</label>').join('')+'<button class="primary" id="presentationNext">'+(presentationSim.index===presentationSim.parts.length-1?'Finish rehearsal':'Save & next part')+'</button>')+
+  card('<p class="muted small">Judge whether the function was actually present and linguistically controlled. The score is diagnostic target coverage, not an official grade.</p>');
+  document.getElementById('recordBtn').onclick=()=>toggleRecording(p);
+  document.getElementById('presentationTimer').onclick=()=>startStandaloneTimer(p.seconds);
+  document.getElementById('presentationNext').onclick=()=>completePresentationSimulatorPart(p);
+}
+function completePresentationSimulatorPart(p){
+  clearInterval(timerHandle);
+  const checks=[...document.querySelectorAll('.targetCheck:checked')].map(x=>x.value);
+  const row=recordSpeaking(state,p,checks);
+  presentationSim.results.push({concept:p.concept,prompt:p.prompt,coverage:row.coverage,checks,total:p.targets.length});
+  if(presentationSim.index<presentationSim.parts.length-1){presentationSim.index++;renderPresentationSimulatorPart();return}
+  const overall=Math.round(presentationSim.results.reduce((a,x)=>a+x.coverage,0)/presentationSim.results.length);
+  recordExamRun(state,{type:'academic_project_rehearsal',coverage:overall,parts:presentationSim.results});
+  app.innerHTML=card('<div class="kicker">Presentation rehearsal complete</div><h2>'+overall+'% target coverage</h2><p>This measures whether the target presentation functions appeared in your rehearsal.</p>'+presentationSim.results.map((x,i)=>'<div class="mini-row"><strong>Part '+(i+1)+'</strong><span style="float:right">'+x.coverage+'%</span></div>').join('')+'<div class="divider"></div><div class="grid"><button class="primary" id="presentationRepair">Practice academic discourse</button><button class="secondary" id="presentationAgain">Run another rehearsal</button><button class="ghost" id="presentationHome">Back to Today</button></div>','hero');
+  document.getElementById('presentationRepair').onclick=()=>startSession(pickExercises(exercises,state,{concept:'academicdiscourse',count:12}),'Presentation repair');
+  document.getElementById('presentationAgain').onclick=renderPresentationSimulator;
+  document.getElementById('presentationHome').onclick=()=>nav('today');
+}
 
 function renderSpeaking(filter=null){setTitle('Speaking Studio');let pool=speaking.filter(p=>!filter||filter.includes(p.concept));const p=pool[Math.floor(Math.random()*pool.length)];app.innerHTML=card('<div class="row between">'+pill(C[p.concept].name)+pill(p.seconds+' sec','gold')+'</div><div class="exercise-prompt">'+esc(p.prompt)+'</div><div>'+p.targets.map(x=>pill(x)).join('')+'</div><div class="big-timer" id="sTimer">'+p.seconds+'</div><div class="grid"><button class="primary" id="recordBtn">Start recording</button><button class="secondary" id="newPrompt">New prompt</button></div><div id="audioBox"></div><div class="divider"></div><h3>Self-audit</h3>'+p.targets.map((x,i)=>'<label class="check-line"><input type="checkbox" class="targetCheck" value="'+i+'">'+esc(x)+'</label>').join('')+'<button class="secondary" id="saveSpeak">Save self-audit</button>');document.getElementById('newPrompt').onclick=()=>renderSpeaking(filter);document.getElementById('recordBtn').onclick=()=>toggleRecording(p);document.getElementById('saveSpeak').onclick=()=>{const checks=[...document.querySelectorAll('.targetCheck:checked')].map(x=>x.value);const row=recordSpeaking(state,p,checks);alert('Self-audit saved: '+row.coverage+'% target coverage. This now counts as free-transfer evidence.')}}
 async function toggleRecording(p){const btn=document.getElementById('recordBtn');if(mediaRecorder&&mediaRecorder.state==='recording'){mediaRecorder.stop();clearInterval(timerHandle);btn.textContent='Start recording';btn.classList.remove('recording');return}try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});mediaChunks=[];mediaRecorder=new MediaRecorder(stream);mediaRecorder.ondataavailable=e=>mediaChunks.push(e.data);mediaRecorder.onstop=()=>{stream.getTracks().forEach(t=>t.stop());if(recordingUrl)URL.revokeObjectURL(recordingUrl);recordingUrl=URL.createObjectURL(new Blob(mediaChunks,{type:mediaRecorder.mimeType}));document.getElementById('audioBox').innerHTML='<audio controls src="'+recordingUrl+'"></audio>'};mediaRecorder.start();timerStarted=Date.now();btn.textContent='Stop recording';btn.classList.add('recording');timerHandle=setInterval(()=>{const left=Math.max(0,p.seconds-Math.floor((Date.now()-timerStarted)/1000));document.getElementById('sTimer').textContent=left;if(!left&&mediaRecorder.state==='recording')mediaRecorder.stop()},250)}catch{alert('Microphone access is unavailable. You can still use the timer and self-audit.') }}
