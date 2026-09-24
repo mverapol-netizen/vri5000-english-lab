@@ -6,7 +6,7 @@
 - Local microphone recording and pronunciation self-audit added.
 - Next: deeper shadowing workflow, chunk-focused retrieval and pronunciation progress analytics.
 
-## v0.7 — current
+## v0.7 — completed
 - Unit 4/Written Exam Lab deepened with intensifiers and for/against writing.
 - Unit 5 Change Lab built.
 - Conditional counterarguments added as a tracked concept.
@@ -17,7 +17,14 @@
 - Quick 5-minute mode added.
 - Next: richer listening/shadowing, vocabulary/chunk expansion, and user-data calibration.
 
-## v0.8
+## v0.8 — current
+- Listening/dictation corpus and lab added.
+- Error Bank repair lifecycle implemented.
+- Upcoming assessments now surface independently from the next class event.
+- Focused labs exposed directly from Practice.
+- Next: shadowing cycles, richer chunk/vocabulary retrieval, and calibration from real usage data.
+
+## v0.9
 - Written Exam lab:
   - future forms
   - intensifiers
