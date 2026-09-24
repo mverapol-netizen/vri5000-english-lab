@@ -82,8 +82,16 @@ export function updateConfidence(state,exerciseId,confidence){
   saveState(state);
 }
 export function recordSpeaking(state,prompt,checks=[]){
-  const total=(prompt.targets||[]).length||1,coverage=Math.round(checks.length/total*100);
-  const row={id:crypto.randomUUID(),promptId:prompt.id,concept:prompt.concept,date:new Date().toISOString(),checks,totalTargets:total,coverage,assessment:prompt.assessment||null};
-  state.speaking.unshift(row);state.speaking=state.speaking.slice(0,80);saveState(state);return row;
+  const total=(prompt.targets||[]).length||1;
+  const coverage=Math.round(checks.length/total*100);
+  const successful=coverage>=75;
+  const now=new Date(),iso=now.toISOString();
+  const row={id:crypto.randomUUID(),promptId:prompt.id||null,concept:prompt.concept,date:iso,checks,totalTargets:total,coverage,successful,assessment:prompt.assessment||null};
+  state.speaking.unshift(row);state.speaking=state.speaking.slice(0,80);
+  const c=ensureConcept(state,prompt.concept);
+  c.attempts++;if(successful)c.correct++;else c.errors++;
+  c.lastSeen=iso;c.transfer.free.attempts++;if(successful)c.transfer.free.correct++;
+  c.reviewAt=new Date(now.getTime()+(successful?72:24)*3600e3).toISOString();
+  saveState(state);return row;
 }
 export function recordExamRun(state,run){state.examRuns.unshift({...run,id:crypto.randomUUID(),date:new Date().toISOString()});state.examRuns=state.examRuns.slice(0,30);saveState(state)}
