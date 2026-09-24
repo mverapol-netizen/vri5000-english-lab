@@ -1,4 +1,4 @@
-import {concepts,domains,exercises,speaking,listening,pronunciation,schedules} from '../js/content.js';
+import {concepts,domains,exercises,chunks,shadowing,conversations,speaking,listening,pronunciation,schedules} from '../js/content.js';
 
 const errors=[];
 const conceptIds=new Set(concepts.map(c=>c.id));
@@ -47,6 +47,20 @@ for(const p of speaking){
   if(!p.prompt||!p.targets?.length||!p.seconds) errors.push('invalid speaking prompt');
 }
 
+for(const ch of chunks){
+  if(!ch.id||!ch.area||!ch.text||!ch.meaning_es||!ch.example||!ch.trap) errors.push('invalid chunk item');
+}
+for(const s of shadowing){
+  if(!s.id||!s.domain||!s.focus||!s.transcript||!Array.isArray(s.chunks)||!s.reusePrompt) errors.push('invalid shadowing item');
+  if(s.domain && !domains.includes(s.domain)) errors.push('shadowing '+s.id+': undeclared domain '+s.domain);
+}
+for(const cv of conversations){
+  if(!cv.id||!cv.title||!cv.domain||!cv.opening||!Array.isArray(cv.turns)||cv.turns.length<2) errors.push('invalid conversation item');
+  if(cv.domain && !domains.includes(cv.domain)) errors.push('conversation '+cv.id+': undeclared domain '+cv.domain);
+  if(Array.isArray(cv.concepts)) for(const cid of cv.concepts) if(!conceptIds.has(cid)) errors.push('conversation '+cv.id+': unknown concept '+cid);
+  for(const t of (cv.turns||[])) if(!t.other||!t.task||!Array.isArray(t.frames)||!t.frames.length) errors.push('conversation '+cv.id+': invalid turn');
+}
+
 for(const l of listening){
   if(!l.id||!l.concept||!l.focus||!l.transcript||!l.tip) errors.push('invalid listening item');
   if(l.concept && !conceptIds.has(l.concept)) errors.push('listening '+l.id+': unknown concept '+l.concept);
@@ -75,6 +89,9 @@ console.log(JSON.stringify({
   guided:exercises.filter(e=>e.transfer==='guided').length,
   free:exercises.filter(e=>e.transfer==='free').length,
   speaking:speaking.length,
+  chunks:chunks.length,
+  shadowing:shadowing.length,
+  conversations:conversations.length,
   listening:listening.length,
   pronunciation:pronunciation.length,
   exactDuplicates:0,
