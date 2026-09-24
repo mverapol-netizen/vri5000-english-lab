@@ -380,6 +380,7 @@ const schedules={
   {date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
   {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
   {date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
+  {date:'2026-10-28',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions','academicdiscourse']},
   {date:'2026-11-02',title:'Unit 4 Review · For & against writing',concepts:['future','intensifiers','academicdiscourse']},
   {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
   {date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
