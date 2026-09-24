@@ -294,6 +294,119 @@ speaking.push(
 );
 
 
+
+const chunks=[
+{id:'chunk_acad_01',area:'Academic argument',text:'the evidence suggests that',meaning_es:'la evidencia sugiere que',example:'The evidence suggests that institutional trust has declined.',trap:'Avoid treating evidence as a person that “says” something.'},
+{id:'chunk_acad_02',area:'Academic argument',text:'this raises the question of',meaning_es:'esto plantea la pregunta de',example:'This raises the question of how autonomy should be understood.',trap:'Use of before a noun phrase; use whether/why/how for a clause.'},
+{id:'chunk_acad_03',area:'Academic argument',text:'to some extent',meaning_es:'hasta cierto punto',example:'To some extent, the pattern reflects institutional differences.',trap:'Do not overuse it as a filler.'},
+{id:'chunk_acad_04',area:'Academic argument',text:'broadly speaking',meaning_es:'en términos generales',example:'Broadly speaking, the cases follow a similar trajectory.',trap:'Useful for a qualified generalization, not a precise finding.'},
+{id:'chunk_acad_05',area:'Academic argument',text:'one possible explanation is that',meaning_es:'una posible explicación es que',example:'One possible explanation is that lower trust reduces compliance.',trap:'Keep the claim explicitly provisional.'},
+{id:'chunk_acad_06',area:'Academic argument',text:'taken together, these findings suggest that',meaning_es:'en conjunto, estos hallazgos sugieren que',example:'Taken together, these findings suggest that institutional design matters.',trap:'Use it to synthesize, not introduce a new argument.'},
+
+{id:'chunk_pol_01',area:'Political science',text:'institutional capacity',meaning_es:'capacidad institucional',example:'The reform depends on institutional capacity.',trap:'Institutional capacity is usually uncountable in this use.'},
+{id:'chunk_pol_02',area:'Political science',text:'rule of law',meaning_es:'Estado de derecho',example:'The rule of law constrains the arbitrary use of power.',trap:'Normally use the rule of law with the article.'},
+{id:'chunk_pol_03',area:'Political science',text:'political accountability',meaning_es:'rendición de cuentas política',example:'Political accountability can shape public trust.',trap:'Accountability is normally uncountable.'},
+{id:'chunk_pol_04',area:'Political science',text:'public trust',meaning_es:'confianza pública',example:'Public trust remains fragile after the scandal.',trap:'Do not translate literally as “public confidence” in every context.'},
+{id:'chunk_pol_05',area:'Political science',text:'democratic resilience',meaning_es:'resiliencia democrática',example:'Democratic resilience depends on both institutions and social norms.',trap:'Use democratic, not democracy, before the noun.'},
+{id:'chunk_pol_06',area:'Political science',text:'policy implementation',meaning_es:'implementación de políticas',example:'Policy implementation varies across municipalities.',trap:'Implementation is uncountable when referring to the process.'},
+
+{id:'chunk_phi_01',area:'Philosophy',text:'draw a distinction between',meaning_es:'trazar una distinción entre',example:'We need to draw a distinction between dependence and domination.',trap:'Use between when two categories are contrasted.'},
+{id:'chunk_phi_02',area:'Philosophy',text:'make a claim about',meaning_es:'formular una afirmación sobre',example:'The author makes a claim about the social conditions of freedom.',trap:'Prefer make a claim, not do a claim.'},
+{id:'chunk_phi_03',area:'Philosophy',text:'raise an objection to',meaning_es:'plantear una objeción a',example:'One might raise an objection to this account of autonomy.',trap:'Use raise, not make, for an objection in formal argument.'},
+{id:'chunk_phi_04',area:'Philosophy',text:'provide an account of',meaning_es:'ofrecer una explicación/concepción de',example:'The theory provides an account of political obligation.',trap:'Account of, not account about.'},
+{id:'chunk_phi_05',area:'Philosophy',text:'be compatible with',meaning_es:'ser compatible con',example:'Individuality can be compatible with social dependence.',trap:'Compatible with, not compatible to.'},
+{id:'chunk_phi_06',area:'Philosophy',text:'a necessary condition for',meaning_es:'una condición necesaria para',example:'Recognition may be a necessary condition for autonomy.',trap:'Condition for, not condition of, in this structure.'},
+
+{id:'chunk_soc_01',area:'Sociology',text:'shape outcomes',meaning_es:'moldear resultados',example:'Institutional arrangements can shape social outcomes.',trap:'Outcome is countable; use outcomes for multiple effects.'},
+{id:'chunk_soc_02',area:'Sociology',text:'reinforce inequality',meaning_es:'reforzar la desigualdad',example:'Algorithmic systems may reinforce existing inequality.',trap:'Reinforce, not reforce.'},
+{id:'chunk_soc_03',area:'Sociology',text:'social cohesion',meaning_es:'cohesión social',example:'High residential segregation can weaken social cohesion.',trap:'Cohesion is uncountable.'},
+{id:'chunk_soc_04',area:'Sociology',text:'undergo change',meaning_es:'experimentar cambios',example:'Urban neighborhoods can undergo rapid change.',trap:'Undergo is irregular: undergo, underwent, undergone.'},
+{id:'chunk_soc_05',area:'Sociology',text:'patterns of behavior',meaning_es:'patrones de comportamiento',example:'The study identifies recurring patterns of behavior.',trap:'Behavior is usually uncountable in general use.'},
+{id:'chunk_soc_06',area:'Sociology',text:'be shaped by',meaning_es:'estar determinado/moldeado por',example:'Political attitudes are shaped by both institutions and experience.',trap:'Useful passive chunk; avoid overusing caused by.'},
+
+{id:'chunk_repair_01',area:'Error repair',text:'depend on',meaning_es:'depender de',example:'The outcome depends on institutional capacity.',trap:'Not depend about.'},
+{id:'chunk_repair_02',area:'Error repair',text:'think about',meaning_es:'pensar/reflexionar sobre',example:'We need to think about the consequences of the reform.',trap:'Use think about for considering a topic.'},
+{id:'chunk_repair_03',area:'Error repair',text:'think of X as Y',meaning_es:'concebir X como Y',example:'We can think of autonomy as a social achievement.',trap:'Not think in X as Y.'},
+{id:'chunk_repair_04',area:'Error repair',text:'highly likely',meaning_es:'altamente probable',example:'The outcome is highly likely under these conditions.',trap:'Not deeply likely or bitterly likely.'},
+{id:'chunk_repair_05',area:'Error repair',text:'harness the potential of',meaning_es:'aprovechar el potencial de',example:'Universities need to harness the potential of AI responsibly.',trap:'Not explode AI potential.'},
+{id:'chunk_repair_06',area:'Error repair',text:'make progress',meaning_es:'progresar',example:'I have made progress with question formation.',trap:'Not do progress or make progresses.'},
+
+{id:'chunk_disc_01',area:'Discourse',text:'what I mean is',meaning_es:'lo que quiero decir es',example:'What I mean is that the mechanism operates indirectly.',trap:'Use it to repair without abandoning the turn.'},
+{id:'chunk_disc_02',area:'Discourse',text:'let me rephrase that',meaning_es:'déjame reformular eso',example:'Let me rephrase that: the claim is more limited.',trap:'Keep speaking after the repair phrase.'},
+{id:'chunk_disc_03',area:'Discourse',text:'while it is true that',meaning_es:'si bien es cierto que',example:'While it is true that access has expanded, inequalities remain.',trap:'Follow it with a complete clause.'},
+{id:'chunk_disc_04',area:'Discourse',text:'by contrast',meaning_es:'en contraste',example:'By contrast, the second case shows much weaker enforcement.',trap:'Use it for an explicit contrast, not just sequence.'},
+{id:'chunk_disc_05',area:'Discourse',text:'if this interpretation is correct',meaning_es:'si esta interpretación es correcta',example:'If this interpretation is correct, it has implications for autonomy.',trap:'Useful for cautious implication.'},
+{id:'chunk_disc_06',area:'Discourse',text:'I see the concern, but',meaning_es:'entiendo la objeción/preocupación, pero',example:'I see the concern, but I would draw a distinction here.',trap:'Acknowledge before disagreeing.'},
+
+{id:'chunk_every_01',area:'Everyday interaction',text:"I didn't sleep very well",meaning_es:'no dormí muy bien',example:"I didn't sleep very well, so I'm still waking up.",trap:'Natural for a difficult morning.'},
+{id:'chunk_every_02',area:'Everyday interaction',text:"I'm still waking up",meaning_es:'todavía me estoy despertando/activando',example:"Give me a minute; I'm still waking up.",trap:'More natural than saying you are “with sleep.”'},
+{id:'chunk_every_03',area:'Everyday interaction',text:"I'm a little confused about",meaning_es:'estoy un poco confundido con',example:"I'm a little confused about the last example.",trap:'A little is neutral; kind of is more informal and vaguer.'},
+{id:'chunk_every_04',area:'Everyday interaction',text:'what about you?',meaning_es:'¿y tú?',example:"My morning was rough. What about you?",trap:'Simple but essential for returning a question.'},
+{id:'chunk_every_05',area:'Everyday interaction',text:'how did that go?',meaning_es:'¿cómo te fue con eso?',example:"You had a presentation yesterday. How did that go?",trap:'Useful natural follow-up.'},
+{id:'chunk_every_06',area:'Everyday interaction',text:'that sounds rough',meaning_es:'suena duro/complicado',example:"You barely slept? That sounds rough.",trap:'Informal and empathetic; avoid in very formal academic settings.'},
+
+{id:'chunk_method_01',area:'Research methods',text:'account for variation in',meaning_es:'explicar variación en',example:'The model attempts to account for variation in turnout.',trap:'Account for, not explain about.'},
+{id:'chunk_method_02',area:'Research methods',text:'be associated with',meaning_es:'estar asociado con',example:'Higher trust is associated with greater compliance.',trap:'Association is not automatically causation.'},
+{id:'chunk_method_03',area:'Research methods',text:'control for',meaning_es:'controlar por',example:'The model controls for country-level income.',trap:'In statistical English, control for is standard.'},
+{id:'chunk_method_04',area:'Research methods',text:'a robust finding',meaning_es:'un hallazgo robusto',example:'The relationship remains a robust finding across specifications.',trap:'Robust is common for stability across models/specifications.'},
+{id:'chunk_method_05',area:'Research methods',text:'the results remain unchanged',meaning_es:'los resultados se mantienen sin cambios',example:'The results remain largely unchanged after adding controls.',trap:'Useful for robustness reporting.'},
+{id:'chunk_method_06',area:'Research methods',text:'interpret with caution',meaning_es:'interpretar con cautela',example:'The coefficient should be interpreted with caution.',trap:'Common passive form in academic writing.'}
+];
+
+const shadowing=[
+{id:'shadow_01',domain:'politics',focus:'thought groups + stress',transcript:'Public trust does not depend on one institution alone. It is shaped by repeated interactions between citizens and public authorities. The evidence suggests that transparency can help, but only when it is accompanied by credible accountability.',chunks:['public trust','is shaped by','the evidence suggests that'],reusePrompt:'Explain one reason why public trust may rise or fall. Reuse at least two chunks from the passage.'},
+{id:'shadow_02',domain:'philosophy',focus:'contrast + self-repair',transcript:'I would draw a distinction between dependence and domination. Dependence is unavoidable in social life, but domination involves an asymmetry of power. What I mean is that individuality does not require complete independence from others.',chunks:['draw a distinction between','what I mean is','social life'],reusePrompt:'Define a concept you work with and make one distinction using the same discourse frames.'},
+{id:'shadow_03',domain:'academic',focus:'hedging + sentence stress',transcript:'The available evidence suggests that the effect may vary across cases. One possible explanation is that institutions respond differently to the same external pressure. Taken together, these findings point to a more conditional interpretation.',chunks:['the evidence suggests that','one possible explanation is that','taken together'],reusePrompt:'Summarize a research finding cautiously using at least two chunks.'},
+{id:'shadow_04',domain:'sociology',focus:'linking + rhythm',transcript:'Urban neighborhoods can undergo rapid change when housing costs rise and long-term residents move away. These changes may reinforce inequality and weaken social cohesion, especially when access to public services also becomes more uneven.',chunks:['undergo change','reinforce inequality','social cohesion'],reusePrompt:'Describe one social change and its consequences using two or three chunks from the passage.'},
+{id:'shadow_05',domain:'horror',focus:'narrative rhythm',transcript:'The researcher was reading alone when the lights went out. Someone had removed several pages from the manuscript before she arrived, and she had been hearing footsteps in the corridor for almost an hour.',chunks:['was reading','had removed','had been hearing'],reusePrompt:'Retell a different unsettling scene using the same three time planes.'},
+{id:'shadow_06',domain:'technology',focus:'future forms + stress',transcript:'By the end of the decade, universities will have adopted new rules for artificial intelligence. Some teachers will be redesigning assessment, while students will have been using these tools for years. The transition is highly likely to remain uneven.',chunks:['will have adopted','will be redesigning','highly likely'],reusePrompt:'Make a prediction about technology and education using at least two future forms and one intensifier.'},
+{id:'shadow_07',domain:'everyday',focus:'natural conversation rhythm',transcript:"I didn't sleep very well last night, so I'm still waking up. I'm a little confused about the homework too. How did your morning go? Did you manage to finish everything?",chunks:["I didn't sleep very well","I'm still waking up","I'm a little confused about","How did your morning go?"],reusePrompt:'Give a natural 30-second morning update and ask the other person two follow-up questions.'},
+{id:'shadow_08',domain:'academic',focus:'Q&A + reformulation',transcript:'That is an important objection. I see the concern, but I would distinguish between the empirical and normative parts of the claim. Let me rephrase that: the evidence supports the first more strongly than the second.',chunks:['I see the concern, but','draw a distinction','let me rephrase that'],reusePrompt:'Answer a difficult academic question using acknowledgment, distinction and reformulation.'}
+];
+
+const conversations=[
+{id:'conv_01',title:'Difficult morning before class',domain:'everyday',concepts:['questions'],opening:"You look tired today. Rough morning?",turns:[
+{other:"I barely slept either. What happened to you?",task:'Give a short morning update, then return a question.',frames:["I didn't sleep very well…","I'm still waking up.","What about you?"]},
+{other:"I had to finish an assignment at 2 a.m.",task:'React naturally and ask a follow-up.',frames:["That sounds rough.","How did that go?","Did you manage to…?"]},
+{other:"Yeah, but I think I made a few mistakes.",task:'Ask one subject question and one object question about the assignment.',frames:['Who checked…?','What did you…?']}
+]},
+{id:'conv_02',title:'Seminar follow-up questions',domain:'academic',concepts:['questions','academicdiscourse'],opening:'A speaker says: “One unexpected finding changed the entire argument.”',turns:[
+{other:'The finding appeared only in two countries.',task:'Ask what caused the difference and who first noticed it.',frames:['What caused…?','Who first noticed…?']},
+{other:'A research assistant noticed it during data cleaning.',task:'Ask a polite indirect question about the data-cleaning process.',frames:['Could you explain how…?','Could you tell me whether…?']},
+{other:'The mechanism is still uncertain.',task:'Ask one cautious follow-up rather than demanding certainty.',frames:['Would it be fair to say…?','Is it possible that…?']}
+]},
+{id:'conv_03',title:'Academic Q&A objection',domain:'philosophy',concepts:['academicdiscourse','counterarguments'],opening:'A listener says: “Your argument seems to confuse social dependence with domination.”',turns:[
+{other:'Can you explain the difference?',task:'Acknowledge and draw a distinction.',frames:['I see the concern, but…','I would draw a distinction between…']},
+{other:'But dependence can still limit freedom.',task:'Concede one point and qualify your claim.',frames:['While it is true that…','To some extent…']},
+{other:'So are you changing your original argument?',task:'Reformulate without abandoning the position.',frames:['What I mean is…','Let me rephrase that…']}
+]},
+{id:'conv_04',title:'Political counterargument',domain:'politics',concepts:['counterarguments','conditionals'],opening:'A colleague says: “Once public trust falls, governments cannot recover it.”',turns:[
+{other:'Trust is too fragile after a scandal.',task:'Give a conditional counterargument.',frames:['It could if…','People might… if…']},
+{other:'But citizens may think reforms are only symbolic.',task:'Acknowledge the concern and add a condition.',frames:['That may be true, but…','provided that…']},
+{other:'What would convince you that trust had recovered?',task:'Answer cautiously with one indicator.',frames:['One possible indicator is…','The evidence would be more convincing if…']}
+]},
+{id:'conv_05',title:'Supervisor meeting',domain:'academic',concepts:['presentperfect','future','verbpatterns'],opening:'Your supervisor asks: “What have you done since our last meeting?”',turns:[
+{other:'What are you still working on?',task:'Use present perfect progressive for ongoing work.',frames:['I have been working on…']},
+{other:'What will you have finished by next week?',task:'Answer with future perfect.',frames:['By next week, I will have…']},
+{other:'What do you need me to review?',task:'Use need + object + to-infinitive naturally.',frames:['I need you to…']}
+]},
+{id:'conv_06',title:'City change discussion',domain:'sociology',concepts:['usedto','presentperfect'],opening:'A friend says: “This neighborhood feels completely different now.”',turns:[
+{other:'What was it like before?',task:'Use used to and would for past habits/states.',frames:['It used to…','People would…']},
+{other:'What feels normal now?',task:'Use be used to + -ing.',frames:["I'm used to…"]},
+{other:'What are residents still adapting to?',task:'Use get used to + -ing.',frames:['They are still getting used to…']}
+]},
+{id:'conv_07',title:'Archive horror',domain:'horror',concepts:['narrative','questions'],opening:'A researcher says: “When I entered the archive, one cabinet was already open.”',turns:[
+{other:'The room was completely empty.',task:'Ask what had happened before the researcher arrived.',frames:['What had happened…?','Who had…?']},
+{other:'I had been hearing footsteps for several minutes.',task:'Ask one natural follow-up about the duration/background.',frames:['How long had you been…?']},
+{other:'Then the lights went out.',task:'Retell the sequence in two or three sentences using several past planes.',frames:['was/were + -ing','had + participle','past simple']}
+]},
+{id:'conv_08',title:'Future of universities',domain:'technology',concepts:['future','intensifiers','counterarguments'],opening:'A colleague says: “AI will completely transform universities within five years.”',turns:[
+{other:'Most assessment will be automated.',task:'Respond with a qualified prediction using an intensifier.',frames:['highly likely','considerably more…','to some extent']},
+{other:'Teachers will not be necessary anymore.',task:'Give a conditional counterargument.',frames:['They might still be necessary if…']},
+{other:'What do you think universities will have changed by 2030?',task:'Use future perfect and one cautious claim.',frames:['By 2030, universities will have…','The evidence suggests that…']}
+]}
+];
+
 const listening=[
 {id:'listen_01',concept:'questions',domain:'academic',focus:'subject question',transcript:'Who developed the argument that changed the debate?',tip:'Listen for who + past verb without did.'},
 {id:'listen_02',concept:'questions',domain:'everyday',focus:'indirect question',transcript:'Could you tell me why the class was moved to another room?',tip:'Notice statement word order after the indirect question frame.'},
@@ -1066,4 +1179,4 @@ const v04FreeTasks=[
 ];
 v04FreeTasks.forEach((x)=>exercises.push(exercise({id:id('free4'),concept:x[0],domain:x[1],type:'selfcheck',transfer:'free',difficulty:3,prompt:x[2],options:[],answer:x[3],explanation:'Use the model as a diagnostic reference, not as a script. Check whether the target grammar appeared accurately and naturally.',misconception:'free_transfer'})));
 
-export {concepts,C,domains,exercises,speaking,listening,pronunciation,schedules};
+export {concepts,C,domains,exercises,chunks,shadowing,conversations,speaking,listening,pronunciation,schedules};
