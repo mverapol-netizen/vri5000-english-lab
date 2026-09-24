@@ -1,4 +1,4 @@
-import {loadState,saveState,recordAttempt,updateConfidence,resetState,recordSpeaking} from './store.js';
+import {loadState,saveState,recordAttempt,updateConfidence,resetState,recordSpeaking,recordExamRun} from './store.js';
 import {pickExercises,todayMix,reviewMix,challengeMix,eventPack,conceptStats,daysUntil,isCorrect} from './engine.js';
 import {concepts,C,domains,exercises,speaking,schedules} from './content.js';
 
@@ -8,6 +8,7 @@ let state=loadState();
 let route='today';
 let session=null;
 let mediaRecorder=null,mediaChunks=[],recordingUrl=null,timerHandle=null,timerStarted=0;
+let oralSim=null;
 
 function esc(s){return String(s??'').replace(/[&<>\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m]))}
 function setTitle(t){title.textContent=t}
@@ -129,8 +130,54 @@ function completeSelfcheck(ex,answer,ok){recordAttempt(state,ex,ok,answer);if(ok
 
 function finishSession(){const pct=Math.round(session.correct/session.items.length*100);state.sessions.unshift({date:new Date().toISOString(),label:session.label,total:session.items.length,correct:session.correct,log:session.log});state.sessions=state.sessions.slice(0,50);saveState(state);app.innerHTML=card('<div class="kicker">Session complete</div><h2>'+pct+'%</h2><p>'+session.correct+' / '+session.items.length+' correct.</p><p class="muted">The engine will reuse the structure before it reuses the exact successful item.</p><button class="primary" id="homeAfter">Back to Today</button>','hero');document.getElementById('homeAfter').onclick=()=>nav('today')}
 
-function renderOralLab(){setTitle('Oral Midterm Lab');const routeDays=[['D−5','Questions + agreement'],['D−4','Narrative tenses'],['D−3','Conditionals + chunks'],['D−2','Integrated speaking'],['D−1','Full rehearsal']];app.innerHTML=card('<div class="kicker">Oral Midterm</div><h2>Productive control under pressure</h2><p>This is a personal practice lab based on course content and your diagnostic priorities; it is not a reconstruction of the official exam.</p><div class="grid"><button class="primary" id="oralMix">10 min warm-up</button><button class="secondary" id="oralSpeak">Speaking bank</button><button class="secondary" id="storyLab">Unit 3 Story Lab</button><button class="secondary" id="oralTransfer">Free transfer</button></div>')+card('<h3>Five-day route</h3>'+routeDays.map(x=>'<div class="route-day"><strong>'+x[0]+'</strong><div>'+x[1]+'</div></div>').join(''))+card('<h3>Skill drills</h3><div class="grid">'+['questions','narrative','conditionals','usedto','agreement','prepositions'].map(c=>'<button class="secondary oralDrill" data-c="'+c+'">'+esc(C[c].name)+'</button>').join('')+'</div>');document.getElementById('oralMix').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['questions','narrative','conditionals','usedto','agreement','prepositions'],count:12}),'Oral warm-up');document.getElementById('oralSpeak').onclick=()=>renderSpeaking(['questions','narrative','conditionals','usedto','agreement','prepositions']);document.getElementById('storyLab').onclick=renderStoryLab;document.getElementById('oralTransfer').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['questions','narrative','conditionals','usedto','prepositions'],transfer:'free',count:8}),'Oral · free transfer');document.querySelectorAll('.oralDrill').forEach(b=>b.onclick=()=>startSession(pickExercises(exercises,state,{concept:b.dataset.c,count:10}),'Oral drill · '+C[b.dataset.c].name))}
+function renderOralLab(){setTitle('Oral Midterm Lab');const routeDays=[['D−5','Questions + agreement'],['D−4','Narrative tenses'],['D−3','Conditionals + chunks'],['D−2','Integrated speaking'],['D−1','Full rehearsal']];app.innerHTML=card('<div class="kicker">Oral Midterm</div><h2>Productive control under pressure</h2><p>This is a personal practice lab based on course content and your diagnostic priorities; it is not a reconstruction of the official exam.</p><div class="grid"><button class="primary" id="oralMix">10 min warm-up</button><button class="secondary" id="oralSpeak">Speaking bank</button><button class="secondary" id="storyLab">Unit 3 Story Lab</button><button class="secondary" id="oralTransfer">Free transfer</button><button class="secondary" id="oralSim">Full rehearsal</button></div>')+card('<h3>Five-day route</h3>'+routeDays.map(x=>'<div class="route-day"><strong>'+x[0]+'</strong><div>'+x[1]+'</div></div>').join(''))+card('<h3>Skill drills</h3><div class="grid">'+['questions','narrative','conditionals','usedto','agreement','prepositions'].map(c=>'<button class="secondary oralDrill" data-c="'+c+'">'+esc(C[c].name)+'</button>').join('')+'</div>');document.getElementById('oralMix').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['questions','narrative','conditionals','usedto','agreement','prepositions'],count:12}),'Oral warm-up');document.getElementById('oralSpeak').onclick=()=>renderSpeaking(['questions','narrative','conditionals','usedto','agreement','prepositions']);document.getElementById('storyLab').onclick=renderStoryLab;document.getElementById('oralSim').onclick=renderOralSimulator;document.getElementById('oralTransfer').onclick=()=>startSession(pickExercises(exercises,state,{concepts:['questions','narrative','conditionals','usedto','prepositions'],transfer:'free',count:8}),'Oral · free transfer');document.querySelectorAll('.oralDrill').forEach(b=>b.onclick=()=>startSession(pickExercises(exercises,state,{concept:b.dataset.c,count:10}),'Oral drill · '+C[b.dataset.c].name))}
 
+
+
+function renderOralSimulator(){
+  oralSim={index:0,results:[],parts:[
+    {id:'oral_sim_q',concept:'questions',seconds:60,prompt:'A researcher says that one unexpected finding changed the project. Ask four natural follow-up questions, including one subject question and one indirect question.',targets:['subject question','object question','indirect question']},
+    {id:'oral_sim_n',concept:'narrative',seconds:90,prompt:'Tell a short story about arriving at an archive and discovering that something had happened before you arrived. Include background, main event, earlier event and prior duration.',targets:['past progressive','past simple','past perfect','past perfect progressive']},
+    {id:'oral_sim_c',concept:'conditionals',seconds:75,prompt:'Give advice for handling a difficult academic or institutional situation using alternatives to if. Include one precaution.',targets:['unless','as long as / provided that','in case','as soon as']}
+  ]};
+  renderOralSimulatorPart();
+}
+function renderOralSimulatorPart(){
+  const p=oralSim.parts[oralSim.index];
+  setTitle('Oral rehearsal · '+(oralSim.index+1)+' / '+oralSim.parts.length);
+  app.innerHTML=card('<div class="row between">'+pill('Part '+(oralSim.index+1)+' / '+oralSim.parts.length)+pill(p.seconds+' sec','gold')+'</div><div class="exercise-prompt">'+esc(p.prompt)+'</div><div>'+p.targets.map(x=>pill(x)).join('')+'</div><div class="big-timer" id="sTimer">'+p.seconds+'</div><div class="grid"><button class="primary" id="recordBtn">Start recording</button><button class="secondary" id="simSkipRecord">Use timer only</button></div><div id="audioBox"></div><div class="divider"></div><h3>Target audit</h3>'+p.targets.map((x,i)=>'<label class="check-line"><input type="checkbox" class="targetCheck" value="'+i+'">'+esc(x)+'</label>').join('')+'<button class="primary" id="simNext">'+(oralSim.index===oralSim.parts.length-1?'Finish rehearsal':'Save & next part')+'</button>')+
+  card('<p class="muted small">This rehearsal measures target coverage, not an official course grade. Mark a target only if you actually produced it accurately.</p>');
+  document.getElementById('recordBtn').onclick=()=>toggleRecording(p);
+  document.getElementById('simSkipRecord').onclick=()=>startStandaloneTimer(p.seconds);
+  document.getElementById('simNext').onclick=()=>completeOralSimulatorPart(p);
+}
+function startStandaloneTimer(seconds){
+  clearInterval(timerHandle);
+  timerStarted=Date.now();
+  const el=document.getElementById('sTimer');
+  timerHandle=setInterval(()=>{
+    const left=Math.max(0,seconds-Math.floor((Date.now()-timerStarted)/1000));
+    if(el)el.textContent=left;
+    if(left===0)clearInterval(timerHandle);
+  },250);
+}
+function completeOralSimulatorPart(p){
+  clearInterval(timerHandle);
+  const checks=[...document.querySelectorAll('.targetCheck:checked')].map(x=>x.value);
+  const row=recordSpeaking(state,p,checks);
+  oralSim.results.push({concept:p.concept,prompt:p.prompt,coverage:row.coverage,checks,total:p.targets.length});
+  if(oralSim.index<oralSim.parts.length-1){oralSim.index++;renderOralSimulatorPart();return}
+  finishOralSimulator();
+}
+function finishOralSimulator(){
+  const overall=Math.round(oralSim.results.reduce((a,x)=>a+x.coverage,0)/oralSim.results.length);
+  const weak=oralSim.results.filter(x=>x.coverage<75).map(x=>x.concept);
+  recordExamRun(state,{type:'oral_midterm_rehearsal',coverage:overall,parts:oralSim.results});
+  app.innerHTML=card('<div class="kicker">Rehearsal complete</div><h2>'+overall+'% target coverage</h2><p>This is a diagnostic coverage score, not a grade.</p>'+oralSim.results.map(x=>'<div class="mini-row"><strong>'+esc(C[x.concept]?.name||x.concept)+'</strong><span style="float:right">'+x.coverage+'%</span></div>').join('')+'<div class="divider"></div><div class="grid">'+(weak.length?'<button class="primary" id="simRepair">Repair weak areas</button>':'')+'<button class="secondary" id="simAgain">Run new rehearsal</button><button class="ghost" id="simHome">Back to Today</button></div>','hero');
+  if(weak.length)document.getElementById('simRepair').onclick=()=>startSession(pickExercises(exercises,state,{concepts:[...new Set(weak)],count:12}),'Post-rehearsal repair');
+  document.getElementById('simAgain').onclick=renderOralSimulator;
+  document.getElementById('simHome').onclick=()=>nav('today');
+}
 
 function renderStoryLab(){
   setTitle('Unit 3 Story Lab');
