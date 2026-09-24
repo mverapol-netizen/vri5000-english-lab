@@ -21,3 +21,5 @@ jobs:
           node --check js/content.js
       - name: Validate pedagogical content
         run: node scripts/validate_content.mjs
+      - name: Test learning engine
+        run: node scripts/test_engine.mjs
