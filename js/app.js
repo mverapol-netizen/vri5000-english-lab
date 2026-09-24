@@ -456,9 +456,10 @@ function chooseChunks(area='all',count=5){
 function renderChunkLab(){
   setTitle('Chunk Lab');
   const areas=[...new Set(chunks.map(x=>x.area))];
-  app.innerHTML=card('<div class="kicker">Productive vocabulary</div><h2>Learn complete chunks, not isolated words</h2><p>Recall the English expression from meaning, then reuse it in a new sentence or speaking turn.</p><label>Area<select id="chunkArea"><option value="all">All areas</option>'+areas.map(a=>'<option>'+esc(a)+'</option>').join('')+'</select></label><div class="grid"><button class="primary" id="chunkRecall">Recall 5</button><button class="secondary" id="chunkBrowse">Browse bank</button></div>')+
+  app.innerHTML=card('<div class="kicker">Productive vocabulary</div><h2>Learn complete chunks, not isolated words</h2><p>Recall the English expression from meaning, then reuse it in a new sentence or speaking turn.</p><label>Area<select id="chunkArea"><option value="all">All areas</option>'+areas.map(a=>'<option>'+esc(a)+'</option>').join('')+'</select></label><div class="grid"><button class="primary" id="chunkRecall">Recall 5</button><button class="secondary" id="chunkDaily">Daily 10</button><button class="secondary" id="chunkBrowse">Browse bank</button></div>')+
   card('<h3>Why chunks?</h3><p class="muted">The goal is fast retrieval of complete combinations such as <strong>depend on</strong>, <strong>raise an objection</strong>, <strong>the evidence suggests that</strong>, and natural conversational frames.</p>');
-  document.getElementById('chunkRecall').onclick=()=>startChunkSession(document.getElementById('chunkArea').value);
+  document.getElementById('chunkRecall').onclick=()=>startChunkSession(document.getElementById('chunkArea').value,5);
+  document.getElementById('chunkDaily').onclick=()=>startChunkSession(document.getElementById('chunkArea').value,10);
   document.getElementById('chunkBrowse').onclick=()=>renderChunkBrowse(document.getElementById('chunkArea').value);
 }
 function renderChunkBrowse(area='all'){
@@ -468,8 +469,8 @@ function renderChunkBrowse(area='all'){
   pool.map(ch=>card('<div class="kicker">'+esc(ch.area)+'</div><h3>'+esc(ch.text)+'</h3><p>'+esc(ch.meaning_es)+'</p><div class="example">'+esc(ch.example)+'</div><p class="muted small">'+esc(ch.trap)+'</p>')).join('');
   document.getElementById('chunkBack').onclick=renderChunkLab;
 }
-function startChunkSession(area='all'){
-  chunkSession={items:chooseChunks(area,5),index:0,correct:0,area};
+function startChunkSession(area='all',count=5){
+  chunkSession={items:chooseChunks(area,count),index:0,correct:0,area,count};
   renderChunkItem();
 }
 function renderChunkItem(){
@@ -496,7 +497,7 @@ function finishChunkSession(){
   state.sessions.unshift({date:new Date().toISOString(),label:'Chunk Recall',type:'chunks',area:chunkSession.area,total:chunkSession.items.length,correct:chunkSession.correct,coverage:pct});
   state.sessions=state.sessions.slice(0,50);saveState(state);
   app.innerHTML=card('<div class="kicker">Chunk session complete</div><h2>'+pct+'%</h2><p>'+chunkSession.correct+' / '+chunkSession.items.length+' recalled exactly.</p><div class="grid"><button class="primary" id="chunkAgain">Another 5</button><button class="secondary" id="chunkHome">Back to Chunk Lab</button></div>','hero');
-  document.getElementById('chunkAgain').onclick=()=>startChunkSession(chunkSession.area);
+  document.getElementById('chunkAgain').onclick=()=>startChunkSession(chunkSession.area,chunkSession.count||5);
   document.getElementById('chunkHome').onclick=renderChunkLab;
 }
 
