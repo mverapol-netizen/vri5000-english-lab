@@ -100,6 +100,54 @@ function addPassive(){
 }
 addQuestionBank();addAgreement();addNarrative();addUsedTo();addPresentPerfect();addConditionals();addFuture();addVerbPatterns();addPrepositions();addPassive();
 
+
+const repairRows=[
+['questions','Which award he won?','Which award did he win?','Object questions in the simple past require did + subject + base verb.'],
+['questions','Who did write the report?','Who wrote the report?','Who is the subject, so did is unnecessary.'],
+['agreement','Universities has to adapt.','Universities have to adapt.','Plural subject universities takes have.'],
+['agreement','Institutional rules determines outcomes.','Institutional rules determine outcomes.','Plural subject rules takes determine.'],
+['agreement','Individuality have a social dimension.','Individuality has a social dimension.','Singular subject individuality takes has.'],
+['verbpatterns','Institutions could suffering from low trust.','Institutions could suffer from low trust.','A modal is followed by the base form.'],
+['verbpatterns','He needs I take photographs.','He needs me to take photographs.','Use need + object + to-infinitive.'],
+['usedto','I am used to speak English in seminars.','I am used to speaking English in seminars.','Be used to is followed by a noun or -ing form.'],
+['usedto','I am getting used to read long papers.','I am getting used to reading long papers.','Get used to is followed by a noun or -ing form.'],
+['prepositions','The result depends about institutional capacity.','The result depends on institutional capacity.','The fixed pattern is depend on.'],
+['prepositions','I think in AI as a political problem.','I think of AI as a political problem.','Use think of X as Y.'],
+['prepositions','We need to think in institutional rules.','We need to think about institutional rules.','Use think about when considering a topic.'],
+['prepositions','This outcome is deeply likely.','This outcome is highly likely.','The standard collocation is highly likely.'],
+['prepositions','I need to repass the material.','I need to review the material.','Review the material is the natural academic expression.'],
+['prepositions','Universities should explode AI potential.','Universities should harness AI’s potential.','Harness the potential is the natural collocation here.']
+];
+for(let r=0;r<2;r++) repairRows.forEach((x,i)=>{
+  exercises.push(exercise({
+    id:id('repair'),concept:x[0],domain:domains[(i+r)%domains.length],transfer:r?'guided':'controlled',
+    prompt:frames[(r+2)%frames.length]+'Choose the best correction of: “'+x[1]+'”',
+    options:[x[2],x[1],x[2].replace(/\.$/,'')+' actually.'],
+    answer:x[2],explanation:x[3],misconception:'personal_error_repair'
+  }));
+});
+
+const contrastRows=[
+['questions','Which pair correctly contrasts a subject question and an object question?','Who wrote the report? / What did she write?','Who did write the report? / What she wrote?','Subject questions do not normally use do/did; object questions do.'],
+['narrative','Which pair correctly contrasts background and event?','She was reading when the lights went out.','She had read when the lights were going out.','Past progressive gives background; past simple marks the interrupting event.'],
+['narrative','Which sentence clearly marks an earlier past event?','Someone had removed the file before she arrived.','Someone removed the file before she had arrived.','Past perfect marks the earlier event relative to a later past reference point.'],
+['usedto','Which contrast is correct?','I used to read less. / I am used to reading long papers now.','I was used to read less. / I am used to read long papers now.','Used to + base describes a past state/habit; be used to + -ing describes familiarity.'],
+['presentperfect','Which contrast best expresses result versus duration?','I have written three pages. / I have been writing all morning.','I have been writing three pages. / I have written all morning.','Present perfect often focuses on result/number; progressive on activity/duration.'],
+['conditionals','Which pair uses unless and in case correctly?','Unless you prepare, you may struggle. / Take notes in case you forget.','Unless you do not prepare, you may struggle. / Take notes unless you forget.','Unless means if not; in case introduces a precaution.'],
+['future','Which contrast is correct for schedule versus arrangement?','The seminar starts at 9. / I am meeting my supervisor at 10.','The seminar is meeting at 9. / I start my supervisor at 10.','Present simple is typical for timetables; present progressive for arrangements.'],
+['future','Which sentence expresses completion before a future point?','By Friday, I will have finished the draft.','By Friday, I will be finishing the draft yesterday.','Future perfect marks completion before a specified future time.'],
+['verbpatterns','Which pair uses the verb patterns correctly?','They suggested changing the rule. / They decided to revise it.','They suggested to change the rule. / They decided revising it.','Suggest takes -ing; decide takes to-infinitive.'],
+['prepositions','Which pair contains the natural collocations?','depend on / impact on','depend about / impact in','These combinations are learned as chunks.'],
+['passivecausative','Which pair contrasts passive and causative correctly?','The report was translated. / We had the report translated.','The report translated. / We had translated the report by someone.','Passive focuses on what was done; causative have/get expresses arranging for it to be done.']
+];
+for(let r=0;r<3;r++) contrastRows.forEach((x,i)=>{
+  exercises.push(exercise({
+    id:id('contrast'),concept:x[0],domain:domains[(i+r+1)%domains.length],transfer:r===0?'controlled':'guided',
+    prompt:frames[r%frames.length]+x[1],
+    options:[x[2],x[3]],answer:x[2],explanation:x[4],misconception:'contrast'
+  }));
+});
+
 const speaking=[
 {concept:'questions',domain:'politics',seconds:75,prompt:'Interview a journalist about a sudden political resignation. Ask five natural questions, including one subject question and one indirect question.',targets:['subject question','object question','indirect question']},
 {concept:'narrative',domain:'horror',seconds:90,prompt:'You entered a library and discovered a door that had never been there before. Tell what you were doing, what happened, and what had happened before you arrived.',targets:['past progressive','past simple','past perfect']},
