@@ -148,6 +148,70 @@ for(let r=0;r<3;r++) contrastRows.forEach((x,i)=>{
   }));
 });
 
+
+const oralSprintRows=[
+['questions','Choose the natural question with a final preposition.',['Who are you talking to?','To who are you talking?','Who you are talking to?'],'Who are you talking to?','In ordinary English, the preposition commonly stays at the end of the question.'],
+['questions','Choose the correct question.',['What are you responsible for?','What do you responsible for?','For what you are responsible?'],'What are you responsible for?','Be responsible for uses be, so no do auxiliary is added.'],
+['questions','Choose the correct negative question.',['Why didn’t the committee respond?','Why the committee didn’t respond?','Why didn’t the committee responded?'],'Why didn’t the committee respond?','Use did + subject + base verb in a negative object/why question.'],
+['questions','Choose the correct negative subject question.',['Who didn’t attend the meeting?','Who not attended the meeting?','Who did not attended the meeting?'],'Who didn’t attend the meeting?','Negative subject questions use the negative auxiliary: Who didn’t…?'],
+['questions','Choose the polite indirect question.',['Could you tell me what the results mean?','Could you tell me what do the results mean?','Could you tell me what mean the results?'],'Could you tell me what the results mean?','Indirect questions use statement word order.'],
+['questions','Choose the polite indirect question.',['Do you know where the archive is?','Do you know where is the archive?','Do you know where does the archive be?'],'Do you know where the archive is?','After Do you know…, use statement word order.'],
+['questions','Choose the natural question.',['Which theory are you referring to?','Which theory do you referring to?','To which theory you refer?'],'Which theory are you referring to?','The progressive question uses be + subject + -ing, with the preposition at the end.'],
+['questions','Ask about the subject: Someone raised the objection.',['Who raised the objection?','Who did raise the objection?','What did someone raise?'],'Who raised the objection?','Who replaces the subject, so no do/did is needed.'],
+['questions','Ask about the object: The reviewer criticized the methodology.',['What did the reviewer criticize?','What criticized the reviewer?','Who did criticize the methodology?'],'What did the reviewer criticize?','Object question: what + did + subject + base verb.'],
+['questions','Choose the correct present-perfect question.',['Why haven’t they published the results?','Why they haven’t published the results?','Why haven’t they publish the results?'],'Why haven’t they published the results?','Invert have/has with the subject; keep the past participle.'],
+['questions','Ask about the subject: Someone has changed the draft.',['Who has changed the draft?','Who did change the draft?','Who has change the draft?'],'Who has changed the draft?','Who is the subject; retain has + past participle.'],
+['questions','Ask about the object: The team has changed the conclusion.',['What has the team changed?','What the team has changed?','Who has changed the conclusion?'],'What has the team changed?','Object question with present perfect: what + has + subject + past participle.'],
+
+['narrative','The archive was quiet. The researcher ___ notes when the alarm rang.',['was taking','had taken','took'],'was taking','Past progressive supplies the background action interrupted by the alarm.'],
+['narrative','By the time the journalist arrived, officials ___ the result.',['had announced','were announcing yesterday','have announced'],'had announced','Past perfect marks an event completed before another past event.'],
+['narrative','The team ___ for three hours when the server finally came back online.',['had been waiting','was waited','has waited'],'had been waiting','Past perfect progressive expresses duration continuing up to a past reference point.'],
+['narrative','While the witnesses ___, the lights suddenly went out.',['were speaking','had spoken','have spoken'],'were speaking','Use past progressive for an action in progress when a shorter event occurs.'],
+['narrative','The committee discovered that someone ___ the figures before the meeting.',['had altered','was alter','has altered'],'had altered','The alteration occurred before the committee discovered it.'],
+['narrative','She opened the envelope and ___ the handwritten note.',['found','had found before she opened it','was finding'],'found','Sequential completed events normally use past simple.'],
+['narrative','The police entered the office. Papers ___ across the floor and a computer was still running.',['were lying','had lain tomorrow','have lain'],'were lying','Past progressive describes the scene/background at that past moment.'],
+['narrative','He was exhausted because he ___ the files all night.',['had been reviewing','reviewed tomorrow','has reviewed'],'had been reviewing','Past perfect progressive explains prior duration causing a past state.'],
+['narrative','When the debate began, both candidates ___ their opening statements already.',['had prepared','were prepare','have preparing'],'had prepared','Past perfect marks preparation completed before the debate began.'],
+['narrative','The phone rang while I ___ an article about the crisis.',['was reading','had read before the phone existed','have read'],'was reading','Past progressive gives the ongoing background action.'],
+['narrative','After the journalist ___ the source, she published the story.',['had verified','was verify','has verifying'],'had verified','Past perfect can make the prior sequence explicit before a later past event.'],
+['narrative','They ___ the problem for weeks before they finally found the cause.',['had been investigating','were investigated','have investigate'],'had been investigating','Past perfect progressive emphasizes the duration before the discovery.'],
+
+['conditionals','___ the electoral authority remains independent, the process can retain credibility.',['As long as','In case','Unless not'],'As long as','As long as introduces a condition that must continue to hold.'],
+['conditionals','The reform can proceed ___ judicial review remains available.',['provided that','in case','unless not'],'provided that','Provided that means on the condition that.'],
+['conditionals','Keep an offline copy ___ the platform goes down.',['in case','as long as','unless'],'in case','In case introduces a precaution against a possible event.'],
+['conditionals','___ the evidence improves, we should not make a stronger claim.',['Unless','Provided','As soon as will'],'Unless','Unless means if not.'],
+['conditionals','___ the committee publishes the report, we will update the presentation.',['As soon as','As soon as will','In case will'],'As soon as','Use present simple after as soon as for future reference.'],
+['conditionals','You may use the dataset ___ you cite it correctly.',['as long as','unless','in case'],'as long as','As long as expresses a condition for permission.'],
+['conditionals','We should prepare a backup slide ___ someone asks about the method.',['in case','unless','provided'],'in case','The backup is a precaution for a possible question.'],
+['conditionals','The argument works ___ we accept the distinction between autonomy and independence.',['provided that','unless not','in case'],'provided that','Provided that introduces a necessary assumption/condition.'],
+['conditionals','___ institutions respond quickly, distrust may deepen.',['Unless','As long as','In case'],'Unless','Unless institutions respond = if institutions do not respond.'],
+['conditionals','___ I finish the draft, I’ll send it to my supervisor.',['As soon as','As soon as will','Provided will'],'As soon as','Future-time clauses normally use present simple after as soon as.'],
+
+['prepositions','Choose the natural academic phrase.',['concerned about democratic erosion','concerned of democratic erosion','concerned on democratic erosion'],'concerned about democratic erosion','The dependent preposition is concerned about.'],
+['prepositions','Choose the natural academic phrase.',['responsible for implementation','responsible of implementation','responsible on implementation'],'responsible for implementation','The fixed pattern is responsible for.'],
+['prepositions','Choose the natural academic phrase.',['aware of the limitation','aware about the limitation','aware in the limitation'],'aware of the limitation','The fixed pattern is aware of.'],
+['prepositions','Choose the natural academic phrase.',['sensitive to context','sensitive of context','sensitive in context'],'sensitive to context','Sensitive to is the standard dependent-preposition pattern.'],
+['prepositions','Choose the natural noun + preposition combination.',['a reason for the decline','a reason of the decline','a reason on the decline'],'a reason for the decline','Use reason for + noun.'],
+['prepositions','Choose the natural noun + preposition combination.',['the possibility of reform','the possibility for reforming in this structure','the possibility about reform'],'the possibility of reform','Possibility of is a common noun-preposition pattern.'],
+['prepositions','Choose the natural phrase.',['a risk of democratic erosion','a risk on democratic erosion','a risk about democratic erosion'],'a risk of democratic erosion','Use risk of + noun/-ing.'],
+['prepositions','Choose the natural phrase.',['have an impact on participation','have an impact in participation','have an impact of participation'],'have an impact on participation','Impact on is the standard collocation.'],
+['prepositions','Choose the natural collocation.',['deeply concerned','highly concernedly','bitterly likely'],'deeply concerned','Deeply concerned is a common adverb + adjective collocation.'],
+['prepositions','Choose the natural collocation.',['absolutely certain','deeply certain','highly certained'],'absolutely certain','Absolutely certain is a standard intensifying collocation.'],
+
+['agreement','Choose the correct verb: A series of recent surveys ___ the same tendency.',['shows','show'],'shows','The head noun is series, which is singular.'],
+['agreement','Choose the correct verb: The findings from the survey ___ substantial variation.',['indicate','indicates'],'indicate','The head noun findings is plural.'],
+['agreement','Choose the correct verb: Each of the institutions ___ a different procedure.',['uses','use'],'uses','Each is grammatically singular.'],
+['agreement','Choose the correct verb: The quality of the interviews ___ important.',['is','are'],'is','The head noun quality is singular; interviews is inside an of-phrase.'],
+['agreement','Choose the correct verb: The interviews conducted last week ___ useful evidence.',['provide','provides'],'provide','The head noun interviews is plural.'],
+['agreement','Choose the correct verb: Public confidence in electoral institutions ___ over time.',['changes','change'],'changes','The head noun confidence is singular.'],
+['agreement','Choose the correct verb: Several forms of political participation ___ declined.',['have','has'],'have','The head noun forms is plural.'],
+['agreement','Choose the correct verb: The relationship between these variables ___ unclear.',['remains','remain'],'remains','The head noun relationship is singular.']
+];
+oralSprintRows.forEach((x,i)=>exercises.push(exercise({
+  id:id('oral'),concept:x[0],domain:domains[i%domains.length],transfer:i%3===0?'guided':'controlled',
+  prompt:x[1],options:x[2],answer:x[3],explanation:x[4],misconception:'oral_midterm_core'
+})));
+
 const speaking=[
 {concept:'questions',domain:'politics',seconds:75,prompt:'Interview a journalist about a sudden political resignation. Ask five natural questions, including one subject question and one indirect question.',targets:['subject question','object question','indirect question']},
 {concept:'narrative',domain:'horror',seconds:90,prompt:'You entered a library and discovered a door that had never been there before. Tell what you were doing, what happened, and what had happened before you arrived.',targets:['past progressive','past simple','past perfect']},
