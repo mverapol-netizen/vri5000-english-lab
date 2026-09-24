@@ -9,7 +9,8 @@ const concepts=[
 {id:'verbpatterns',name:'Verb patterns',priority:8,summary:'-ing, to-infinitive and modal + base.',rule:'Modals + base; avoid/suggest + -ing; decide/plan + to-infinitive; need + object + to-infinitive.',examples:['They could reduce the risk.','They suggested changing the rule.','We decided to revise the draft.']},
 {id:'prepositions',name:'Prepositions & collocations',priority:8,summary:'High-frequency dependent prepositions and academic chunks.',rule:'Learn the whole chunk: depend on, interested in, responsible for, impact on, highly likely.',examples:['The outcome depends on institutional capacity.','She is responsible for the analysis.','The reform had an impact on trust.']},
 {id:'passivecausative',name:'Passive & causative',priority:6,summary:'Passive voice and have/get something done.',rule:'Passive = be + past participle. Causative = have/get + object + past participle.',examples:['The data were collected in 2025.','We had the document translated.']},
-{id:'academicdiscourse',name:'Academic discourse',priority:8,summary:'Signposting, hedging, concession, reformulation and Q&A for academic presentations and writing.',rule:'Use explicit discourse frames to organize claims, soften certainty, concede objections and repair your wording without abandoning the turn.',examples:['My main argument is that…','The evidence suggests that…','While it is true that…, I would argue that…','What I mean is…','Let me rephrase that…']}
+{id:'academicdiscourse',name:'Academic discourse',priority:8,summary:'Signposting, hedging, concession, reformulation and Q&A for academic presentations and writing.',rule:'Use explicit discourse frames to organize claims, soften certainty, concede objections and repair your wording without abandoning the turn.',examples:['My main argument is that…','The evidence suggests that…','While it is true that…, I would argue that…','What I mean is…','Let me rephrase that…']},
+{id:'intensifiers',name:'Intensifiers',priority:7,summary:'Natural adverb–adjective and adverb–comparative combinations for degree and emphasis.',rule:'Choose an intensifier that collocates naturally with the adjective or comparative: considerably + comparative, utterly/totally + strong adjective, intensely/deeply + evaluative state, extremely + gradable adjective.',examples:['considerably more effective','utterly unrealistic','totally unexpected','intensely frustrating','extremely difficult']}
 ];
 const C=Object.fromEntries(concepts.map(x=>[x.id,x]));
 const domains=['politics','philosophy','sociology','horror','academic','everyday'];
@@ -315,14 +316,20 @@ const pronunciation=[
 {id:'pron_repair_01',focus:'Self-repair',sentence:'What I mean is that the mechanism operates indirectly.',tip:'Use What I mean is as a smooth repair frame; do not restart the sentence from zero.',seconds:14}
 ];
 
+
+speaking.push(
+{id:'intensifier_speak_01',concept:'intensifiers',domain:'technology',seconds:60,prompt:'Compare two future technologies. Use considerably + comparative, highly likely, extremely + adjective, and one strong adjective with utterly or totally.',targets:['considerably + comparative','highly likely','extremely + adjective','strong-adjective intensifier']},
+{id:'intensifier_speak_02',concept:'intensifiers',domain:'academic',seconds:60,prompt:'Evaluate a research result using four natural intensifier combinations without repeating the same adverb.',targets:['collocational variety','degree control']}
+);
+
 const schedules={
  conservative:[
   {date:'2026-09-25',title:'Unit 3 · Final consolidation',concepts:['narrative','conditionals','prepositions','questions']},
   {date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
   {date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
   {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
-  {date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
-  {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+  {date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
+  {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
   {date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
   {date:'2026-11-16',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
   {date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
@@ -336,9 +343,9 @@ const schedules={
 {date:'2026-10-07',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
 {date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
 {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
-{date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+{date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
 {date:'2026-10-28',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
-{date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+{date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-16',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
 {date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
@@ -352,9 +359,9 @@ const schedules={
 {date:'2026-10-15',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
 {date:'2026-10-20',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
 {date:'2026-10-22',title:'Unit 4.1 · Future forms',concepts:['future']},
-{date:'2026-10-27',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+{date:'2026-10-27',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
 {date:'2026-10-29',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
-{date:'2026-11-05',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+{date:'2026-11-05',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-10',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-17',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
 {date:'2026-11-19',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
@@ -368,9 +375,9 @@ const schedules={
 {date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
 {date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
 {date:'2026-10-23',title:'Unit 4.1 · Future forms',concepts:['future']},
-{date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+{date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
 {date:'2026-10-30',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
-{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-11',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-18',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
 {date:'2026-11-20',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
@@ -384,9 +391,9 @@ const schedules={
 {date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions','academicdiscourse']},
 {date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect','academicdiscourse']},
 {date:'2026-10-23',title:'Unit 4.1 · Future forms',concepts:['future']},
-{date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+{date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive + intensifiers',concepts:['future','intensifiers']},
 {date:'2026-10-30',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
-{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','intensifiers','prepositions','agreement','academicdiscourse']},
 {date:'2026-11-11',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
 {date:'2026-11-18',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
 {date:'2026-11-20',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
@@ -395,6 +402,59 @@ const schedules={
 };
 
 
+
+
+function addIntensifiers(){
+  const rows=[
+    ['The revised transport plan is ___ more expensive than the original proposal.',['considerably','utterly','intensely'],'considerably','Considerably naturally modifies comparatives such as more expensive.'],
+    ['The claim that no regulation is needed is ___ unrealistic.',['utterly','considerably','painfully'],'utterly','Utterly combines naturally with strong adjectives such as unrealistic.'],
+    ['The result was ___ unexpected; none of the analysts had predicted it.',['totally','considerably','disastrously'],'totally','Totally can strongly intensify unexpected.'],
+    ['Waiting three hours for a five-minute meeting was ___ frustrating.',['intensely','considerably','utterly more'],'intensely','Intensely can modify strong emotional/evaluative adjectives such as frustrating.'],
+    ['The new procedure is ___ difficult for first-time users.',['extremely','utterly more','considerably'],'extremely','Extremely is a flexible intensifier with gradable adjectives such as difficult.'],
+    ['The second model performed ___ better than the first.',['considerably','utterly','deeply'],'considerably','Comparative forms such as better commonly take considerably.'],
+    ['The proposal is ___ impractical in small municipalities.',['utterly','considerably','intensely more'],'utterly','Utterly works with strong negative adjectives such as impractical.'],
+    ['The difference between the two estimates was ___ significant.',['highly','utterly more','disastrously'],'highly','Highly significant is a conventional academic collocation.'],
+    ['Researchers were ___ concerned about the missing observations.',['deeply','considerably more','utterly more'],'deeply','Deeply concerned is a natural collocation.'],
+    ['The final cost was ___ higher than the initial estimate.',['considerably','totally','painfully'],'considerably','Considerably modifies a comparative adjective.'],
+    ['The explanation is ___ convincing once the new evidence is included.',['highly','disastrously','utterly more'],'highly','Highly convincing is a natural formal collocation.'],
+    ['The software failure had a ___ negative effect on the presentation.',['seriously','considerably more','utterly more'],'seriously','Seriously negative is a natural degree collocation.'],
+    ['The committee found the evidence ___ persuasive.',['extremely','considerably more','utterly more'],'extremely','Extremely can intensify a gradable adjective such as persuasive.'],
+    ['The assumption turned out to be ___ wrong.',['completely','considerably','intensely'],'completely','Completely wrong is a natural strong-degree collocation.'],
+    ['The reform is ___ likely to produce uneven effects across regions.',['highly','utterly','disastrously'],'highly','Highly likely is a standard collocation.'],
+    ['The first draft was ___ shorter than the version finally submitted.',['considerably','totally','deeply'],'considerably','Use considerably with comparative adjectives.'],
+    ['The idea that evidence never matters is ___ absurd.',['utterly','considerably','highly more'],'utterly','Utterly naturally modifies strong adjectives such as absurd.'],
+    ['The audience reaction was ___ positive.',['overwhelmingly','utterly more','disastrously'],'overwhelmingly','Overwhelmingly positive is a natural evaluative collocation.'],
+    ['The problem became ___ worse after the second outage.',['considerably','totally','intensely'],'considerably','Worse is comparative and can be intensified by considerably.'],
+    ['The instructions were ___ clear, so almost nobody made a mistake.',['extremely','disastrously','utterly more'],'extremely','Extremely clear is grammatically and collocationally natural.']
+  ];
+  rows.forEach((x,i)=>exercises.push(exercise({
+    id:id('int'),concept:'intensifiers',domain:i%3===0?'academic':i%3===1?'politics':'technology',type:'mcq',
+    transfer:i<10?'controlled':'guided',difficulty:i<10?1:2,prompt:x[0],options:x[1],answer:x[2],explanation:x[3],misconception:'intensifier_collocation'
+  })));
+
+  const corrections=[
+    ['The second model was utterly better than the first.','The second model was considerably better than the first.','Use considerably, not utterly, to modify a comparative such as better.'],
+    ['The claim was considerably absurd.','The claim was utterly absurd.','A strong adjective such as absurd naturally combines with utterly.'],
+    ['The researchers were considerably concerned about the result.','The researchers were deeply concerned about the result.','Deeply concerned is the natural collocation for emotional concern.'],
+    ['The outcome is utterly likely.','The outcome is highly likely.','Highly likely is the conventional collocation.'],
+    ['The revised estimate is totally higher than the original.','The revised estimate is considerably higher than the original.','Use considerably with a comparative adjective.'],
+    ['The result was considerably unexpected.','The result was totally unexpected.','Totally unexpected is a natural strong-degree combination.']
+  ];
+  corrections.forEach((x,i)=>exercises.push(exercise({
+    id:id('intcorr'),concept:'intensifiers',domain:i%2?'academic':'technology',type:'text',transfer:'guided',
+    difficulty:2,prompt:'Correct the intensifier: “'+x[0]+'”',acceptedAnswers:[x[1]],answer:x[1],explanation:x[2],misconception:'intensifier_collocation'
+  })));
+
+  const free=[
+    ['academic','Compare two research designs using one comparative intensified with considerably, one highly + adjective combination, and one cautious conclusion.','Model: The second design is considerably more robust. Its identification strategy is highly convincing, although the evidence is still somewhat limited.'],
+    ['technology','Evaluate a controversial technology using at least four natural intensifier + adjective combinations.','Model: The potential benefits are extremely significant, but some proposed uses are utterly unrealistic and the transition could be considerably more expensive than expected.']
+  ];
+  free.forEach((x)=>exercises.push(exercise({
+    id:id('intfree'),concept:'intensifiers',domain:x[0],type:'selfcheck',transfer:'free',difficulty:3,
+    prompt:x[1],options:[],answer:x[2],explanation:'Check collocation, not only grammatical possibility. The goal is to retrieve natural degree expressions.',misconception:'intensifier_transfer'
+  })));
+}
+addIntensifiers();
 
 function addAcademicDiscourse(){
   const mcq=[
