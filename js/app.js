@@ -41,8 +41,77 @@ function renderCourse(){setTitle('Course Path');const evs=currentEvents();const 
 function renderProgress(){setTitle('Progress');const total=Object.values(state.seen).reduce((a,x)=>a+(x.attempts||0),0);const active=state.errors.filter(e=>!e.resolved);app.innerHTML=card('<div class="grid"><div class="metric"><strong>'+total+'</strong><span>attempts</span></div><div class="metric"><strong>'+Object.keys(state.seen).length+'</strong><span>unique items</span></div><div class="metric"><strong>'+active.length+'</strong><span>active errors</span></div><div class="metric"><strong>'+exercises.length+'</strong><span>available items</span></div></div>')+'<div class="section-title">Mastery by concept</div>'+concepts.map(c=>{const s=conceptStats(state,c.id);return card('<div class="row between"><strong>'+esc(c.name)+'</strong>'+pill(s.status)+'</div><div class="progressbar"><span style="width:'+s.mastery+'%"></span></div><div class="transfer-row"><span>Controlled</span><div class="progressbar"><span style="width:'+s.rates.controlled+'%"></span></div><strong>'+s.rates.controlled+'%</strong></div><div class="transfer-row"><span>Guided</span><div class="progressbar"><span style="width:'+s.rates.guided+'%"></span></div><strong>'+s.rates.guided+'%</strong></div><div class="transfer-row"><span>Transfer</span><div class="progressbar"><span style="width:'+s.rates.free+'%"></span></div><strong>'+s.rates.free+'%</strong></div>')}).join('')+(active.length?'<div class="section-title">Error Bank</div>'+active.slice(0,10).map(e=>card('<strong>'+esc(C[e.concept]?.name||e.concept)+'</strong><p>'+esc(e.prompt)+'</p><p class="small">Your answer: '+esc(e.userAnswer)+'<br>Correct: '+esc(e.correctAnswer)+'</p><button class="secondary repairBtn" data-c="'+e.concept+'">Repair this area</button>')).join(''):'');document.querySelectorAll('.repairBtn').forEach(b=>b.onclick=()=>startSession(pickExercises(exercises,state,{concept:b.dataset.c,count:8}),'Error repair'))}
 
 function startSession(items,label){if(!items.length){alert('No exercises available for this selection yet.');return}session={items,index:0,correct:0,label,log:[]};renderExercise()}
-function renderExercise(){const ex=session.items[session.index];setTitle(session.label);if(!ex)return finishSession();if(ex.type==='selfcheck'){app.innerHTML=card('<div class="row between">'+pill((session.index+1)+' / '+session.items.length)+pill(C[ex.concept]?.name||ex.concept)+'</div><div class="exercise-prompt">'+esc(ex.prompt)+'</div><textarea class="input textarea" id="freeAnswer" placeholder="Write notes or your response here…"></textarea><button class="primary" id="revealModel">Reveal model & self-check</button><div id="feedbackBox"></div>');document.getElementById('revealModel').onclick=()=>answerSelfcheck(ex);return}app.innerHTML=card('<div class="row between">'+pill((session.index+1)+' / '+session.items.length)+pill(C[ex.concept]?.name||ex.concept)+'</div><div class="exercise-prompt">'+esc(ex.prompt)+'</div>'+ex.options.map(o=>'<button class="choice exChoice" data-v="'+esc(o)+'">'+esc(o)+'</button>').join('')+'<div id="feedbackBox"></div>');document.querySelectorAll('.exChoice').forEach(b=>b.onclick=()=>answerExercise(ex,b.dataset.v,b))}
-function answerExercise(ex,answer,btn){document.querySelectorAll('.exChoice').forEach(x=>x.disabled=true);const ok=isCorrect(ex,answer);btn.classList.add(ok?'correct':'wrong');if(ok)session.correct++;recordAttempt(state,ex,ok,answer);session.log.push({id:ex.id,concept:ex.concept,answer,correct:ok});const f=document.getElementById('feedbackBox');f.innerHTML='<div class="feedback '+(ok?'':'error')+'"><h3>'+(ok?'Correct':'Not yet')+'</h3><p><strong>Answer:</strong> '+esc(ex.answer)+'</p><p>'+esc(ex.explanation)+'</p><div class="confidence"><span>Confidence:</span><button data-c="sure">Sure</button><button data-c="unsure">Unsure</button><button data-c="guess">Guess</button></div><button class="primary" id="nextEx">'+(session.index===session.items.length-1?'Finish':'Next')+'</button></div>';f.querySelectorAll('[data-c]').forEach(x=>x.onclick=()=>{f.querySelectorAll('[data-c]').forEach(z=>z.classList.remove('selected'));x.classList.add('selected');updateConfidence(state,ex.id,x.dataset.c)});document.getElementById('nextEx').onclick=()=>{session.index++;renderExercise()}}
+function renderExercise(){
+  const ex=session.items[session.index];
+  setTitle(session.label);
+  if(!ex)return finishSession();
+  if(ex.type==='selfcheck'){
+    app.innerHTML=card('<div class="row between">'+pill((session.index+1)+' / '+session.items.length)+pill(C[ex.concept]?.name||ex.concept)+'</div><div class="exercise-prompt">'+esc(ex.prompt)+'</div><textarea class="input textarea" id="freeAnswer" placeholder="Write notes or your response here…"></textarea><button class="primary" id="revealModel">Reveal model & self-check</button><div id="feedbackBox"></div>');
+    document.getElementById('revealModel').onclick=()=>answerSelfcheck(ex);
+    return;
+  }
+  if(ex.type==='builder')return renderBuilderExercise(ex);
+  if(ex.type==='text')return renderTextExercise(ex);
+  if(ex.type==='timeline')return renderTimelineExercise(ex);
+  return renderChoiceExercise(ex);
+}
+function exerciseHeader(ex){
+  return '<div class="row between">'+pill((session.index+1)+' / '+session.items.length)+pill(C[ex.concept]?.name||ex.concept)+'</div>';
+}
+function renderChoiceExercise(ex,extra=''){
+  app.innerHTML=card(exerciseHeader(ex)+extra+'<div class="exercise-prompt">'+esc(ex.prompt)+'</div>'+ex.options.map(o=>'<button class="choice exChoice" data-v="'+esc(o)+'">'+esc(o)+'</button>').join('')+'<div id="feedbackBox"></div>');
+  document.querySelectorAll('.exChoice').forEach(b=>b.onclick=()=>answerExercise(ex,b.dataset.v,b));
+}
+function renderTimelineExercise(ex){
+  const strip='<div class="time-strip">'+(ex.timeline||[]).map((x,i)=>'<div class="time-point"><span>'+(i+1)+'</span><div>'+esc(x)+'</div></div>').join('')+'</div>';
+  renderChoiceExercise(ex,strip);
+}
+function renderTextExercise(ex){
+  app.innerHTML=card(exerciseHeader(ex)+'<div class="exercise-prompt">'+esc(ex.prompt)+'</div><textarea class="input textarea" id="textAnswer" placeholder="Type your answer…"></textarea><button class="primary" id="checkText">Check</button><div id="feedbackBox"></div>');
+  const input=document.getElementById('textAnswer');
+  document.getElementById('checkText').onclick=()=>answerTextExercise(ex,input.value);
+}
+function renderBuilderExercise(ex){
+  let chosen=[];
+  const tokens=(ex.tokens||[]).map((t,i)=>({t,i}));
+  app.innerHTML=card(exerciseHeader(ex)+'<div class="exercise-prompt">'+esc(ex.prompt)+'</div><div class="builder-answer" id="builderAnswer"><span class="muted">Tap words below to build the sentence.</span></div><div class="token-bank" id="tokenBank"></div><div class="row"><button class="ghost small-btn" id="builderUndo">Undo</button><button class="ghost small-btn" id="builderClear">Clear</button></div><button class="primary" id="builderCheck">Check sentence</button><div id="feedbackBox"></div>');
+  const bank=document.getElementById('tokenBank'),ans=document.getElementById('builderAnswer');
+  function draw(){
+    ans.innerHTML=chosen.length?esc(chosen.map(x=>x.t).join(' ')):'<span class="muted">Tap words below to build the sentence.</span>';
+    bank.innerHTML=tokens.map(x=>'<button class="token" data-i="'+x.i+'" '+(chosen.some(y=>y.i===x.i)?'disabled':'')+'>'+esc(x.t)+'</button>').join('');
+    bank.querySelectorAll('.token').forEach(b=>b.onclick=()=>{const x=tokens.find(z=>z.i===+b.dataset.i);chosen.push(x);draw()});
+  }
+  draw();
+  document.getElementById('builderUndo').onclick=()=>{chosen.pop();draw()};
+  document.getElementById('builderClear').onclick=()=>{chosen=[];draw()};
+  document.getElementById('builderCheck').onclick=()=>answerTextExercise(ex,chosen.map(x=>x.t).join(' '));
+}
+function feedbackHTML(ex,answer,ok){
+  const specific=!ok&&ex.optionFeedback?.[answer]?'<div class="specific-feedback">'+esc(ex.optionFeedback[answer])+'</div>':'';
+  return '<div class="feedback '+(ok?'':'error')+'"><h3>'+(ok?'Correct':'Not yet')+'</h3><p><strong>Answer:</strong> '+esc(ex.answer)+'</p>'+specific+'<p>'+esc(ex.explanation)+'</p><div class="confidence"><span>Confidence:</span><button data-c="sure">Sure</button><button data-c="unsure">Unsure</button><button data-c="guess">Guess</button></div><button class="primary" id="nextEx">'+(session.index===session.items.length-1?'Finish':'Next')+'</button></div>';
+}
+function finishAnswer(ex,answer,ok){
+  if(ok)session.correct++;
+  recordAttempt(state,ex,ok,answer);
+  session.log.push({id:ex.id,concept:ex.concept,type:ex.type,answer,correct:ok});
+  const f=document.getElementById('feedbackBox');
+  f.innerHTML=feedbackHTML(ex,answer,ok);
+  f.querySelectorAll('[data-c]').forEach(x=>x.onclick=()=>{f.querySelectorAll('[data-c]').forEach(z=>z.classList.remove('selected'));x.classList.add('selected');updateConfidence(state,ex.id,x.dataset.c)});
+  document.getElementById('nextEx').onclick=()=>{session.index++;renderExercise()};
+}
+function answerExercise(ex,answer,btn){
+  document.querySelectorAll('.exChoice').forEach(x=>x.disabled=true);
+  const ok=isCorrect(ex,answer);
+  btn.classList.add(ok?'correct':'wrong');
+  if(!ok)document.querySelectorAll('.exChoice').forEach(x=>{if(isCorrect(ex,x.dataset.v))x.classList.add('correct')});
+  finishAnswer(ex,answer,ok);
+}
+function answerTextExercise(ex,answer){
+  const controls=[document.getElementById('checkText'),document.getElementById('builderCheck')].filter(Boolean);
+  controls.forEach(x=>x.disabled=true);
+  const ok=isCorrect(ex,answer);
+  finishAnswer(ex,answer,ok);
+}
 
 function answerSelfcheck(ex){const answer=document.getElementById('freeAnswer').value.trim();const f=document.getElementById('feedbackBox');f.innerHTML='<div class="feedback"><h3>Model, not a script</h3><p>'+esc(ex.answer)+'</p><p>'+esc(ex.explanation)+'</p><p><strong>Did you use the target structure accurately?</strong></p><div class="selfcheck-row"><button class="primary" id="selfYes">Yes</button><button class="ghost" id="selfNo">Not yet</button></div></div>';document.getElementById('revealModel').disabled=true;document.getElementById('selfYes').onclick=()=>completeSelfcheck(ex,answer,true);document.getElementById('selfNo').onclick=()=>completeSelfcheck(ex,answer,false)}
 function completeSelfcheck(ex,answer,ok){recordAttempt(state,ex,ok,answer);if(ok)session.correct++;session.log.push({id:ex.id,concept:ex.concept,answer,correct:ok});document.getElementById('feedbackBox').insertAdjacentHTML('beforeend','<button class="primary" id="nextSelf" style="margin-top:10px">'+(session.index===session.items.length-1?'Finish':'Next')+'</button>');document.getElementById('nextSelf').onclick=()=>{session.index++;renderExercise()}}
