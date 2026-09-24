@@ -12,6 +12,7 @@ const concepts=[
 ];
 const C=Object.fromEntries(concepts.map(x=>[x.id,x]));
 const domains=['politics','philosophy','sociology','horror','academic','everyday'];
+const frames=['In a seminar: ','In a policy memo: ','During an interview: ','In an archive note: ','In a conversation: '];
 const people=['the researcher','the committee','the journalist','the philosopher','the student','the analyst'];
 const objects=['the report','the proposal','the argument','the evidence','the manuscript','the dataset'];
 const verbs=[['write','wrote','written'],['review','reviewed','reviewed'],['challenge','challenged','challenged'],['change','changed','changed'],['remove','removed','removed'],['analyze','analyzed','analyzed']];
@@ -28,7 +29,7 @@ function addQuestionBank(){
 }
 function addAgreement(){
   const pairs=[['The evidence','suggests'],['The results','suggest'],['A series of reforms','has'],['The reforms','have'],['Each of the cases','illustrates'],['The arguments in the article','raise'],['Public trust','remains'],['These findings','indicate']];
-  for(let r=0;r<4;r++) pairs.forEach((p,i)=>exercises.push(exercise({id:id('agr'),concept:'agreement',domain:domains[(i+r)%6],prompt:p[0]+' ___ a relevant point.',options:[p[1],p[1].endsWith('s')?p[1].slice(0,-1):p[1]+'s'],answer:p[1],explanation:'The verb agrees with the head of the subject.',misconception:'agreement'})));
+  for(let r=0;r<4;r++) pairs.forEach((p,i)=>exercises.push(exercise({id:id('agr'),concept:'agreement',domain:domains[(i+r)%6],prompt:frames[r%frames.length]+p[0]+' ___ a relevant point.',options:[p[1],p[1].endsWith('s')?p[1].slice(0,-1):p[1]+'s'],answer:p[1],explanation:'The verb agrees with the head of the subject.',misconception:'agreement'})));
 }
 function addNarrative(){
   const rows=[
@@ -39,7 +40,7 @@ function addNarrative(){
     ['the alarm rang','they discuss the proposal','They were discussing the proposal when the alarm rang.'],
     ['the door opened','he wait for an hour','He had been waiting for an hour when the door opened.']
   ];
-  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('nar'),concept:'narrative',domain:domains[(i+r)%6],type:'mcq',transfer:r<2?'controlled':'guided',prompt:'Choose the sentence that best expresses the sequence: '+x[0]+'; earlier/background: '+x[1]+'.',options:[x[2],x[2].replace(/had been|had|was|were/g,'').replace(/  +/g,' '),x[2].replace('had ','was ')],answer:x[2],explanation:'Choose the tense according to the temporal relation: event, background, earlier event or prior duration.',misconception:'narrative_sequence'})));
+  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('nar'),concept:'narrative',domain:domains[(i+r)%6],type:'mcq',transfer:r<2?'controlled':'guided',prompt:frames[r%frames.length]+'Choose the sentence that best expresses the sequence: '+x[0]+'; earlier/background: '+x[1]+'.',options:[x[2],x[2].replace(/had been|had|was|were/g,'').replace(/  +/g,' '),x[2].replace('had ','was ')],answer:x[2],explanation:'Choose the tense according to the temporal relation: event, background, earlier event or prior duration.',misconception:'narrative_sequence'})));
 }
 function addUsedTo(){
   const rows=[
@@ -50,7 +51,7 @@ function addUsedTo(){
     ['familiar now','Researchers are ___ working with incomplete evidence.','used to','use to'],
     ['past habit','I ___ avoid long presentations.','used to','am used to']
   ];
-  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('ut'),concept:'usedto',domain:domains[(i+r)%6],transfer:r<2?'controlled':'guided',prompt:x[1],options:[x[2],x[3]],answer:x[2],explanation:x[0]+': '+C.usedto.rule,misconception:'usedto_family'})));
+  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('ut'),concept:'usedto',domain:domains[(i+r)%6],transfer:r<2?'controlled':'guided',prompt:frames[r%frames.length]+x[1],options:[x[2],x[3]],answer:x[2],explanation:x[0]+': '+C.usedto.rule,misconception:'usedto_family'})));
 }
 function addPresentPerfect(){
   const rows=[
@@ -61,7 +62,7 @@ function addPresentPerfect(){
     ['state verb','I ___ her for years.','have known','have been knowing'],
     ['experience','I ___ this paper in English before.','have never presented','have never been presenting']
   ];
-  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('pp'),concept:'presentperfect',domain:domains[(i+r)%6],prompt:x[1],options:[x[2],x[3]],answer:x[2],explanation:'Focus: '+x[0]+'. '+C.presentperfect.rule,misconception:'perfect_aspect'})));
+  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('pp'),concept:'presentperfect',domain:domains[(i+r)%6],prompt:frames[r%frames.length]+x[1],options:[x[2],x[3]],answer:x[2],explanation:'Focus: '+x[0]+'. '+C.presentperfect.rule,misconception:'perfect_aspect'})));
 }
 function addConditionals(){
   const rows=[
@@ -72,7 +73,7 @@ function addConditionals(){
     ['___ the results arrive, I will update the table.','As soon as','As soon as will'],
     ['We will continue ___ the committee objects.','unless','provided']
   ];
-  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('cond'),concept:'conditionals',domain:domains[(i+r)%6],transfer:r<3?'controlled':'guided',prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:C.conditionals.rule,misconception:'conditional_alternative'})));
+  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('cond'),concept:'conditionals',domain:domains[(i+r)%6],transfer:r<3?'controlled':'guided',prompt:frames[r%frames.length]+x[0],options:[x[1],x[2]],answer:x[1],explanation:C.conditionals.rule,misconception:'conditional_alternative'})));
 }
 function addFuture(){
   const rows=[
@@ -83,19 +84,19 @@ function addFuture(){
     ['By December, I ___ English for four months.','will have been studying','will have studied'],
     ['Look at those clouds. It ___.','is going to rain','will have rained']
   ];
-  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('fut'),concept:'future',domain:domains[(i+r)%6],prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:C.future.rule,misconception:'future_choice'})));
+  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('fut'),concept:'future',domain:domains[(i+r)%6],prompt:frames[r%frames.length]+x[0],options:[x[1],x[2]],answer:x[1],explanation:C.future.rule,misconception:'future_choice'})));
 }
 function addVerbPatterns(){
   const rows=[['They could ___ the risk.','reduce','reducing'],['They suggested ___ the rule.','changing','to change'],['We decided ___ the proposal.','to revise','revising'],['Researchers should avoid ___ the evidence.','overstating','to overstate'],['My supervisor needs me ___ the file.','to send','send'],['They considered ___ the project.','postponing','to postpone']];
-  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('vp'),concept:'verbpatterns',domain:domains[(i+r)%6],prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:C.verbpatterns.rule,misconception:'verb_pattern'})));
+  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('vp'),concept:'verbpatterns',domain:domains[(i+r)%6],prompt:frames[r%frames.length]+x[0],options:[x[1],x[2]],answer:x[1],explanation:C.verbpatterns.rule,misconception:'verb_pattern'})));
 }
 function addPrepositions(){
   const rows=[['The result depends ___ institutional capacity.','on','about'],['She is responsible ___ the analysis.','for','of'],['They are concerned ___ declining trust.','about','of'],['I am interested ___ political theory.','in','on'],['The reform had an impact ___ participation.','on','in'],['The outcome is ___ likely.','highly','deeply']];
-  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('prep'),concept:'prepositions',domain:domains[(i+r)%6],prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:'Learn the whole chunk: '+x[0].replace('___',x[1]),misconception:'dependent_preposition'})));
+  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('prep'),concept:'prepositions',domain:domains[(i+r)%6],prompt:frames[r%frames.length]+x[0],options:[x[1],x[2]],answer:x[1],explanation:'Learn the whole chunk: '+x[0].replace('___',x[1]),misconception:'dependent_preposition'})));
 }
 function addPassive(){
   const rows=[['The data ___ in 2025.','were collected','collected'],['The law ___ by Congress last month.','was approved','approved'],['The results ___ next week.','will be published','will publish'],['We ___ the document translated yesterday.','had','were'],['She ___ her laptop repaired.','got','was'],['The interviews ___ before the analysis began.','had been completed','had completed']];
-  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('pc'),concept:'passivecausative',domain:domains[(i+r)%6],prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:C.passivecausative.rule,misconception:'passive_causative'})));
+  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('pc'),concept:'passivecausative',domain:domains[(i+r)%6],prompt:frames[r%frames.length]+x[0],options:[x[1],x[2]],answer:x[1],explanation:C.passivecausative.rule,misconception:'passive_causative'})));
 }
 addQuestionBank();addAgreement();addNarrative();addUsedTo();addPresentPerfect();addConditionals();addFuture();addVerbPatterns();addPrepositions();addPassive();
 
