@@ -350,7 +350,35 @@ const chunks=[
 {id:'chunk_method_03',area:'Research methods',text:'control for',meaning_es:'controlar por',example:'The model controls for country-level income.',trap:'In statistical English, control for is standard.'},
 {id:'chunk_method_04',area:'Research methods',text:'a robust finding',meaning_es:'un hallazgo robusto',example:'The relationship remains a robust finding across specifications.',trap:'Robust is common for stability across models/specifications.'},
 {id:'chunk_method_05',area:'Research methods',text:'the results remain unchanged',meaning_es:'los resultados se mantienen sin cambios',example:'The results remain largely unchanged after adding controls.',trap:'Useful for robustness reporting.'},
-{id:'chunk_method_06',area:'Research methods',text:'interpret with caution',meaning_es:'interpretar con cautela',example:'The coefficient should be interpreted with caution.',trap:'Common passive form in academic writing.'}
+{id:'chunk_method_06',area:'Research methods',text:'interpret with caution',meaning_es:'interpretar con cautela',example:'The coefficient should be interpreted with caution.',trap:'Common passive form in academic writing.'},
+
+{id:'chunk_dep_01',area:'Dependent prepositions',text:'anxious about',meaning_es:'ansioso/preocupado por',example:'The students were anxious about the oral exam.',trap:'Anxious about, not anxious for in this meaning.'},
+{id:'chunk_dep_02',area:'Dependent prepositions',text:'interested in',meaning_es:'interesado en',example:'I am interested in how institutions shape behavior.',trap:'Interested in + noun/-ing.'},
+{id:'chunk_dep_03',area:'Dependent prepositions',text:'responsible for',meaning_es:'responsable de',example:'The team is responsible for checking the data.',trap:'Responsible for, not responsible of.'},
+{id:'chunk_dep_04',area:'Dependent prepositions',text:'aware of',meaning_es:'consciente de',example:'Researchers should be aware of potential measurement error.',trap:'Aware of, not aware about.'},
+{id:'chunk_dep_05',area:'Dependent prepositions',text:'sensitive to',meaning_es:'sensible a',example:'The estimate is sensitive to the coding decision.',trap:'Sensitive to is common in analysis.'},
+{id:'chunk_dep_06',area:'Dependent prepositions',text:'concerned about',meaning_es:'preocupado por',example:'The committee is concerned about declining participation.',trap:'Concerned about for worry; concerned with can mean dealing with a topic.'},
+
+{id:'chunk_phrasal_01',area:'Phrasal verbs',text:'deal with',meaning_es:'lidiar con/abordar',example:'The team had to deal with several unexpected problems.',trap:'Deal with, not deal about.'},
+{id:'chunk_phrasal_02',area:'Phrasal verbs',text:'sort out',meaning_es:'resolver/ordenar',example:'We eventually sorted out the coding problem.',trap:'Separable: sort the problem out / sort out the problem.'},
+{id:'chunk_phrasal_03',area:'Phrasal verbs',text:'run into',meaning_es:'encontrarse con un problema',example:'We ran into a problem during data collection.',trap:'Run into is informal-neutral and common in spoken English.'},
+{id:'chunk_phrasal_04',area:'Phrasal verbs',text:'figure out',meaning_es:'descubrir/entender/resolver',example:'We need to figure out why the estimates changed.',trap:'Common in speech; use determine/establish for more formal writing.'},
+{id:'chunk_phrasal_05',area:'Phrasal verbs',text:'end up',meaning_es:'terminar/acabar',example:'The discussion ended up focusing on institutional trust.',trap:'End up + -ing is common.'},
+{id:'chunk_phrasal_06',area:'Phrasal verbs',text:'get away with',meaning_es:'salirse con la suya',example:'Officials should not be able to get away with ignoring the rules.',trap:'Get away with + noun/-ing.'},
+
+{id:'chunk_follow_01',area:'Follow-up questions',text:'what happened next?',meaning_es:'¿qué pasó después?',example:'You said the system failed. What happened next?',trap:'Simple natural follow-up for narratives.'},
+{id:'chunk_follow_02',area:'Follow-up questions',text:'how come?',meaning_es:'¿cómo es que?/¿por qué?',example:'You changed your topic? How come?',trap:'Informal; do not invert after how come: How come you changed it?'},
+{id:'chunk_follow_03',area:'Follow-up questions',text:'what do you mean by',meaning_es:'¿qué quieres decir con?',example:'What do you mean by institutional autonomy?',trap:'Useful for clarification; follow with noun/phrase.'},
+{id:'chunk_follow_04',area:'Follow-up questions',text:'did that help?',meaning_es:'¿eso ayudó?',example:'You changed the schedule. Did that help?',trap:'Natural short follow-up.'},
+{id:'chunk_follow_05',area:'Follow-up questions',text:'and then what?',meaning_es:'¿y después qué?',example:'You found the document—and then what?',trap:'Very conversational; use What happened after that? in more formal contexts.'},
+{id:'chunk_follow_06',area:'Follow-up questions',text:'would you say that',meaning_es:'¿dirías que…?',example:'Would you say that the reform changed public expectations?',trap:'Useful cautious interview frame.'},
+
+{id:'chunk_morning_01',area:'Everyday interaction',text:'I had a rough start this morning',meaning_es:'tuve un comienzo difícil esta mañana',example:'I had a rough start this morning, but I am doing better now.',trap:'Natural alternative to “my morning was difficult.”'},
+{id:'chunk_morning_02',area:'Everyday interaction',text:"I'm running on very little sleep",meaning_es:'estoy funcionando con muy pocas horas de sueño',example:"I'm running on very little sleep today.",trap:'Informal but natural.'},
+{id:'chunk_morning_03',area:'Everyday interaction',text:"I'm a bit out of it",meaning_es:'estoy un poco ido/desorientado',example:"Sorry, I'm a bit out of it this morning.",trap:'Informal; useful for tired/confused state.'},
+{id:'chunk_morning_04',area:'Everyday interaction',text:'I need a minute to wake up',meaning_es:'necesito un minuto para activarme',example:'I need a minute to wake up before we start.',trap:'Natural morning expression.'},
+{id:'chunk_morning_05',area:'Everyday interaction',text:'how about you?',meaning_es:'¿y tú?',example:'I barely slept. How about you?',trap:'Equivalent to What about you? in many casual exchanges.'},
+{id:'chunk_morning_06',area:'Everyday interaction',text:"I'm not fully awake yet",meaning_es:'todavía no estoy completamente despierto',example:"I'm not fully awake yet, so give me a second.",trap:'Natural and direct.'}
 ];
 
 const shadowing=[
@@ -361,7 +389,9 @@ const shadowing=[
 {id:'shadow_05',domain:'horror',focus:'narrative rhythm',transcript:'The researcher was reading alone when the lights went out. Someone had removed several pages from the manuscript before she arrived, and she had been hearing footsteps in the corridor for almost an hour.',chunks:['was reading','had removed','had been hearing'],reusePrompt:'Retell a different unsettling scene using the same three time planes.'},
 {id:'shadow_06',domain:'technology',focus:'future forms + stress',transcript:'By the end of the decade, universities will have adopted new rules for artificial intelligence. Some teachers will be redesigning assessment, while students will have been using these tools for years. The transition is highly likely to remain uneven.',chunks:['will have adopted','will be redesigning','highly likely'],reusePrompt:'Make a prediction about technology and education using at least two future forms and one intensifier.'},
 {id:'shadow_07',domain:'everyday',focus:'natural conversation rhythm',transcript:"I didn't sleep very well last night, so I'm still waking up. I'm a little confused about the homework too. How did your morning go? Did you manage to finish everything?",chunks:["I didn't sleep very well","I'm still waking up","I'm a little confused about","How did your morning go?"],reusePrompt:'Give a natural 30-second morning update and ask the other person two follow-up questions.'},
-{id:'shadow_08',domain:'academic',focus:'Q&A + reformulation',transcript:'That is an important objection. I see the concern, but I would distinguish between the empirical and normative parts of the claim. Let me rephrase that: the evidence supports the first more strongly than the second.',chunks:['I see the concern, but','draw a distinction','let me rephrase that'],reusePrompt:'Answer a difficult academic question using acknowledgment, distinction and reformulation.'}
+{id:'shadow_08',domain:'academic',focus:'Q&A + reformulation',transcript:'That is an important objection. I see the concern, but I would distinguish between the empirical and normative parts of the claim. Let me rephrase that: the evidence supports the first more strongly than the second.',chunks:['I see the concern, but','draw a distinction','let me rephrase that'],reusePrompt:'Answer a difficult academic question using acknowledgment, distinction and reformulation.'},
+{id:'shadow_09',domain:'environment',focus:'counterargument + modal stress',transcript:'Penalties may change behavior, but they are not the only option. People might also respond if the sustainable choice were cheaper and easier. That may be true only when the alternative is actually convenient.',chunks:['might also respond if','that may be true','sustainable choice'],reusePrompt:'Respond to an environmental policy claim with one acknowledgment and one conditional counterargument.'},
+{id:'shadow_10',domain:'academic',focus:'dependent prepositions + linking',transcript:'The team was anxious about the deadline, but everyone was aware of the main risks. One researcher was responsible for checking the data, while another dealt with the missing files and eventually sorted the problem out.',chunks:['anxious about','aware of','responsible for','deal with','sort out'],reusePrompt:'Describe a project problem using at least three dependent-preposition or phrasal-verb chunks.'}
 ];
 
 const conversations=[
@@ -404,6 +434,26 @@ const conversations=[
 {other:'Most assessment will be automated.',task:'Respond with a qualified prediction using an intensifier.',frames:['highly likely','considerably more…','to some extent']},
 {other:'Teachers will not be necessary anymore.',task:'Give a conditional counterargument.',frames:['They might still be necessary if…']},
 {other:'What do you think universities will have changed by 2030?',task:'Use future perfect and one cautious claim.',frames:['By 2030, universities will have…','The evidence suggests that…']}
+]},
+{id:'conv_09',title:'Research project went wrong',domain:'academic',concepts:['prepositions','narrative'],opening:'A colleague says: “Our data collection went badly yesterday.”',turns:[
+{other:'We ran into three different problems.',task:'Ask what they had to deal with first.',frames:['What did you have to deal with first?','What happened next?']},
+{other:'The files were in the wrong format.',task:'React and ask how they sorted it out.',frames:['How did you sort that out?','Did that help?']},
+{other:'Eventually we fixed it, but we lost two hours.',task:'Retell the sequence briefly using one past perfect form.',frames:['had… before…','ended up…']}
+]},
+{id:'conv_10',title:'Fear and advice',domain:'everyday',concepts:['conditionals','questions'],opening:'A classmate says: “I get really anxious before oral presentations.”',turns:[
+{other:'I usually forget what I wanted to say.',task:'Offer advice using in case.',frames:['Take a short outline in case…']},
+{other:'I also speak too fast.',task:'Give another condition using as long as or provided that.',frames:['You will sound clearer as long as…','Provided that…']},
+{other:'What if I completely freeze?',task:'Respond naturally, then return a question.',frames:['If that happens…','What usually helps you…?']}
+]},
+{id:'conv_11',title:'Environmental proposal',domain:'environment',concepts:['counterarguments','passivecausative'],opening:'A colleague says: “People will never adopt reusable systems voluntarily.”',turns:[
+{other:'Convenience matters more than environmental concern.',task:'Give a conditional counterargument.',frames:['They might if…','It could work if…']},
+{other:'The infrastructure would still be expensive.',task:'Acknowledge the point and propose a solution.',frames:['That may be true, but…','One way to tackle this is…']},
+{other:'How would you implement it?',task:'Use one passive or causative structure.',frames:['The system could be introduced…','The city could have… installed.']}
+]},
+{id:'conv_12',title:'Clarifying a confusing explanation',domain:'academic',concepts:['questions','academicdiscourse'],opening:'A professor gives an explanation that you only partly understand.',turns:[
+{other:'The mechanism is indirect and depends on institutional mediation.',task:'Say that you are a little confused and ask for clarification naturally.',frames:["I'm a little confused about…",'What do you mean by…?']},
+{other:'I mean that institutions shape how the effect appears.',task:'Check your understanding with a cautious follow-up.',frames:['Would you say that…?','So, if I understand correctly…']},
+{other:'Yes, exactly.',task:'Briefly reformulate the idea in your own words.',frames:['What I mean is…','So the key point is…']}
 ]}
 ];
 
