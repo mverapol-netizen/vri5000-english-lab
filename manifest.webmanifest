@@ -1,0 +1,12 @@
+{
+  "name": "VRI5000 Personal English Lab",
+  "short_name": "English Lab",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f0e7",
+  "theme_color": "#2b3a34",
+  "description": "Personal adaptive English trainer for VRI5000 Upper Intermediate English 1.",
+  "icons": [
+    {"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
