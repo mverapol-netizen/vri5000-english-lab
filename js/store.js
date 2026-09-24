@@ -50,7 +50,7 @@ function ensureConcept(state,id){
   if(!state.concepts[id])state.concepts[id]={attempts:0,correct:0,lastSeen:null,reviewAt:null,transfer:ensureTransfer(),errors:0};
   return state.concepts[id];
 }
-export function recordAttempt(state,exercise,correct,userAnswer,{confidence='unknown'}={}){
+export function recordAttempt(state,exercise,correct,userAnswer,{confidence='unknown',responseMs=null}={}){
   const now=new Date(),iso=now.toISOString();
   const prev=state.seen[exercise.id]||{attempts:0,correctCount:0,streak:0};
   prev.attempts++;if(correct)prev.correctCount++;prev.lastCorrect=!!correct;prev.correct=!!correct;prev.lastSeen=iso;prev.userAnswer=userAnswer;prev.confidence=confidence;
@@ -58,11 +58,12 @@ export function recordAttempt(state,exercise,correct,userAnswer,{confidence='unk
   let itemHours=correct?exactIntervalHours(prev.streak):12;
   if(confidence==='guess')itemHours=Math.min(itemHours,24);
   if(confidence==='unsure'&&correct)itemHours=Math.min(itemHours,72);
-  prev.reviewAt=new Date(now.getTime()+itemHours*3600e3).toISOString();state.seen[exercise.id]=prev;
+  prev.reviewAt=new Date(now.getTime()+itemHours*3600e3).toISOString();if(responseMs!=null){prev.responseMs=responseMs;prev.responseTotalMs=(prev.responseTotalMs||0)+responseMs;prev.responseCount=(prev.responseCount||0)+1;prev.avgResponseMs=Math.round(prev.responseTotalMs/prev.responseCount)}state.seen[exercise.id]=prev;
 
   const c=ensureConcept(state,exercise.concept);c.attempts++;if(correct)c.correct++;else c.errors++;c.lastSeen=iso;
   const bucket=exercise.transfer==='guided'?'guided':exercise.transfer==='free'?'free':'controlled';
   c.transfer[bucket].attempts++;if(correct)c.transfer[bucket].correct++;
+  if(responseMs!=null){c.responseTotalMs=(c.responseTotalMs||0)+responseMs;c.responseCount=(c.responseCount||0)+1;c.avgResponseMs=Math.round(c.responseTotalMs/c.responseCount)}
   c.reviewAt=new Date(now.getTime()+conceptIntervalHours(c,correct)*3600e3).toISOString();
 
   const key=exercise.misconception||exercise.id;
@@ -87,11 +88,15 @@ export function recordAttempt(state,exercise,correct,userAnswer,{confidence='unk
   }
   saveState(state);return state;
 }
-export function updateConfidence(state,exerciseId,confidence){
+export function updateConfidence(state,exerciseId,confidence,conceptId=null){
   const item=state.seen[exerciseId];if(!item)return;
   item.confidence=confidence;const now=Date.now();
   if(confidence==='guess')item.reviewAt=new Date(now+12*3600e3).toISOString();
   if(confidence==='unsure'&&item.lastCorrect)item.reviewAt=new Date(now+48*3600e3).toISOString();
+  if(conceptId){
+    const c=ensureConcept(state,conceptId);c.confidence=c.confidence||{sure:0,unsure:0,guess:0};
+    if(c.confidence[confidence]!=null)c.confidence[confidence]++;
+  }
   saveState(state);
 }
 export function recordSpeaking(state,prompt,checks=[]){
