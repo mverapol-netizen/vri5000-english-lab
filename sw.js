@@ -1,6 +1,6 @@
-const CACHE='vri5000-lab-v091';
+const CACHE='vri5000-lab-v092-install';
 const ASSETS=[
-  './','./index.html','./styles.css','./manifest.webmanifest','./assets/icon.svg',
+  './','./index.html','./styles.css','./manifest.webmanifest','./assets/icon.svg','./assets/icon-192.png','./assets/icon-512.png',
   './js/app.js','./js/content.js','./js/store.js','./js/engine.js'
 ];
 self.addEventListener('install',event=>{
