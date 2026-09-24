@@ -1,4 +1,4 @@
-import {concepts,exercises,speaking,schedules} from '../js/content.js';
+import {concepts,exercises,speaking,pronunciation,schedules} from '../js/content.js';
 
 const errors=[];
 const conceptIds=new Set(concepts.map(c=>c.id));
@@ -45,6 +45,10 @@ for(const p of speaking){
   if(!p.prompt||!p.targets?.length||!p.seconds) errors.push('invalid speaking prompt');
 }
 
+for(const p of pronunciation){
+  if(!p.id||!p.focus||!p.sentence||!p.tip||!p.seconds) errors.push('invalid pronunciation item');
+}
+
 for(const [section,events] of Object.entries(schedules)){
   for(let i=1;i<events.length;i++) if(events[i].date<events[i-1].date) errors.push(section+': dates not sorted');
   for(const ev of events) for(const c of ev.concepts||[]) if(!conceptIds.has(c)) errors.push(section+': unknown event concept '+c);
@@ -63,6 +67,7 @@ console.log(JSON.stringify({
   guided:exercises.filter(e=>e.transfer==='guided').length,
   free:exercises.filter(e=>e.transfer==='free').length,
   speaking:speaking.length,
+  pronunciation:pronunciation.length,
   exactDuplicates:0,
   byType:Object.fromEntries([...new Set(exercises.map(e=>e.type))].map(t=>[t,exercises.filter(e=>e.type===t).length]))
 },null,2));
