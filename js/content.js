@@ -158,6 +158,26 @@ const speaking=[
 {concept:'presentperfect',domain:'academic',seconds:75,prompt:'Describe your recent English study. Distinguish completed results from activities that have been continuing.',targets:['present perfect','present perfect progressive']},
 {concept:'future',domain:'academic',seconds:75,prompt:'Describe your academic work three months from now. Say what you will be doing and what you will have completed.',targets:['future progressive','future perfect']}
 ];
+
+speaking.push(
+{concept:'questions',domain:'philosophy',seconds:75,prompt:'Interview a philosopher about a concept you do not fully understand. Ask four follow-up questions without repeating the same question form.',targets:['subject question','object question','follow-up question']},
+{concept:'questions',domain:'academic',seconds:60,prompt:'A professor says: “The evidence surprised us.” Ask three questions to clarify who found it, what it showed, and why it mattered.',targets:['subject question','object question','indirect question']},
+{concept:'narrative',domain:'academic',seconds:90,prompt:'Tell the story of a research project that went wrong. Include background, a main event, an earlier cause and something that had been happening for some time.',targets:['past progressive','past simple','past perfect','past perfect progressive']},
+{concept:'narrative',domain:'literature',seconds:90,prompt:'Retell a disturbing fictional journey in which the narrator discovers that someone had followed them before the story began.',targets:['past simple','past progressive','past perfect']},
+{concept:'conditionals',domain:'politics',seconds:75,prompt:'Explain how institutions can survive a crisis. Use unless, provided that, as long as and in case.',targets:['unless','provided that','as long as','in case']},
+{concept:'conditionals',domain:'horror',seconds:75,prompt:'Give survival instructions for an abandoned building using at least three alternatives to if.',targets:['unless','in case','as soon as']},
+{concept:'usedto',domain:'sociology',seconds:75,prompt:'Compare social life before and after smartphones. Distinguish past habits from things people are now accustomed to.',targets:['used to','would','be used to']},
+{concept:'usedto',domain:'everyday',seconds:60,prompt:'Describe a routine that changed and one new habit you are still adapting to.',targets:['used to','get used to']},
+{concept:'presentperfect',domain:'academic',seconds:75,prompt:'Explain what you have accomplished this semester and what you have been working on recently.',targets:['present perfect','present perfect progressive']},
+{concept:'presentperfect',domain:'politics',seconds:75,prompt:'Describe a political trend that has changed over several years and an activity that has been continuing recently.',targets:['present perfect','present perfect progressive']},
+{concept:'future',domain:'technology',seconds:90,prompt:'Describe how AI may change academic work over the next five years. Include a prediction, an activity in progress and something completed by a future date.',targets:['will','future progressive','future perfect']},
+{concept:'future',domain:'academic',seconds:75,prompt:'Describe your next conference day using a timetable, a personal arrangement and two advanced future forms.',targets:['present simple','present progressive','future progressive','future perfect']},
+{concept:'verbpatterns',domain:'academic',seconds:75,prompt:'Advise a doctoral student about preparing a paper. Use a modal, suggest + -ing, decide + to and need + object + to.',targets:['modal + base','suggest + -ing','decide + to','need + object + to']},
+{concept:'prepositions',domain:'philosophy',seconds:75,prompt:'Make a short philosophical argument using depend on, be compatible with, raise an objection and provide an account of.',targets:['depend on','be compatible with','raise an objection','provide an account of']},
+{concept:'passivecausative',domain:'politics',seconds:75,prompt:'Explain how an election result is processed: votes are counted, results are verified, and an institution has something independently reviewed.',targets:['passive voice','causative have/get']},
+{concept:'agreement',domain:'politics',seconds:60,prompt:'Discuss public trust using these subjects accurately: public trust, the findings, a series of surveys, institutions.',targets:['singular agreement','plural agreement']}
+);
+
 const schedules={
  conservative:[
   {date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
@@ -170,10 +190,62 @@ const schedules={
   {date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
   {date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
  ],
- mon_wed:[{date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},{date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions']},{date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future']},{date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}],
- tue_thu:[{date:'2026-10-06',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},{date:'2026-10-20',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions']},{date:'2026-11-05',title:'Written Exam',assessment:true,concepts:['future']},{date:'2026-12-03',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}],
- wed_fri_am:[{date:'2026-10-02',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions']},{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future']},{date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}],
- wed_fri_pm:[{date:'2026-09-30',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions']},{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future']},{date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}]
+ mon_wed:[
+{date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
+{date:'2026-09-30',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement']},
+{date:'2026-10-07',title:'Presentation preparation · Opening',concepts:['questions','prepositions']},
+{date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+{date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
+{date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+{date:'2026-10-28',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
+{date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+{date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
+{date:'2026-11-16',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
+{date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+{date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
+],
+ tue_thu:[
+{date:'2026-10-06',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
+{date:'2026-10-08',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement']},
+{date:'2026-10-15',title:'Presentation preparation · Opening',concepts:['questions','prepositions']},
+{date:'2026-10-20',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+{date:'2026-10-22',title:'Unit 4.1 · Future forms',concepts:['future']},
+{date:'2026-10-27',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+{date:'2026-10-29',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
+{date:'2026-11-05',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+{date:'2026-11-10',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
+{date:'2026-11-17',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
+{date:'2026-11-19',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+{date:'2026-12-03',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
+],
+ wed_fri_am:[
+{date:'2026-10-02',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
+{date:'2026-10-07',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement']},
+{date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions']},
+{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+{date:'2026-10-23',title:'Unit 4.1 · Future forms',concepts:['future']},
+{date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+{date:'2026-10-30',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
+{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+{date:'2026-11-11',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
+{date:'2026-11-18',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
+{date:'2026-11-20',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+{date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
+],
+ wed_fri_pm:[
+{date:'2026-09-30',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
+{date:'2026-10-07',title:'Presentation preparation · Organizing',concepts:['questions','prepositions','agreement']},
+{date:'2026-10-16',title:'Presentation preparation · Opening',concepts:['questions','prepositions']},
+{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+{date:'2026-10-23',title:'Unit 4.1 · Future forms',concepts:['future']},
+{date:'2026-10-28',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+{date:'2026-10-30',title:'Unit 4.3 · Automation at work',concepts:['future','prepositions']},
+{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+{date:'2026-11-11',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
+{date:'2026-11-18',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
+{date:'2026-11-20',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+{date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
+]
 };
 
 const freeTasks=[
