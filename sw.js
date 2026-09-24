@@ -1,4 +1,4 @@
-const CACHE='vri5000-lab-v05';
+const CACHE='vri5000-lab-v06';
 const ASSETS=[
   './','./index.html','./styles.css','./manifest.webmanifest','./assets/icon.svg',
   './js/app.js','./js/content.js','./js/store.js','./js/engine.js'
