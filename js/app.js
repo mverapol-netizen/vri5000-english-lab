@@ -11,6 +11,7 @@ let mediaRecorder=null,mediaChunks=[],recordingUrl=null,timerHandle=null,timerSt
 let oralSim=null;
 let presentationSim=null;
 let finalOralSim=null;
+let deferredInstallPrompt=null;
 let chunkSession=null;
 let shadowSession=null;
 let conversationSession=null;
@@ -25,6 +26,24 @@ function countForMinutes(m){return Math.max(5,Math.round(m*.55))}
 function nav(r){route=r;document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.route===r));render()}
 
 document.querySelectorAll('.bottom-nav button').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.route)));
+const installBtn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  installBtn.hidden=false;
+});
+installBtn.onclick=async()=>{
+  if(!deferredInstallPrompt){
+    alert('Chrome todavía no ofrece el instalador. Recarga la página y vuelve a intentarlo en unos segundos.');
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt=null;
+  installBtn.hidden=true;
+};
+window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;installBtn.hidden=true;});
+
 document.getElementById('settingsBtn').onclick=()=>{document.getElementById('sectionSelect').value=state.settings.section;document.getElementById('durationSelect').value=state.settings.duration;document.getElementById('settingsDialog').showModal()};
 document.getElementById('saveSettings').onclick=()=>{state.settings.section=document.getElementById('sectionSelect').value;state.settings.duration=+document.getElementById('durationSelect').value;saveState(state);setTimeout(render,0)};
 document.getElementById('resetProgress').onclick=()=>{if(confirm('¿Borrar todo el progreso local?')){resetState();state=loadState();document.getElementById('settingsDialog').close();render()}};
