@@ -322,6 +322,14 @@ speaking.push(
 {id:'intensifier_speak_02',concept:'intensifiers',domain:'academic',seconds:60,prompt:'Evaluate a research result using four natural intensifier combinations without repeating the same adverb.',targets:['collocational variety','degree control']}
 );
 
+
+speaking.push(
+{id:'u5_speak_vp_01',concept:'verbpatterns',domain:'cities',seconds:75,prompt:'Give advice for improving a neighborhood. Use avoid + -ing, decide + to, need + object + to, a modal + base, and one infinitive of purpose.',targets:['avoid + -ing','decide + to','need + object + to','modal + base','purpose infinitive']},
+{id:'u5_speak_vp_02',concept:'verbpatterns',domain:'academic',seconds:75,prompt:'Describe a research routine using remember + -ing, remember + to, stop + -ing and try + -ing with the intended meanings.',targets:['remember + -ing','remember + to','stop + -ing','try + -ing']},
+{id:'u5_speak_pass_01',concept:'passivecausative',domain:'academic',seconds:75,prompt:'Describe how a paper was prepared for submission. Use at least three passive forms and one causative have/get construction.',targets:['passive voice','causative have/get']},
+{id:'u5_speak_pass_02',concept:'passivecausative',domain:'everyday',seconds:60,prompt:'Describe two services you arranged for someone else to perform and one unwanted event that happened to you.',targets:['have/get something done','unwelcome causative']}
+);
+
 const schedules={
  conservative:[
   {date:'2026-09-25',title:'Unit 3 · Final consolidation',concepts:['narrative','conditionals','prepositions','questions']},
@@ -415,6 +423,94 @@ const schedules={
 
 
 
+
+
+function addUnit5Depth(){
+  const vpRows=[
+    ['After the preposition “about,” choose the correct form: She is thinking about ___ to another city.',['moving','to move','move'],'moving','After a preposition, use the -ing form.'],
+    ['Choose the natural subject form: ___ in a new city can be difficult at first.',['Living','To live always','Live'],'Living','An -ing form can function as the subject of a sentence.'],
+    ['Choose the pattern after an adjective: It is difficult ___ reliable evidence quickly.',['to find','finding always','find'],'to find','Adjectives such as difficult are commonly followed by the infinitive.'],
+    ['Express purpose: She moved to Santiago ___ at the university.',['to study','studying','study'],'to study','The infinitive can express purpose.'],
+    ['Choose the form after avoid: Researchers should avoid ___ causal claims from weak evidence.',['making','to make','make'],'making','Avoid is followed by -ing.'],
+    ['Choose the form after decide: The team decided ___ the survey.',['to redesign','redesigning','redesign'],'to redesign','Decide is followed by the to-infinitive.'],
+    ['Choose the form after promise: The institution promised ___ the report.',['to publish','publishing','publish'],'to publish','Promise is followed by the to-infinitive.'],
+    ['Choose the form after a modal: The city could ___ the policy next year.',['change','to change','changing'],'change','Modal verbs are followed by the base form.'],
+    ['Choose the form after let: The supervisor let the students ___ a new approach.',['try','to try','trying'],'try','Let is followed by object + base form.'],
+    ['Choose the form after make: The deadline made everyone ___ more carefully.',['plan','to plan','planning'],'plan','Make is followed by object + base form in the active voice.'],
+    ['Meaning: “I remember meeting her.” Which interpretation is correct?',['I have a memory of the meeting.','I remembered that I needed to meet her later.'],'I have a memory of the meeting.','Remember + -ing refers to a memory of an earlier event.'],
+    ['Meaning: “Remember to send the file.” Which interpretation is correct?',['Do not forget the future task.','Recall the memory of sending it.'],'Do not forget the future task.','Remember + to-infinitive refers to remembering a task that still needs to be done.'],
+    ['Meaning: “He stopped smoking.” What changed?',['He quit the activity.','He paused another activity in order to smoke.'],'He quit the activity.','Stop + -ing means cease an activity.'],
+    ['Meaning: “He stopped to smoke.” What happened?',['He paused another activity in order to smoke.','He permanently quit smoking.'],'He paused another activity in order to smoke.','Stop + to-infinitive means pause one activity in order to do another.'],
+    ['Meaning: “Try restarting the app.” What does try mean?',['Experiment with a possible solution.','Make an effort that may be difficult.'],'Experiment with a possible solution.','Try + -ing often suggests experimenting with a method.'],
+    ['Meaning: “Try to finish before six.” What does try mean?',['Make an effort to achieve the goal.','Experiment with finishing as one option.'],'Make an effort to achieve the goal.','Try + to-infinitive emphasizes effort toward a goal.'],
+    ['Choose the form after appreciate: I appreciate you ___ the argument so clearly.',['explaining','to explain','explain'],'explaining','Appreciate is followed by -ing.'],
+    ['Choose the form after manage: The team managed ___ the missing data.',['to recover','recovering','recover'],'to recover','Manage is followed by the to-infinitive.'],
+    ['Choose the form after mind: Would you mind ___ the question?',['repeating','to repeat','repeat'],'repeating','Mind is followed by -ing.'],
+    ['Choose the form after need + object: We need the committee ___ the proposal.',['to review','reviewing','review'],'to review','Need + object + to-infinitive is the target pattern.']
+  ];
+  vpRows.forEach((x,i)=>exercises.push(exercise({
+    id:id('u5vp'),concept:'verbpatterns',domain:i%4===0?'academic':i%4===1?'cities':i%4===2?'everyday':'politics',
+    type:'mcq',transfer:i<10?'controlled':'guided',difficulty:i<10?1:2,prompt:x[0],options:x[1],answer:x[2],
+    explanation:x[3],misconception:'ing_infinitive_choice'
+  })));
+
+  const vpCorrections=[
+    ['I am thinking about to move to another city.','I am thinking about moving to another city.','A preposition is followed by -ing.'],
+    ['It is difficult finding a solution in this case.','It is difficult to find a solution in this case.','After difficult, use the to-infinitive.'],
+    ['They decided revising the proposal.','They decided to revise the proposal.','Decide is followed by to-infinitive.'],
+    ['Researchers should avoid to overstate the results.','Researchers should avoid overstating the results.','Avoid is followed by -ing.'],
+    ['You must to check the source.','You must check the source.','Modal verbs take the base form.'],
+    ['The supervisor made us to rewrite the section.','The supervisor made us rewrite the section.','Active make + object takes the base form.'],
+    ['I will never forget to meet her for the first time.','I will never forget meeting her for the first time.','Forget + -ing refers to a memory of a past experience.'],
+    ['He stopped to use the platform because of privacy concerns.','He stopped using the platform because of privacy concerns.','Stop + -ing means cease the activity.']
+  ];
+  vpCorrections.forEach((x,i)=>exercises.push(exercise({
+    id:id('u5vpcorr'),concept:'verbpatterns',domain:i%2?'academic':'everyday',type:'text',transfer:'guided',difficulty:2,
+    prompt:'Correct the verb pattern: “'+x[0]+'”',acceptedAnswers:[x[1]],answer:x[1],explanation:x[2],misconception:'ing_infinitive_choice'
+  })));
+
+  const vpTransforms=[
+    ['Use avoid + -ing: “Researchers should not exaggerate the evidence.”','Researchers should avoid exaggerating the evidence.'],
+    ['Use decide + to: “The team made the decision to postpone the meeting.”','The team decided to postpone the meeting.'],
+    ['Use remember + -ing to express a memory: “I have a memory of presenting there for the first time.”','I remember presenting there for the first time.'],
+    ['Use remember + to for a future task: “Do not forget that you need to bring the document.”','Remember to bring the document.'],
+    ['Use stop + -ing: “She no longer checks email after midnight.”','She stopped checking email after midnight.'],
+    ['Use stop + to: “He paused his work because he wanted to answer the phone.”','He stopped to answer the phone.'],
+    ['Use try + -ing as an experiment: “One possible method is restarting the device.”','Try restarting the device.'],
+    ['Use the infinitive of purpose: “She went to the archive because she wanted to verify the date.”','She went to the archive to verify the date.']
+  ];
+  vpTransforms.forEach((x,i)=>exercises.push(exercise({
+    id:id('u5vptrans'),concept:'verbpatterns',domain:i%2?'academic':'everyday',type:'text',transfer:'guided',difficulty:3,
+    prompt:x[0],acceptedAnswers:[x[1]],answer:x[1],explanation:'Select the form according to both grammar and meaning.',misconception:'verb_pattern_meaning'
+  })));
+
+  const passiveRows=[
+    ['Make the research process passive: Researchers collected the interviews in May.',['The interviews were collected in May.','The interviews collected in May.'],'The interviews were collected in May.','Passive voice requires be + past participle.'],
+    ['Choose the causative: A technician repaired my laptop for me.',['I had my laptop repaired.','I had repaired my laptop by a technician.'],'I had my laptop repaired.','Causative have is have + object + past participle.'],
+    ['Choose the causative with get.',['She got the document translated.','She got translated the document.'],'She got the document translated.','Causative get places the object before the past participle.'],
+    ['Choose the passive sequence.',['The proposal was reviewed, revised and approved.','The proposal reviewed, revised and approved.'],'The proposal was reviewed, revised and approved.','Keep the auxiliary be for the passive sequence.'],
+    ['Express an unwelcome event naturally.',['He had his phone stolen on the train.','He had stolen his phone on the train.'],'He had his phone stolen on the train.','Causative have can describe an unwanted event that happens to someone.'],
+    ['Choose the passive with a modal.',['The data should be checked again.','The data should checked again.'],'The data should be checked again.','Modal passive = modal + be + past participle.'],
+    ['Choose the present perfect passive.',['The final report has been published.','The final report has published.'],'The final report has been published.','Present perfect passive = have/has been + past participle.'],
+    ['Choose the past perfect passive.',['The files had been removed before the audit began.','The files had removed before the audit began.'],'The files had been removed before the audit began.','Past perfect passive = had been + past participle.'],
+    ['Choose the causative question.',['Did you have the figures checked?','Did you have checked the figures?'],'Did you have the figures checked?','Keep object + past participle after have.'],
+    ['Choose the natural research sentence.',['We had the transcripts anonymized before analysis.','We had anonymized the transcripts before analysis by someone else.'],'We had the transcripts anonymized before analysis.','Causative have foregrounds arranging for another person to do the task.']
+  ];
+  passiveRows.forEach((x,i)=>exercises.push(exercise({
+    id:id('u5pass'),concept:'passivecausative',domain:i%2?'academic':'everyday',type:'mcq',transfer:i<5?'controlled':'guided',
+    difficulty:2,prompt:x[0],options:x[1],answer:x[2],explanation:x[3],misconception:'passive_causative'
+  })));
+
+  const passiveFree=[
+    ['academic','Describe a research workflow using three passive forms and two causative constructions.','Model: The interviews were recorded and the data were anonymized. The final dataset was checked twice. We had the transcripts translated and got the figures redesigned before submission.'],
+    ['cities','Explain how a public project was completed using passive voice for the sequence and one causative construction for an outsourced task.','Model: The site was selected, the plan was approved and the work was completed in stages. The city had the environmental assessment carried out by an independent team.']
+  ];
+  passiveFree.forEach((x)=>exercises.push(exercise({
+    id:id('u5passfree'),concept:'passivecausative',domain:x[0],type:'selfcheck',transfer:'free',difficulty:3,
+    prompt:x[1],options:[],answer:x[2],explanation:'Check both passive morphology and causative word order.',misconception:'passive_causative_transfer'
+  })));
+}
+addUnit5Depth();
 
 function addIntensifiers(){
   const rows=[
