@@ -3,10 +3,9 @@ import {concepts,domains,exercises,speaking,pronunciation,schedules} from '../js
 const errors=[];
 const conceptIds=new Set(concepts.map(c=>c.id));
 const ids=new Set();
-const exact=new const usedDomains=[...new Set(exercises.map(e=>e.domain))];
+const exact=new Set();
+const usedDomains=[...new Set(exercises.map(e=>e.domain))];
 for(const d of usedDomains) if(!domains.includes(d)) errors.push('undeclared domain: '+d);
-
-Set();
 
 for(const e of exercises){
   if(!e.id||ids.has(e.id)) errors.push('duplicate/missing id: '+e.id); else ids.add(e.id);
