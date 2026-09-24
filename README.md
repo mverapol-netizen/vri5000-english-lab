@@ -1,61 +1,96 @@
-# VRI5000 Personal English Lab — v0.3
+# VRI5000 Personal English Lab — v0.4
 
-Android-first, installable PWA for personalized VRI5000 study.
+Personal, Android-first PWA for VRI5000 Upper Intermediate English 1.
 
-## What changed in v0.3
-- 709 **unique** exercises across 10 concept families.
-- 40 speaking prompts, including a 16-prompt Oral Midterm bank.
-- New exercise formats: sentence builder, contrast sets and visual timeline tasks.
-- More production-heavy corpus: transformations, corrections and free-transfer self-checks expanded substantially.
-- Distractor-specific feedback supported through `optionFeedback`.
-- Course Path now offers **Prepare / Consolidate / Transfer test** packs for the next milestone.
-- Dedicated **Oral Midterm Lab** with skill map, five-day route, targeted drills, speaking prompts and full rehearsal.
-- Exact successful items are scheduled for much later review; concept review normally prefers a new item testing the same structure.
-- Maintenance/mastery now requires free-transfer evidence rather than recognition alone.
-- Speaking attempts store target-coverage self-audits.
-- Exam simulators produce a target-coverage audit and can generate a post-simulator repair set.
-- Session audits can be exported as JSON.
-- v0.2 local progress is migrated automatically.
+The repository is now the live development source for the app. The design is deliberately personal: it follows the VRI5000 course path while maintaining a second path for recurring weaknesses detected in the diagnostic work.
 
-## Current corpus
-- 709 exercises
-- 301 multiple choice
-- 128 error corrections
-- 89 transformations
-- 60 contrast sets
-- 50 sentence builders
-- 30 timeline tasks
-- 51 free-production self-checks
-- 40 speaking prompts
+## Current build
 
-The corpus remains intentionally finite and auditable. The objective is novelty and transfer, not artificial scale.
+The app currently includes:
 
-## Core design principles
-1. No exercise without a correction and explanation.
-2. Structures repeat; exact successful items rarely do.
-3. Novel near-transfer items are preferred for routine review.
-4. Recognition is weaker evidence than guided or free production.
-5. The VRI5000 course path and the personal weakness path run in parallel.
-6. Recurring misconceptions matter more than isolated slips.
-7. Course preparation has three phases: Prepare → Consolidate → Transfer.
-8. The interface stays small even when the corpus grows.
+- 10 concept families
+- 286 unique exercise instances generated from finite, auditable templates
+- 0 exact prompt + answer duplicates
+- 20 free-transfer/self-check tasks
+- 8 speaking challenges with microphone recording
+- Oral Midterm Lab
+- Academic Project Presentation Lab
+- Prepare → Consolidate → Transfer packs for course milestones
+- adaptive Today, Review due, Challenge me, Error Bank and mastery tracking
+- local backup/import of progress
+- offline PWA cache for Android
+
+The goal is not to maximize item count. The target is enough novelty to prevent memorizing exercises while repeatedly retrieving the underlying structure.
+
+## Core pedagogical rules
+
+1. No exercise without correction and explanation.
+2. The structure repeats before the exact successful item does.
+3. Recognition is weaker evidence than guided production or free transfer.
+4. A concept cannot reach maintenance/mastery through multiple choice alone.
+5. Errors are grouped as recurring misconceptions rather than treated as isolated wrong answers.
+6. The course curriculum and the personal weakness curriculum run simultaneously.
+7. Correct-but-unsure answers are reviewed sooner.
+8. Course preparation follows Prepare → Consolidate → Transfer.
+
+## Main concept families
+
+- Question forms
+- Subject–verb agreement
+- Narrative tenses
+- used to / would / be used to / get used to
+- Present perfect / present perfect progressive
+- Conditionals and alternatives to if
+- Future forms
+- Verb patterns
+- Dependent prepositions and collocations
+- Passive voice and causative have/get
+
+## Study modes
+
+Today builds an adaptive session using the upcoming course milestone, due concepts, active errors and weak areas.
+
+Learn provides concise rules and examples before practice.
+
+Practice allows a manual choice of content and context.
+
+Free transfer uses open prompts and model-based self-checking rather than answer recognition.
+
+Course Path aligns study with the real semester calendar and provides Prepare, Consolidate and Transfer packs.
+
+Speaking Studio records locally in the browser and uses target-language self-audits.
+
+Progress separates controlled, guided and transfer evidence.
+
+## Content integrity
+
+GitHub Actions checks JavaScript syntax and runs scripts/validate_content.mjs. Validation fails for duplicate IDs, exact duplicate prompt+answer pairs, missing answers/models, missing explanations, invalid concept links, malformed MCQs, missing free-transfer coverage, or inconsistent schedule references.
 
 ## Run locally
-Service workers require HTTP(S):
-```bash
-python -m http.server 8080
-```
-Then open `http://localhost:8080`.
 
-## Android
-Once hosted over HTTPS (for example GitHub Pages), open the site in Chrome and choose **Add to Home screen / Install app**.
+Run: python -m http.server 8080
 
-## Validation
-```bash
-python scripts/validate_content.py
-python scripts/build_manifest.py
-```
-The validator fails on duplicate IDs, exact duplicate exercises, missing answers/explanations, invalid concept links, broken choice tasks, builder tasks without tokens, and timeline tasks without timeline points.
+Then open http://localhost:8080.
+
+## Android / PWA
+
+Once GitHub Pages is enabled for the repository:
+
+1. Open the published site in Chrome on Android.
+2. Open Chrome's menu.
+3. Choose Install app or Add to Home screen.
+4. The service worker caches the core app for offline study.
 
 ## Privacy
-Progress is stored locally in the browser. Speaking recordings are played from an in-memory browser blob and are not uploaded by this prototype.
+
+Progress remains in browser local storage. Audio recordings are held as temporary browser blobs for playback and are not uploaded by this prototype.
+
+## Next development block
+
+- expand the unique corpus toward roughly 500–700 high-quality items, without exact repetition;
+- strengthen Question Forms, Narrative Tenses, Conditionals and dependent prepositions;
+- add an integrated Unit 3 / Short Story Lab;
+- expand the Academic Project Presentation Lab with hedging, signposting, Q&A and reformulation;
+- build the Unit 4 / Written Exam Lab;
+- make speaking self-audits contribute explicitly to transfer mastery;
+- add richer session-history analytics while keeping the interface small.
