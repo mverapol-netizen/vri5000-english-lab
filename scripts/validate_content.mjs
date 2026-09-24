@@ -12,10 +12,22 @@ for(const e of exercises){
   if(!e.answer?.trim()) errors.push(e.id+': missing answer/model');
   if(!e.explanation?.trim()) errors.push(e.id+': missing explanation');
   if(!['controlled','guided','free'].includes(e.transfer)) errors.push(e.id+': invalid transfer');
+  const allowedTypes=['mcq','selfcheck','builder','text','timeline'];
+  if(!allowedTypes.includes(e.type)) errors.push(e.id+': invalid type '+e.type);
   if(e.type==='mcq'){
     if(!Array.isArray(e.options)||e.options.length<2) errors.push(e.id+': invalid options');
     if(!e.options?.includes(e.answer)) errors.push(e.id+': answer not in options');
   }
+  if(e.type==='timeline'){
+    if(!Array.isArray(e.timeline)||e.timeline.length<1) errors.push(e.id+': missing timeline points');
+    if(!Array.isArray(e.options)||e.options.length<2) errors.push(e.id+': invalid timeline options');
+    if(!e.options?.includes(e.answer)) errors.push(e.id+': timeline answer not in options');
+  }
+  if(e.type==='builder'){
+    if(!Array.isArray(e.tokens)||e.tokens.length<2) errors.push(e.id+': missing builder tokens');
+    if(!e.tokens?.every(x=>typeof x==='string'&&x.trim())) errors.push(e.id+': invalid builder token');
+  }
+  if(e.type==='text' && e.acceptedAnswers && (!Array.isArray(e.acceptedAnswers)||!e.acceptedAnswers.length)) errors.push(e.id+': invalid acceptedAnswers');
   if(e.type==='selfcheck' && e.transfer!=='free') errors.push(e.id+': selfcheck must be free transfer');
   const k=e.prompt+'\u0000'+e.answer;
   if(exact.has(k)) errors.push(e.id+': exact duplicate prompt+answer');
@@ -51,5 +63,6 @@ console.log(JSON.stringify({
   guided:exercises.filter(e=>e.transfer==='guided').length,
   free:exercises.filter(e=>e.transfer==='free').length,
   speaking:speaking.length,
-  exactDuplicates:0
+  exactDuplicates:0,
+  byType:Object.fromEntries([...new Set(exercises.map(e=>e.type))].map(t=>[t,exercises.filter(e=>e.type===t).length]))
 },null,2));
