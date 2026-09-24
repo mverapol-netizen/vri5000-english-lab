@@ -282,6 +282,39 @@ speaking.push(
 {id:'academic_discourse_speak_06',concept:'academicdiscourse',domain:'philosophy',seconds:90,prompt:'Present a claim, concede one opposing point, and explain why your argument still holds.',targets:['claim','concession','response']}
 );
 
+
+const pronunciation=[
+{id:'pron_q_01',focus:'Question intonation',sentence:'Have you been practicing long?',tip:'Yes/no questions often use rising intonation. Keep the final rise controlled rather than exaggerated.',seconds:12},
+{id:'pron_q_02',focus:'Question intonation',sentence:'Where were you living before?',tip:'Wh- questions commonly end with falling intonation.',seconds:12},
+{id:'pron_q_03',focus:'Question intonation',sentence:'Who wrote the report?',tip:'This is a subject wh-question. Keep who prominent and let the pitch fall toward report.',seconds:12},
+{id:'pron_q_04',focus:'Question intonation',sentence:'Could you tell me where the seminar is?',tip:'Treat the indirect question as one polite thought group; avoid question-word inversion in your rhythm.',seconds:14},
+{id:'pron_q_05',focus:'Question intonation',sentence:'What are you worried about?',tip:'Do not drop the final preposition. Keep about inside the same thought group.',seconds:12},
+
+{id:'pron_link_01',focus:'Connected speech',sentence:'They are open-minded and easy-going.',tip:'Link final consonants to following vowel sounds where natural: open-minded_and, and_easy-going.',seconds:14},
+{id:'pron_link_02',focus:'Connected speech',sentence:'She achieved a lot despite having a difficult childhood.',tip:'Avoid separating every word. Group achieved_a_lot and despite_having naturally.',seconds:16},
+{id:'pron_link_03',focus:'Connected speech',sentence:'He built a successful argument around the evidence.',tip:'Link built_a and argument_around without adding extra vowels.',seconds:14},
+{id:'pron_link_04',focus:'Connected speech',sentence:'We spent a lot of our time discussing the article.',tip:'Practice consonant-to-vowel links in spent_a, lot_of, and time_discussing.',seconds:15},
+{id:'pron_link_05',focus:'Connected speech',sentence:'The evidence indicates an important change.',tip:'Keep indicates_an connected and stress evidence, important, change.',seconds:14},
+
+{id:'pron_used_01',focus:'used to catenation',sentence:'I used to study at night.',tip:'In fluent speech, used to is usually reduced; do not pronounce each word as an isolated full form.',seconds:12},
+{id:'pron_used_02',focus:'used to catenation',sentence:'She used to have long hair.',tip:'Keep used to compact and move quickly into have.',seconds:12},
+{id:'pron_used_03',focus:'be used to + -ing',sentence:'I am used to reading long academic papers.',tip:'Here used to means accustomed to. Keep to reading connected and do not insert a pause.',seconds:14},
+{id:'pron_used_04',focus:'get used to + -ing',sentence:'I am getting used to speaking spontaneously.',tip:'Group getting used to speaking as one rhythmic unit.',seconds:14},
+
+{id:'pron_stress_01',focus:'Sentence stress',sentence:'The evidence suggests that institutional capacity matters.',tip:'Stress evidence, suggests, institutional capacity, matters. Reduce function words.',seconds:15},
+{id:'pron_stress_02',focus:'Sentence stress',sentence:'My main argument is that platforms reshape the conditions of choice.',tip:'Give prominence to main argument, platforms, reshape, conditions, choice.',seconds:16},
+{id:'pron_stress_03',focus:'Thought groups',sentence:'While it is true that access has expanded, important inequalities remain.',tip:'Use a short boundary after expanded; do not rush the concession and main claim together.',seconds:16},
+{id:'pron_stress_04',focus:'Thought groups',sentence:'The first point concerns autonomy; the second concerns social dependence.',tip:'Make two balanced thought groups with clear contrastive stress on first and second.',seconds:16},
+
+{id:'pron_cond_01',focus:'Conditional intonation',sentence:'Unless institutions adapt, public trust may decline.',tip:'Use a clear boundary after the condition clause, then a falling contour on the main claim.',seconds:14},
+{id:'pron_cond_02',focus:'Conditional intonation',sentence:'As long as oversight continues, the measure may be acceptable.',tip:'Keep as long as together and separate the condition from the consequence.',seconds:15},
+{id:'pron_cond_03',focus:'Conditional intonation',sentence:'Take a copy in case the internet fails.',tip:'Keep in case unstressed relative to the key content words copy, internet, fails.',seconds:14},
+
+{id:'pron_int_01',focus:'Intensifiers',sentence:'The outcome is highly likely.',tip:'Stress highly and likely as a natural collocation, without equal stress on every word.',seconds:10},
+{id:'pron_int_02',focus:'Intensifiers',sentence:'The researchers were deeply concerned about the result.',tip:'Stress deeply concerned as the main information unit.',seconds:12},
+{id:'pron_repair_01',focus:'Self-repair',sentence:'What I mean is that the mechanism operates indirectly.',tip:'Use What I mean is as a smooth repair frame; do not restart the sentence from zero.',seconds:14}
+];
+
 const schedules={
  conservative:[
   {date:'2026-09-25',title:'Unit 3 · Final consolidation',concepts:['narrative','conditionals','prepositions','questions']},
@@ -756,4 +789,4 @@ const v04FreeTasks=[
 ];
 v04FreeTasks.forEach((x)=>exercises.push(exercise({id:id('free4'),concept:x[0],domain:x[1],type:'selfcheck',transfer:'free',difficulty:3,prompt:x[2],options:[],answer:x[3],explanation:'Use the model as a diagnostic reference, not as a script. Check whether the target grammar appeared accurately and naturally.',misconception:'free_transfer'})));
 
-export {concepts,C,domains,exercises,speaking,schedules};
+export {concepts,C,domains,exercises,speaking,pronunciation,schedules};
