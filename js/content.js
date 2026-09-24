@@ -1,0 +1,129 @@
+const concepts=[
+{id:'questions',name:'Question forms',priority:10,summary:'Subject/object questions, indirect questions and questions with prepositions.',rule:'Use do/does/did in object questions. In subject questions, who/what replaces the subject, so no do/does/did is normally used.',examples:['Who wrote the report?','What did the researcher write?','Could you tell me where the seminar is?']},
+{id:'agreement',name:'Subject–verb agreement',priority:8,summary:'Keep subject and verb aligned even in long sentences.',rule:'The verb agrees with the head of the subject, not the nearest noun.',examples:['The evidence suggests a pattern.','The results suggest a pattern.','A series of reforms has changed the system.']},
+{id:'narrative',name:'Narrative tenses',priority:10,summary:'Past simple, past progressive, past perfect and past perfect progressive.',rule:'Past simple = event; past progressive = background; past perfect = earlier event; past perfect progressive = prior duration.',examples:['She was reading when the lights went out.','Someone had removed the file before she arrived.','They had been waiting for hours.']},
+{id:'usedto',name:'Used to family',priority:10,summary:'Past habits, past states, familiarity and adaptation.',rule:'used to + base; would + base for repeated past actions; be/get used to + noun or -ing.',examples:['I used to read less.','I would study at night.','I am used to reading long papers.','I am getting used to speaking in English.']},
+{id:'presentperfect',name:'Present perfect system',priority:9,summary:'Result, experience, frequency, duration and ongoing activity.',rule:'Present perfect often emphasizes result/number; present perfect progressive emphasizes activity/duration.',examples:['I have written three pages.','I have been writing all morning.']},
+{id:'conditionals',name:'Conditionals & alternatives',priority:9,summary:'unless, as long as, provided, in case and as soon as.',rule:'Unless = if not; provided/as long as = condition; in case = precaution; as soon as + present for future reference.',examples:['Unless institutions adapt, trust will decline.','Take notes in case you forget.','As soon as the results arrive, I will update the table.']},
+{id:'future',name:'Future forms',priority:9,summary:'Schedules, arrangements, intentions, predictions and future perfect/progressive.',rule:'Present simple for schedules, present progressive for arrangements, future perfect for completion before a future point.',examples:['The class starts at 9.','I am meeting my supervisor tomorrow.','By Friday, I will have finished the draft.']},
+{id:'verbpatterns',name:'Verb patterns',priority:8,summary:'-ing, to-infinitive and modal + base.',rule:'Modals + base; avoid/suggest + -ing; decide/plan + to-infinitive; need + object + to-infinitive.',examples:['They could reduce the risk.','They suggested changing the rule.','We decided to revise the draft.']},
+{id:'prepositions',name:'Prepositions & collocations',priority:8,summary:'High-frequency dependent prepositions and academic chunks.',rule:'Learn the whole chunk: depend on, interested in, responsible for, impact on, highly likely.',examples:['The outcome depends on institutional capacity.','She is responsible for the analysis.','The reform had an impact on trust.']},
+{id:'passivecausative',name:'Passive & causative',priority:6,summary:'Passive voice and have/get something done.',rule:'Passive = be + past participle. Causative = have/get + object + past participle.',examples:['The data were collected in 2025.','We had the document translated.']}
+];
+const C=Object.fromEntries(concepts.map(x=>[x.id,x]));
+const domains=['politics','philosophy','sociology','horror','academic','everyday'];
+const people=['the researcher','the committee','the journalist','the philosopher','the student','the analyst'];
+const objects=['the report','the proposal','the argument','the evidence','the manuscript','the dataset'];
+const verbs=[['write','wrote','written'],['review','reviewed','reviewed'],['challenge','challenged','challenged'],['change','changed','changed'],['remove','removed','removed'],['analyze','analyzed','analyzed']];
+const exercise=(x)=>({difficulty:2,domain:'academic',transfer:'controlled',type:'mcq',...x});
+let exercises=[];
+let seq=0; const id=(c)=>c+'_'+String(++seq).padStart(4,'0');
+
+function addQuestionBank(){
+  people.forEach((p,i)=>{const [base,past]=verbs[i%verbs.length],obj=objects[i%objects.length];
+    exercises.push(exercise({id:id('q'),concept:'questions',domain:domains[i%domains.length],prompt:p.charAt(0).toUpperCase()+p.slice(1)+' '+past+' '+obj+'. Ask about the person.',options:['Who '+past+' '+obj+'?','Who did '+base+' '+obj+'?','What did '+p+' '+base+'?'],answer:'Who '+past+' '+obj+'?',explanation:'Who is the subject of the question, so no do/did is needed.',misconception:'unnecessary_auxiliary'}));
+    exercises.push(exercise({id:id('q'),concept:'questions',domain:domains[(i+2)%domains.length],prompt:p.charAt(0).toUpperCase()+p.slice(1)+' '+past+' '+obj+'. Ask about the object.',options:['What did '+p+' '+base+'?','What '+past+' '+obj+'?','Who did '+base+' '+obj+'?'],answer:'What did '+p+' '+base+'?',explanation:'This is an object question: use did + subject + base verb.',misconception:'missing_auxiliary'}));
+  });
+  ['seminar starts','archive closes','results arrive','meeting ends','course begins','presentation starts'].forEach((x,i)=>exercises.push(exercise({id:id('q'),concept:'questions',domain:domains[i%6],prompt:'Choose the polite indirect question.',options:['Could you tell me when the '+x+'?','Could you tell me when does the '+x+'?','Could you tell me when the '+x+' does?'],answer:'Could you tell me when the '+x+'?',explanation:'Indirect questions use statement word order and do not use do/does/did inversion.',misconception:'indirect_inversion'})));
+}
+function addAgreement(){
+  const pairs=[['The evidence','suggests'],['The results','suggest'],['A series of reforms','has'],['The reforms','have'],['Each of the cases','illustrates'],['The arguments in the article','raise'],['Public trust','remains'],['These findings','indicate']];
+  for(let r=0;r<4;r++) pairs.forEach((p,i)=>exercises.push(exercise({id:id('agr'),concept:'agreement',domain:domains[(i+r)%6],prompt:p[0]+' ___ a relevant point.',options:[p[1],p[1].endsWith('s')?p[1].slice(0,-1):p[1]+'s'],answer:p[1],explanation:'The verb agrees with the head of the subject.',misconception:'agreement'})));
+}
+function addNarrative(){
+  const rows=[
+    ['the researcher arrived','someone removed the file','When the researcher arrived, someone had removed the file.'],
+    ['the police reached the building','the suspect left','By the time the police reached the building, the suspect had left.'],
+    ['the meeting began','the team prepared the slides','Before the meeting began, the team had prepared the slides.'],
+    ['the lights went out','she read the manuscript','She was reading the manuscript when the lights went out.'],
+    ['the alarm rang','they discuss the proposal','They were discussing the proposal when the alarm rang.'],
+    ['the door opened','he wait for an hour','He had been waiting for an hour when the door opened.']
+  ];
+  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('nar'),concept:'narrative',domain:domains[(i+r)%6],type:'mcq',transfer:r<2?'controlled':'guided',prompt:'Choose the sentence that best expresses the sequence: '+x[0]+'; earlier/background: '+x[1]+'.',options:[x[2],x[2].replace(/had been|had|was|were/g,'').replace(/  +/g,' '),x[2].replace('had ','was ')],answer:x[2],explanation:'Choose the tense according to the temporal relation: event, background, earlier event or prior duration.',misconception:'narrative_sequence'})));
+}
+function addUsedTo(){
+  const rows=[
+    ['past state','I ___ shy when I was younger.','used to be','would be'],
+    ['past repeated action','When I was an undergraduate, I ___ study at night.','would','am used to'],
+    ['familiar now','I ___ reading long articles in English.','am used to','used to'],
+    ['adaptation','I am ___ speaking spontaneously in seminars.','getting used to','used to'],
+    ['familiar now','Researchers are ___ working with incomplete evidence.','used to','use to'],
+    ['past habit','I ___ avoid long presentations.','used to','am used to']
+  ];
+  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('ut'),concept:'usedto',domain:domains[(i+r)%6],transfer:r<2?'controlled':'guided',prompt:x[1],options:[x[2],x[3]],answer:x[2],explanation:x[0]+': '+C.usedto.rule,misconception:'usedto_family'})));
+}
+function addPresentPerfect(){
+  const rows=[
+    ['result/number','I ___ three pages this morning.','have written','have been writing'],
+    ['duration/activity','I ___ all morning.','have been writing','have written'],
+    ['frequency','She ___ the archive twice this month.','has visited','has been visiting'],
+    ['duration','They ___ data for six months.','have been collecting','have collected'],
+    ['state verb','I ___ her for years.','have known','have been knowing'],
+    ['experience','I ___ this paper in English before.','have never presented','have never been presenting']
+  ];
+  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('pp'),concept:'presentperfect',domain:domains[(i+r)%6],prompt:x[1],options:[x[2],x[3]],answer:x[2],explanation:'Focus: '+x[0]+'. '+C.presentperfect.rule,misconception:'perfect_aspect'})));
+}
+function addConditionals(){
+  const rows=[
+    ['___ institutions adapt, trust will decline.','Unless','Unless not'],
+    ['You can use the archive ___ you follow the rules.','as long as','in case'],
+    ['Bring a copy ___ the internet fails.','in case','unless'],
+    ['___ the evidence is strong, the claim is plausible.','Provided that','As soon as'],
+    ['___ the results arrive, I will update the table.','As soon as','As soon as will'],
+    ['We will continue ___ the committee objects.','unless','provided']
+  ];
+  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('cond'),concept:'conditionals',domain:domains[(i+r)%6],transfer:r<3?'controlled':'guided',prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:C.conditionals.rule,misconception:'conditional_alternative'})));
+}
+function addFuture(){
+  const rows=[
+    ['According to the timetable, the class ___ at 9.','starts','will be starting'],
+    ['I ___ my supervisor tomorrow at 10; it is arranged.','am meeting','will meet'],
+    ['By Friday, I ___ the draft.','will have finished','will be finishing'],
+    ['At 9 tomorrow, I ___ my paper.','will be presenting','will have presented'],
+    ['By December, I ___ English for four months.','will have been studying','will have studied'],
+    ['Look at those clouds. It ___.','is going to rain','will have rained']
+  ];
+  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('fut'),concept:'future',domain:domains[(i+r)%6],prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:C.future.rule,misconception:'future_choice'})));
+}
+function addVerbPatterns(){
+  const rows=[['They could ___ the risk.','reduce','reducing'],['They suggested ___ the rule.','changing','to change'],['We decided ___ the proposal.','to revise','revising'],['Researchers should avoid ___ the evidence.','overstating','to overstate'],['My supervisor needs me ___ the file.','to send','send'],['They considered ___ the project.','postponing','to postpone']];
+  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('vp'),concept:'verbpatterns',domain:domains[(i+r)%6],prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:C.verbpatterns.rule,misconception:'verb_pattern'})));
+}
+function addPrepositions(){
+  const rows=[['The result depends ___ institutional capacity.','on','about'],['She is responsible ___ the analysis.','for','of'],['They are concerned ___ declining trust.','about','of'],['I am interested ___ political theory.','in','on'],['The reform had an impact ___ participation.','on','in'],['The outcome is ___ likely.','highly','deeply']];
+  for(let r=0;r<5;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('prep'),concept:'prepositions',domain:domains[(i+r)%6],prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:'Learn the whole chunk: '+x[0].replace('___',x[1]),misconception:'dependent_preposition'})));
+}
+function addPassive(){
+  const rows=[['The data ___ in 2025.','were collected','collected'],['The law ___ by Congress last month.','was approved','approved'],['The results ___ next week.','will be published','will publish'],['We ___ the document translated yesterday.','had','were'],['She ___ her laptop repaired.','got','was'],['The interviews ___ before the analysis began.','had been completed','had completed']];
+  for(let r=0;r<4;r++) rows.forEach((x,i)=>exercises.push(exercise({id:id('pc'),concept:'passivecausative',domain:domains[(i+r)%6],prompt:x[0],options:[x[1],x[2]],answer:x[1],explanation:C.passivecausative.rule,misconception:'passive_causative'})));
+}
+addQuestionBank();addAgreement();addNarrative();addUsedTo();addPresentPerfect();addConditionals();addFuture();addVerbPatterns();addPrepositions();addPassive();
+
+const speaking=[
+{concept:'questions',domain:'politics',seconds:75,prompt:'Interview a journalist about a sudden political resignation. Ask five natural questions, including one subject question and one indirect question.',targets:['subject question','object question','indirect question']},
+{concept:'narrative',domain:'horror',seconds:90,prompt:'You entered a library and discovered a door that had never been there before. Tell what you were doing, what happened, and what had happened before you arrived.',targets:['past progressive','past simple','past perfect']},
+{concept:'conditionals',domain:'academic',seconds:75,prompt:'Give advice to a student with an oral exam tomorrow. Use unless, as long as, in case and as soon as.',targets:['unless','as long as','in case','as soon as']},
+{concept:'usedto',domain:'academic',seconds:75,prompt:'Describe how studying in English has changed for you. Use used to, would, be used to and get used to.',targets:['used to','would','be used to','get used to']},
+{concept:'agreement',domain:'academic',seconds:60,prompt:'Explain why evidence matters in research. Use: the evidence, the results, a series of studies, the findings.',targets:['agreement']},
+{concept:'prepositions',domain:'politics',seconds:75,prompt:'Explain what political trust depends on and what institutions should be concerned about. Use at least four chunks.',targets:['depend on','concerned about','responsible for','impact on']},
+{concept:'presentperfect',domain:'academic',seconds:75,prompt:'Describe your recent English study. Distinguish completed results from activities that have been continuing.',targets:['present perfect','present perfect progressive']},
+{concept:'future',domain:'academic',seconds:75,prompt:'Describe your academic work three months from now. Say what you will be doing and what you will have completed.',targets:['future progressive','future perfect']}
+];
+const schedules={
+ conservative:[
+  {date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
+  {date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions','presentperfect']},
+  {date:'2026-10-21',title:'Unit 4.1 · Future forms',concepts:['future']},
+  {date:'2026-10-26',title:'Unit 4.2 · Future perfect/progressive',concepts:['future']},
+  {date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future','prepositions','agreement']},
+  {date:'2026-11-09',title:'Unit 5.1 · Passive & causative',concepts:['passivecausative']},
+  {date:'2026-11-16',title:'Unit 5.2 · -ing & infinitive',concepts:['verbpatterns']},
+  {date:'2026-11-18',title:'Unit 5.3 · Counterarguments',concepts:['conditionals']},
+  {date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}
+ ],
+ mon_wed:[{date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},{date:'2026-10-19',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions']},{date:'2026-11-04',title:'Written Exam',assessment:true,concepts:['future']},{date:'2026-12-02',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}],
+ tue_thu:[{date:'2026-10-06',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},{date:'2026-10-20',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions']},{date:'2026-11-05',title:'Written Exam',assessment:true,concepts:['future']},{date:'2026-12-03',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}],
+ wed_fri_am:[{date:'2026-10-02',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions']},{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future']},{date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}],
+ wed_fri_pm:[{date:'2026-09-30',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},{date:'2026-10-21',title:'Academic Project Presentation',assessment:true,concepts:['questions','agreement','prepositions']},{date:'2026-11-06',title:'Written Exam',assessment:true,concepts:['future']},{date:'2026-12-04',title:'Final Oral Exam',assessment:true,concepts:concepts.map(x=>x.id)}]
+};
+export {concepts,C,domains,exercises,speaking,schedules};
