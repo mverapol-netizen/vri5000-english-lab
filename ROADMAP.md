@@ -1,43 +1,10 @@
 # Roadmap — VRI5000 Personal English Lab
 
-## v0.4 — current
-- 601 unique exercises.
-- Rich exercise formats: choice, typed production, builders, timelines, free transfer.
-- Adaptive Today / Review / Challenge.
-- Course Path with Prepare → Consolidate → Transfer.
-- Error Bank, confidence tracking, mastery by transfer level.
-- Speaking Studio with local microphone recording.
-- Oral Midterm Lab, Unit 3 Story Lab, Academic Project Lab, Unit 4/Written Exam Lab.
-- Local progress backup/import.
-- Automated content validation and learning-engine tests.
-
-## v0.5 — immediate
-### Oral Midterm
-- Expand speaking prompts from 24 to ~45.
-- Add follow-up question chains.
-- Add timed 3-part oral rehearsal.
-- Add targeted repair after self-audit.
-
-### Academic Project Presentation
-- Build a dedicated signposting / hedging / Q&A corpus.
-- Add thesis → evidence → implication microdrills.
-- Add hostile/neutral follow-up questions.
-- Add reformulation and self-repair prompts.
-
-### Unit 3
-- Expand storytelling with descriptive verbs and phrasal verbs.
-- Add dependent-preposition drills linked to fears/advice.
-- Add short-story writing self-check aligned with Unit 3 review.
-
-## v0.6
-- Listening and pronunciation lab:
-  - question intonation
-  - final consonant + initial vowel linking
-  - thought groups
-  - sentence stress
-  - weak forms
-- Shadowing workflow with local audio playback/recording.
-- Chunk-focused retrieval.
+## v0.6 — current
+- Pronunciation and connected-speech corpus added.
+- Device text-to-speech model playback added.
+- Local microphone recording and pronunciation self-audit added.
+- Next: deeper shadowing workflow, chunk-focused retrieval and pronunciation progress analytics.
 
 ## v0.7
 - Written Exam lab:
