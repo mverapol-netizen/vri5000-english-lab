@@ -242,6 +242,35 @@ speaking.push(
 {concept:'agreement',domain:'politics',seconds:60,prompt:'Discuss public trust using these subjects accurately: public trust, the findings, a series of surveys, institutions.',targets:['singular agreement','plural agreement']}
 );
 
+
+speaking.push(
+{id:'oral_midterm_extra_01',concept:'questions',domain:'politics',seconds:75,prompt:'A political scientist says that an unexpected event changed voter behavior. Ask five follow-up questions that move from basic information to clarification.',targets:['subject question','object question','indirect question','question with preposition']},
+{id:'oral_midterm_extra_02',concept:'questions',domain:'academic',seconds:75,prompt:'Your professor says: “One assumption in the paper is problematic.” Ask who identified it, what the assumption is, what it depends on, and why it matters.',targets:['subject question','object question','preposition question','indirect question']},
+{id:'oral_midterm_extra_03',concept:'questions',domain:'everyday',seconds:60,prompt:'A classmate says they had a terrible morning. Keep the conversation going with five natural follow-up questions.',targets:['wh-question','subject question','negative question','follow-up question']},
+{id:'oral_midterm_extra_04',concept:'questions',domain:'philosophy',seconds:75,prompt:'Interview a philosopher who claims that freedom depends on social institutions. Ask four precise questions about the claim and one polite indirect question.',targets:['object question','subject question','indirect question']},
+
+{id:'oral_midterm_extra_05',concept:'narrative',domain:'horror',seconds:90,prompt:'You were studying alone when every computer in the room turned off. Explain what was happening, what happened next, what had happened earlier, and what had been happening for several minutes.',targets:['past progressive','past simple','past perfect','past perfect progressive']},
+{id:'oral_midterm_extra_06',concept:'narrative',domain:'politics',seconds:90,prompt:'Tell a fictional election-night story in which officials were counting votes when a technical problem appeared, but warning signs had emerged earlier.',targets:['past progressive','past simple','past perfect']},
+{id:'oral_midterm_extra_07',concept:'narrative',domain:'academic',seconds:90,prompt:'Tell the story of arriving late to a seminar and discovering that the schedule had changed after people had been waiting for a long time.',targets:['past simple','past perfect','past perfect progressive']},
+{id:'oral_midterm_extra_08',concept:'narrative',domain:'literature',seconds:90,prompt:'Describe a character entering an old house while a storm was developing. Reveal an earlier event that explains why the house is empty.',targets:['past progressive','past simple','past perfect']},
+
+{id:'oral_midterm_extra_09',concept:'conditionals',domain:'politics',seconds:75,prompt:'Give four conditions under which emergency political measures could be acceptable and one precaution institutions should take.',targets:['provided that','as long as','unless','in case']},
+{id:'oral_midterm_extra_10',concept:'conditionals',domain:'academic',seconds:75,prompt:'Give practical advice for succeeding in an oral exam using unless, in case, as soon as, and provided that.',targets:['unless','in case','as soon as','provided that']},
+{id:'oral_midterm_extra_11',concept:'conditionals',domain:'everyday',seconds:60,prompt:'Explain your plan for a very busy morning using at least four alternatives to if.',targets:['unless','as long as','in case','as soon as']},
+{id:'oral_midterm_extra_12',concept:'conditionals',domain:'horror',seconds:75,prompt:'Give rules for surviving one night in an abandoned archive. Make the rules conditional without repeatedly using if.',targets:['unless','provided that','in case','as soon as']},
+
+{id:'oral_midterm_extra_13',concept:'usedto',domain:'academic',seconds:75,prompt:'Compare how you studied before graduate school, what repeated habits you had, what is normal now, and what you are still adapting to.',targets:['used to','would','be used to','get used to']},
+{id:'oral_midterm_extra_14',concept:'usedto',domain:'technology',seconds:75,prompt:'Describe how academic life changed after constant internet access became normal.',targets:['used to','would','be used to','get used to']},
+
+{id:'oral_midterm_extra_15',concept:'agreement',domain:'academic',seconds:60,prompt:'Explain a research finding using these exact subjects: the evidence, the results, each study, a series of studies, the findings.',targets:['subject–verb agreement']},
+{id:'oral_midterm_extra_16',concept:'prepositions',domain:'politics',seconds:75,prompt:'Explain why institutional trust can decline. Use at least five complete chunks rather than isolated vocabulary.',targets:['depend on','responsible for','concerned about','impact on','risk of']},
+
+{id:'presentation_extra_01',concept:'presentperfect',domain:'academic',seconds:90,prompt:'Open a research presentation by explaining what the literature has established and what scholars have been debating recently.',targets:['present perfect','present perfect progressive','academic signposting']},
+{id:'presentation_extra_02',concept:'future',domain:'academic',seconds:75,prompt:'End a presentation by explaining what you will do next, what you will be working on, and what you expect to have completed by a specific date.',targets:['will','future progressive','future perfect']},
+{id:'presentation_extra_03',concept:'prepositions',domain:'philosophy',seconds:90,prompt:'Present one philosophical claim using draw a distinction, provide an account of, be compatible with, and raise an objection.',targets:['draw a distinction','provide an account of','be compatible with','raise an objection']},
+{id:'presentation_extra_04',concept:'agreement',domain:'politics',seconds:75,prompt:'Give a concise evidence-based argument while deliberately switching between singular and plural academic subjects.',targets:['agreement','sentence control']}
+);
+
 const schedules={
  conservative:[
   {date:'2026-09-28',title:'Oral Midterm',assessment:true,concepts:['questions','narrative','conditionals','usedto','agreement','prepositions']},
